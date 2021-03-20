@@ -1,38 +1,29 @@
-.App {
-  text-align: center;
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;700&display=swap');
+
+/* Font used for logo: Kohinoor Bangla */
+
+:root {
+	/* General */
+	--bg: #f1f5f9;
+	--primary: #3b4049;
+	--left-sidebar-font-color: #90999c;
+	--border-color-light: #e8ebed;
+	--success: #40c764;
+
+	/* Section and Block */
+	--card-color: #ffffff;
+	--card-br: 5px;
+	--card-border-color: #d4d7dc;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+html, body {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+	background-color: var(--bg);
+	font-family: 'Poppins', sans-serif;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+button, input {
+	font-family: 'Poppins', sans-serif;
 }

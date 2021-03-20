@@ -1,0 +1,67 @@
+.module header.module-unofficial-header {
+	position: relative;
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding-bottom: 15px;
+	border-bottom: 0.5px solid var(--border-color-light);
+}
+
+.module header .close-module-button {
+	background: transparent;
+	border-radius: 50%;
+	border: 2px solid var(--primary);
+	color: var(--primary);
+	font-weight: 800;
+	transition: 0.2s;
+}
+
+.module header .close-module-button:hover {
+	cursor: pointer;
+	color: var(--left-sidebar-font-color);
+	border: 2px solid var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.module header .module-name-information {
+	margin-left: 20px;
+	max-width: 400px;
+}
+
+.module header .module-name-information h1 {
+	margin: 0 !important;
+	padding: 0 !important;
+}
+
+.module header .module-name-information span {
+	margin: 0;
+	padding: 0;
+	font-weight: 300;
+	display: inline-block;
+	margin-bottom: -25px;
+}
+
+.module header .module-name-information small {
+	color: var(--left-sidebar-font-color);
+}
+
+.module header .module-config {
+	margin-left: 20px;
+}
+
+.module header .module-config button {
+	margin-left: 10px;
+	border-radius: var(--card-br);
+	background: transparent;
+	border: 1px solid var(--left-sidebar-font-color);
+	padding: 8px 16px;
+	transition: 0.2s;
+	font-size: 0.6em;
+	margin-top: 10px;
+}
+
+.module header .module-config button:hover {
+	cursor: pointer;
+	color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}

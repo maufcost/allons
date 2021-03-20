@@ -1,0 +1,6 @@
+.quill .ql-editor {
+	color: var(--secondary);
+	font-size: 1em;
+	font-family: 'Poppins', sans-serif !important;
+	margin: 0 !important;
+}

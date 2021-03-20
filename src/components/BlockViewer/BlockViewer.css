@@ -1,0 +1,30 @@
+.module-viewer-block {
+	transition: 0.2s;
+	padding: 16px;
+	border-radius: var(--card-br);
+}
+
+.module-viewer-block.add-hover:hover {
+	cursor: pointer;
+	border: 1px solid var(--border-color-light);
+	box-shadow: 0 0 10px var(--border-color-light);
+	transition: 0.2s;
+}
+
+.module-viewer-block .block-content p {
+	margin: 0 !important;
+}
+
+.module-viewer-block .mentions {
+	display: flex;
+	margin-top: 5px;
+}
+
+.module-viewer-block .mention-picture-wrapper {
+	margin-right: 8px;
+}
+
+.module-viewer-block .mention-picture-wrapper .mention-profile-picture {
+	width: 30px;
+	border-radius: 50%;
+}

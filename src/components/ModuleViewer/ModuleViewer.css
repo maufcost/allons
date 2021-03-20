@@ -1,0 +1,79 @@
+.module-viewer {
+	position: relative;
+	background-color: var(--card-color);
+	width: 70vw;
+	height: 100vh;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+.module-viewer p {
+	margin: 0;
+}
+
+.module-viewer header {
+	padding: 20px 0;
+}
+
+.module-viewer header .module-title {
+	margin: 0;
+	font-size: 2.3em;
+}
+
+.module-viewer .video-message-player-container {
+	position: absolute;
+	bottom: 20px;
+	right: -60px;
+}
+
+.module-viewer .video-message-player {
+	position: relative;
+}
+
+.module-viewer .video-message-container {
+	width: 190px;
+	height: 180px;
+	overflow: hidden;
+	background: transparent;
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+.module-viewer .video-message {
+	width: 320px;
+	height: 180px;
+	margin-left: -70px;
+	border-radius: 50%;
+}
+
+.module-viewer .video-message-play-pause {
+	position: absolute;
+	bottom: 0;
+	left: 20px;
+	background-color: var(--card-color);
+	color: var(--primary);
+	border: 2px solid var(--card-border-color);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.2s;
+	padding: 2px;
+}
+
+.module-viewer .video-message-play-pause:hover {
+	cursor: pointer;
+	background-color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.module-viewer .play-pause-img {
+	width: 25px;
+	height: 25px;
+}
+
+.module-viewer footer {
+	position: absolute;
+	bottom: 0;
+	font-size: 0.8em;
+}

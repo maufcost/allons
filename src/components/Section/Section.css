@@ -1,0 +1,52 @@
+.module-section {
+	background-color: var(--card-color);
+	padding: 10px;
+	transition: 0.2s;
+	margin-top: 20px;
+	margin-left: auto;
+	margin-right: auto;
+	max-width: 60%;
+	border-radius: var(--card-br);
+}
+
+.module-section:hover {
+	cursor: pointer;
+	border: 1px solid var(--border-color-light);
+	box-shadow: 0 0 10px var(--border-color-light);
+	transition: 0.2s;
+}
+
+.section-title {
+	color: var(--primary);
+}
+
+.module-section header {
+	display: flex;
+	align-items: center;
+	padding: 8px;
+}
+
+.module-section header button {
+	margin-left: 20px;
+	border-radius: var(--card-br);
+	background: transparent;
+	border: 1px solid var(--left-sidebar-font-color);
+	padding: 8px 16px;
+	transition: 0.2s;
+}
+
+.module-section header button:hover {
+	cursor: pointer;
+	color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.module-section header h2 {
+	margin: 0 !important;
+	color: black !important;
+}
+
+.module-section .blocks {
+	/* background-color: salmon; */
+	margin-left: 20px;
+}

@@ -57,7 +57,9 @@ function Dashboard({
 	// 2) OR a user creates a new module
 	const handleShowingModule = (module) => {
 		// To force <Module/> re-rerender
-		setShowModule(false);
+		// setShowModule(false);
+		console.log("handleShowingModule")
+		setShowModule(true);
 
 		setSelectedModuleId(module.id);
 		setSelectedModuleName(module.moduleName);
@@ -127,6 +129,7 @@ function Dashboard({
 	// 	<p>There isn't a user</p>
 	// }
 
+	console.log(showModule)
 	return (
 		<div className='dashboard'>
 			<div className='left-sidebar'>
@@ -165,7 +168,7 @@ function Dashboard({
 							{/* Module thumbnails */}
 							{children}
 						</div>
-						<p>Click on a module above to see it here</p>
+						{/*<p>Click on a module above to see it here</p>*/}
 					</section>
 				}
 			</main>

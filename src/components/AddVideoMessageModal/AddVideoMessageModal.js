@@ -189,78 +189,80 @@ class AddVideoMessageModal extends React.Component {
 			<div>
 				<div className='add-video-message-modal-bg'></div>
 				<div className='add-video-message-modal'>
-					<header>
-						<p className='title'>Add a personalized video message for your module viewers</p><br/>
-						<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
-						<button
-							className='close-button'
-							onClick={this.props.closeAddVideoMessageModal}
-						>
-							<p>X</p>
-						</button>
-					</header>
+					<div className='add-video-message-modal-inner'>
+						<header>
+							<p className='title'>Add a personalized video message for your module viewers</p><br/>
+							<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
+							<button
+								className='close-button'
+								onClick={this.props.closeAddVideoMessageModal}
+							>
+								<p>X</p>
+							</button>
+						</header>
 
-					{this.state.flashMessage && (
-						<div className='video-message-flash-message'>
-							<p>Your video message has been successfully added to your module</p>
-						</div>
-					)}
-
-					<div className='videos'>
-						<div className='video-area'>
-							<p>Here's how you look:</p>
-							<div className='video-wrapper'>
-								<video
-									className='video-record'
-									ref={this.videoRecordRef}
-									muted
-								></video>
-							</div>
-						</div>
-						<div className='video-area'>
-							<p>Here's the message preview:</p>
-							<div className='video-wrapper-controls'>
-								<div className='video-wrapper'>
-									<video
-										className='video-preview'
-										ref={this.videoPreviewRef}
-									></video>
-								</div>
-								{this.state.isPreviewRecorded && (
-									<button
-										className='play-pause-preview-button'
-										onClick={this.playPausePreview}
-									>
-										<img
-											src={this.state.isPreviewPlaying ? Pause : Play}
-											className='play-pause-img'
-											alt='Play or Pause Video Message Preview'
-										/>
-									</button>
-								)}
-							</div>
-						</div>
-					</div>
-
-					<div className='toolbar'>
-						<button
-							className='start-record'
-							onClick={this.startStopRecording}
-						>
-							{this.state.isRecordingStarted ? 'Stop recording' : 'Start recording' }
-						</button>
-						<button
-							className='add-video-message-to-module-button'
-							onClick={this.addVideoMessageToModule}
-							disabled={!this.state.isPreviewRecorded}
-						>
-							Add Video Message to Module
-						</button>
-						{this.state.isRecordingStarted && (
-							<div className='timer'>
-								<p>Time left: <b>{this.state.countdown}</b></p>
+						{this.state.flashMessage && (
+							<div className='video-message-flash-message'>
+								<p>Your video message has been successfully added to your module</p>
 							</div>
 						)}
+
+						<div className='videos'>
+							<div className='video-area'>
+								<p>Here's how you look:</p>
+								<div className='video-wrapper'>
+									<video
+										className='video-record'
+										ref={this.videoRecordRef}
+										muted
+									></video>
+								</div>
+							</div>
+							<div className='video-area'>
+								<p>Here's the message preview:</p>
+								<div className='video-wrapper-controls'>
+									<div className='video-wrapper'>
+										<video
+											className='video-preview'
+											ref={this.videoPreviewRef}
+										></video>
+									</div>
+									{this.state.isPreviewRecorded && (
+										<button
+											className='play-pause-preview-button'
+											onClick={this.playPausePreview}
+										>
+											<img
+												src={this.state.isPreviewPlaying ? Pause : Play}
+												className='play-pause-img'
+												alt='Play or Pause Video Message Preview'
+											/>
+										</button>
+									)}
+								</div>
+							</div>
+						</div>
+
+						<div className='toolbar'>
+							<button
+								className='start-record'
+								onClick={this.startStopRecording}
+							>
+								{this.state.isRecordingStarted ? 'Stop recording' : 'Start recording' }
+							</button>
+							<button
+								className='add-video-message-to-module-button'
+								onClick={this.addVideoMessageToModule}
+								disabled={!this.state.isPreviewRecorded}
+							>
+								Add Video Message to Module
+							</button>
+							{this.state.isRecordingStarted && (
+								<div className='timer'>
+									<p>Time left: <b>{this.state.countdown}</b></p>
+								</div>
+							)}
+						</div>
 					</div>
 				</div>
 			</div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router } from "@reach/router";
 
+import Landing from '../Landing/Landing';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import Dashboard from '../Dashboard/Dashboard';
@@ -60,6 +61,8 @@ class Main extends React.Component {
 		return(
 			<div>
 				<Router>
+					<Landing path='/' />
+
 					<SignUp path='/signup' />
 
 					<SignIn path='/signin' />

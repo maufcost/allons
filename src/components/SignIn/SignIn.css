@@ -1,0 +1,131 @@
+.sign-in header {
+	background-color: var(--card-color);
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px;
+}
+
+.sign-in header .logo {
+	transition: 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+}
+
+.sign-in header .logo:hover {
+	opacity: 0.6;
+	transition: 0.2s;
+}
+
+.sign-in header .logo img {
+	width: 50px;
+}
+
+.sign-in header .logo span {
+	display: inline-block;
+	margin-left: 5px;
+	background-color: var(--warning);
+	padding: 5px;
+	border-radius: var(--card-br);
+	font-size: 0.8em;
+	color: var(--primary);
+}
+
+.sign-in header ul {
+	list-style: none;
+	display: flex;
+	margin: 0;
+	margin-right: 2%;
+}
+
+.sign-in header ul li {
+	list-style: none;
+	display: flex;
+	margin: 0;
+	margin-left: 20px;
+}
+
+.sign-in header ul li a {
+	text-decoration: none;
+	color: var(--primary);
+	transition: 0.2s;
+	font-size: 0.9em;
+}
+
+.sign-in header ul li a:hover {
+	text-decoration: underline;
+	color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.sign-in .auth {
+	background-color: var(--card-color);
+	border: 1px solid var(--border-color-light);
+	margin: 0 auto;
+	margin-top: 5%;
+	width: 30%;
+	border-radius: var(--card-br);
+	padding: 16px;
+	text-align: center;
+}
+
+.sign-in .auth .logo-auth {
+	width: 80px;
+	margin-bottom: 15px;
+}
+
+.sign-in .auth .logo-auth:hover {
+	opacity: 0.7;
+}
+
+.sign-in .auth p {
+	margin: 0;
+}
+
+.sign-in .auth input {
+	display: block;
+	margin: 0 auto;
+	margin-top: 5px;
+	border: 1px solid var(--border-color-light);
+	width: 50%;
+	padding: 8px 16px;
+}
+
+.sign-in .auth button {
+	display: block;
+	margin: 0 auto;
+	margin-top: 5px;
+	transition: 0.2s;
+	width: 55%;
+	padding: 8px 16px;
+	background-color: var(--primary);
+	border: none;
+	color: var(--card-color);
+	border-radius: var(--card-br);
+}
+
+.sign-in .auth button:hover {
+	cursor: pointer;
+	transition: 0.2s;
+	border: 1px solid var(--card-border-color);
+	background-color: var(--card-color);
+	color: var(--primary);
+}
+
+.sign-in .auth .sub-text {
+	margin: 0;
+	text-decoration: none;
+	transition: 0.2s;
+	color: var(--primary);
+	font-size: 0.7em;
+}
+
+.sign-in .auth .sub-text:hover {
+	margin: 0;
+	text-decoration: underline;
+	transition: 0.2s;
+	color: var(--left-sidebar-font-color);
+}

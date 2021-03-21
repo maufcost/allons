@@ -3,19 +3,23 @@ import React, { useState, useEffect, useRef } from 'react';
 import BlockViewer from '../BlockViewer/BlockViewer';
 import Play from '../../assets/Icons/play.svg';
 import Pause from '../../assets/Icons/pause.svg';
+import Logo1 from '../../assets/Logos/logo1.svg';
 
-import { getUserModule } from '../../firebase';
+import { getUserDocument, getUserModule } from '../../firebase';
 
 import './ModuleViewer.css'
 
 function ModuleViewer({ userId, moduleId }) {
 
 	// State
+	const [user, setUser] = useState(null);
 	const [module, setModule] = useState(null);
 	const [isVideoMessagePlaying, setIsVideoMessagePlaying] = useState(false);
+	const [isAudioMessagePlaying, setIsAudioMessagePlaying] = useState(false);
 
 	// Refs
 	const videoMessageRef = useRef(null);
+	const audioMessageRef = useRef(null);
 
 	// ComponentDidMount
 	useEffect(() => {
@@ -23,6 +27,15 @@ function ModuleViewer({ userId, moduleId }) {
 		async function fetchModule() {
 			 const module = await getUserModule(userId, moduleId);
 			 setModule(module);
+
+			 // Setting up audio message ref (if any audio message is present).
+			 if (module.audioMessageURL) {
+				 audioMessageRef.current = new Audio(module.audioMessageURL);
+			 }
+
+			 // Getting the module's author info
+			 const user = await getUserDocument(userId);
+			 setUser(user);
 		}
 
 		fetchModule();
@@ -79,6 +92,20 @@ function ModuleViewer({ userId, moduleId }) {
 		}
 	}
 
+	const playPauseAudioMessage = (e) => {
+		if (isAudioMessagePlaying) {
+
+			// Pause audio message
+			audioMessageRef.current.pause();
+			setIsAudioMessagePlaying(false);
+
+		}else {
+			// Play audio message
+			audioMessageRef.current.play();
+			setIsAudioMessagePlaying(true);
+		}
+	}
+
 	const children = [];
 	let videoMessage = null;
 	let audioMessage = null;
@@ -130,24 +157,51 @@ function ModuleViewer({ userId, moduleId }) {
 		// Rendering module audio message
 		if (module.audioMessageURL) {
 			audioMessage = (
-				null
+				<div className='audio-message-player-container'>
+					<button
+						className='audio-message-play-pause'
+						onClick={playPauseAudioMessage}
+					>
+						<img
+							src={isAudioMessagePlaying ? Pause: Play}
+							className='play-pause-img'
+							alt='Play or Pause Audio Message'
+						/>
+					</button>
+				</div>
 			)
 		}
 	}
 
+	let authorInformation = null;
+	if (user) {
+		authorInformation = (
+			<div className='author-information'>
+				<p><span>Written by</span> {user.displayName}</p>
+				<img src={user.photoURL} alt='User' />
+			</div>
+		);
+	}
+
 	return (
 		<div className='module-viewer'>
-			{videoMessage}
-			{audioMessage}
+
+			<div className='messages'>
+				{audioMessage}
+				{videoMessage}
+			</div>
 
 			<header>
 				<h1 className='module-title'>{module ? module.moduleName : null}</h1>
+				{authorInformation}
 			</header>
 
 			{children}
 
 			<footer>
-				<small>Built with <a href="http://producthunt.com">allons</a></small>
+				<small>
+					Built with <a href="http://producthunt.com"><img src={Logo1} alt='Allons'/></a>
+				</small>
 			</footer>
 		</div>
 	)

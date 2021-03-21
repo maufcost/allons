@@ -136,8 +136,8 @@
 	width: 80%;
 	font-size: 0.9em;
 	border-radius: var(--card-br);
-	margin: 0 auto;
-	margin-top: 10px;
+	margin: 10px auto;
+	padding: 4px;
 }
 
 .add-audio-message-modal .start-record {

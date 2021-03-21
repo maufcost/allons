@@ -3,6 +3,8 @@ import { navigate } from '@reach/router'
 
 import { auth, generateUserDocument } from '../../firebase.js';
 
+import Logo1 from '../../assets/Logos/logo1.svg';
+
 import './SignUp.css';
 
 class SignUp extends React.Component {
@@ -61,30 +63,50 @@ class SignUp extends React.Component {
 	render() {
 		return (
 			<div className='sign-up'>
-				<input
-					type='text'
-					name='displayName'
-					placeholder='E.g.: Michael Scott'
-					value={this.state.displayName}
-					onChange={this.handleDisplayNameChange}
-				/>
-				<input
-					type='text'
-					name='email'
-					placeholder='E.g.: michaelscott@hotmail.com'
-					value={this.state.email}
-					onChange={this.handleEmailChange}
-				/>
-				<input
-					type='password'
-					name='password'
-					placeholder='Your password'
-					value={this.state.password}
-					onChange={this.handlePasswordChange}
-				/>
-				<button onClick={this.signUpWithEmailAndPasswordHandler}>
-					Sign Up
-				</button>
+
+				<header>
+					<a className='logo' href='/'>
+						<img src={Logo1} alt='Allon'/>
+						<span className='beta'>beta</span>
+					</a>
+
+					<ul>
+						<li><a href='/signin'>Sign In</a></li>
+						<li><a href='/signup'>Sign Up</a></li>
+						<li><a href='/'>Contact</a></li>
+					</ul>
+				</header>
+
+				<div className='auth'>
+					<img className='logo-auth' src={Logo1} alt='Allons' />
+					<p>Sign Up</p>
+					<input
+						type='text'
+						name='displayName'
+						placeholder='E.g.: Michael Scott'
+						value={this.state.displayName}
+						onChange={this.handleDisplayNameChange}
+					/>
+					<input
+						type='text'
+						name='email'
+						placeholder='E.g.: michaelscott@hotmail.com'
+						value={this.state.email}
+						onChange={this.handleEmailChange}
+					/>
+					<input
+						type='password'
+						name='password'
+						placeholder='Your password'
+						value={this.state.password}
+						onChange={this.handlePasswordChange}
+					/>
+					<button onClick={this.signUpWithEmailAndPasswordHandler}>
+						Sign Up
+					</button>
+					<br/>
+					<a className='sub-text' href='/sign-in'>Already have an account? Sign in here</a>
+				</div>
 			</div>
 		)
 	}

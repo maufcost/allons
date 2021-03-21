@@ -1,0 +1,100 @@
+.landing-page {
+	/* background-color: salmon; */
+}
+
+.landing-page header {
+	background-color: var(--card-color);
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px;
+}
+
+.landing-page header .logo {
+	transition: 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+}
+
+.landing-page header .logo:hover {
+	opacity: 0.6;
+	transition: 0.2s;
+}
+
+.landing-page header .logo img {
+	width: 50px;
+}
+
+.landing-page header .logo span {
+	display: inline-block;
+	margin-left: 5px;
+	background-color: var(--warning);
+	padding: 5px;
+	border-radius: var(--card-br);
+	font-size: 0.8em;
+	color: var(--primary);
+}
+
+.landing-page header ul {
+	list-style: none;
+	display: flex;
+	margin: 0;
+	margin-right: 2%;
+}
+
+.landing-page header ul li {
+	list-style: none;
+	display: flex;
+	margin: 0;
+	margin-left: 20px;
+}
+
+.landing-page header ul li a {
+	text-decoration: none;
+	color: var(--primary);
+	transition: 0.2s;
+	font-size: 0.9em;
+}
+
+.landing-page header ul li a:hover {
+	text-decoration: underline;
+	color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.landing-page .showcase {
+	text-align: center;
+	margin-top: 8%;
+}
+
+.landing-page .showcase h1 {
+	margin: 0;
+	font-size: 2.9em;
+}
+
+.landing-page .showcase p {
+	margin: 0;
+	margin-top: 15px;
+	color: var(--left-sidebar-font-color);
+}
+
+.landing-page .showcase button {
+	border-radius: var(--card-br);
+	padding: 8px 16px;
+	background-color: var(--primary);
+	color: var(--card-color);
+	transition: 0.2s;
+	border: none;
+	margin-top: 15px;
+}
+
+.landing-page .showcase button:hover {
+	cursor: pointer;
+	background-color: var(--card-color);
+	color: var(--primary);
+	transition: 0.2s;
+	border: 1px solid var(--card-border-color);
+}

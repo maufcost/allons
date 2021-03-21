@@ -65,7 +65,7 @@ class Block extends React.Component {
 	onChangeContent(content, delta, source, editor) {
 
 		// Quill has this weird bug where it adds these unneeded html tags.
-		content = content.replaceAll('<p><br></p>', '');
+		// content = content.replaceAll('<p><br></p>', '');
 
 		// Updating local state.
 		this.setState({ content });

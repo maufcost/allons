@@ -30,15 +30,20 @@
 	overflow: auto;
 }
 
-.add-video-message-modal header {
+.add-audio-message-modal-inner {
 	position: relative;
+	width: 100%;
+	height: 100%;
+}
+
+.add-video-message-modal header {
 	text-align: center;
 }
 
 .add-video-message-modal header .close-button {
 	position: absolute;
-	top: -20px;
-	right: -10px;
+	top: 10px;
+	right: 10px;
 	background: transparent;
 	border-radius: 50%;
 	/* border: 2px solid var(--primary); */
@@ -201,4 +206,5 @@
 	border-radius: var(--card-br);
 	margin: 0 auto;
 	margin-top: 10px;
+	padding: 4px;
 }

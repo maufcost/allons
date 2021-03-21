@@ -10,6 +10,7 @@ class ModuleThumbnail extends React.Component {
 	}
 
 	handleClick() {
+		console.log("ModuleThumbnail handleClick")
 		const module = {
 			id: this.props.id,
 			moduleName: this.props.name,

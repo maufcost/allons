@@ -52,7 +52,7 @@ export const generateUserDocument = async (user, additionalData) => {
 }
 
 // Retrieves a user document
-const getUserDocument = async uid => {
+export const getUserDocument = async uid => {
 	if (!uid) return null;
 
 	// Retrieving user.

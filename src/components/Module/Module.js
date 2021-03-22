@@ -6,6 +6,9 @@ import Section from '../Section/Section'
 import { updateUserModule } from '../../firebase'
 import { generateRandomId } from '../../util/main_util'
 
+import OneColumnOutlineIcon from '../../assets/Icons/one-column.svg';
+import TwoColumnOutlineIcon from '../../assets/Icons/two-columns.svg';
+
 import './Module.css';
 
 class Module extends React.Component {
@@ -170,11 +173,27 @@ class Module extends React.Component {
 						<small>Your module name will be visible to your module viewers</small>
 					</div>
 					<div className='module-config'>
-						<button onClick={this.save}>Save module</button>
-						<button onClick={this.addAudioMessage}>Add Audio Message</button>
-						<button onClick={this.addVideoMessage}>Add Video Message</button>
-						<button onClick={this.handlePreview}>Preview module</button>
-						<button onClick={this.handleNewSection}>Create section</button>
+						<div>
+							<button onClick={this.save}>Save module</button>
+							<button onClick={this.addAudioMessage}>Add Audio Message</button>
+							<button onClick={this.addVideoMessage}>Add Video Message</button>
+							<button onClick={this.handlePreview}>Preview module</button>
+							<button onClick={this.handleNewSection}>Create section</button>
+						</div>
+						<div className='toolbar'>
+							<button disabled className='toolbar-button'>
+								<img
+									src={OneColumnOutlineIcon}
+									alt='Single column module outline'
+								/>
+							</button>
+							<button disabled className='toolbar-button'>
+								<img
+									src={TwoColumnOutlineIcon}
+									alt='Double column module outline'
+								/>
+							</button>
+						</div>
 					</div>
 				</header>
 

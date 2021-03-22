@@ -28,6 +28,11 @@ function Profile({ user }) {
 		}
 	}
 
+	// @TODO: Better error handling.
+	if (errorFirebase) {
+		console.log('[Profile] Error');
+	}
+
 	// Formatting display name.
 	let userFormattedDisplayName = 'Default Display Name'
 	if (user) {

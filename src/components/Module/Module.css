@@ -65,3 +65,23 @@
 	color: var(--left-sidebar-font-color);
 	transition: 0.2s;
 }
+
+.module header .module-config .toolbar-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.module header .module-config .toolbar {
+	display: flex;
+}
+
+.module header .module-config .toolbar-button:disabled {
+	/* opacity: 0.8; */
+	cursor: not-allowed;
+	padding: 6px;
+}
+
+.module header .module-config .toolbar-button img {
+	width: 15px;
+}

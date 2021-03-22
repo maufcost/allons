@@ -6,8 +6,8 @@ import Section from '../Section/Section'
 import { updateUserModule } from '../../firebase'
 import { generateRandomId } from '../../util/main_util'
 
-import OneColumnOutlineIcon from '../../assets/Icons/one-column.svg';
-import TwoColumnOutlineIcon from '../../assets/Icons/two-columns.svg';
+import OneColumnOutlineIcon from '../../assets/allons-icons/one-column.svg';
+import TwoColumnOutlineIcon from '../../assets/allons-icons/two-columns.svg';
 
 import './Module.css';
 

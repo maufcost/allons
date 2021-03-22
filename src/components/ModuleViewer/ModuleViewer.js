@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 import BlockViewer from '../BlockViewer/BlockViewer';
-import Play from '../../assets/Icons/play.svg';
-import Pause from '../../assets/Icons/pause.svg';
+import Play from '../../assets/allons-icons/play.svg';
+import Pause from '../../assets/allons-icons/pause.svg';
 import Logo1 from '../../assets/Logos/logo1.svg';
 
 import { getUserDocument, getUserModule } from '../../firebase';

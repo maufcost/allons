@@ -3,8 +3,8 @@
 // stuff is here.
 import React from 'react';
 
-import Play from '../../assets/Icons/play.svg';
-import Pause from '../../assets/Icons/pause.svg';
+import Play from '../../assets/allons-icons/play.svg';
+import Pause from '../../assets/allons-icons/pause.svg';
 
 import { uploadVideoMessage } from '../../firebase';
 import { generateId } from '../../util/main_util';

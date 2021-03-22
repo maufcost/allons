@@ -76,8 +76,6 @@ class Module extends React.Component {
 	save() {
 		if (this.props.user) {
 			// Saving changes on firebase.
-			console.log('save, this.state.sections:')
-			console.log(this.state.sections)
 			updateUserModule(this.props.user.uid, {
 				id: this.props.id,
 				name: this.state.moduleName,
@@ -139,7 +137,6 @@ class Module extends React.Component {
 		const sections = this.state.sections;
 
 		for (let i = 0; i < sections.length; i++) {
-			console.log(sections[i])
 			children.push(
 				<Section
 					key={sections[i].id}

@@ -58,7 +58,6 @@ function Dashboard({
 	const handleShowingModule = (module) => {
 		// To force <Module/> re-rerender
 		// setShowModule(false);
-		console.log("handleShowingModule")
 		setShowModule(true);
 
 		setSelectedModuleId(module.id);
@@ -129,7 +128,6 @@ function Dashboard({
 	// 	<p>There isn't a user</p>
 	// }
 
-	console.log(showModule)
 	return (
 		<div className='dashboard'>
 			<div className='left-sidebar'>

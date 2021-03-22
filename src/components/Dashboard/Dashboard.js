@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from 'react';
+import { navigate } from '@reach/router';
 
 import Profile from '../Profile/Profile'
 import Module from '../Module/Module';
@@ -99,6 +100,7 @@ function Dashboard({
 
 	const handleSignOut = () => {
 		signOutUser();
+		navigate('/');
 	}
 
 	const closeModule = () => {

@@ -18,7 +18,7 @@ class Module extends React.Component {
 
 		this.state = {
 			moduleId: this.props.id,
-			moduleName: this.props.name,
+			moduleName: this.props.name || "Default module name",
 			sections: this.props.sections,
 			isPublic: true
 		};

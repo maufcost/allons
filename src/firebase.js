@@ -27,7 +27,6 @@ export const firebaseStorage = firebase.storage();
 // Generates a user document on firebase if there isn't one already there
 export const generateUserDocument = async (user, additionalData) => {
 	if (!user) return;
-
 	const userRef = firestore.doc(`users/${user.uid}`);
 	const snapshot = await userRef.get();
 

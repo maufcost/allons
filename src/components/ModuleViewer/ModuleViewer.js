@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 
+import ProfileImage from '../ProfileImage/ProfileImage'
 import BlockViewer from '../BlockViewer/BlockViewer';
+
 import Play from '../../assets/allons-icons/play.svg';
 import Pause from '../../assets/allons-icons/pause.svg';
 import Logo1 from '../../assets/Logos/logo1.svg';
@@ -178,7 +180,10 @@ function ModuleViewer({ userId, moduleId }) {
 		authorInformation = (
 			<div className='author-information'>
 				<p><span>Written by</span> {user.displayName}</p>
-				<img src={user.photoURL} alt='User' />
+				<ProfileImage
+					user={user}
+					profileImageURL={user.photoURL}
+				/>
 			</div>
 		);
 	}

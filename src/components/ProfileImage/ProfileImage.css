@@ -1,4 +1,21 @@
+.profile-image-container {
+	margin: 0 auto;
+	display: inline-block;
+}
+
 .profile-image-container img {
 	width: 50px;
 	border-radius: 50%;
+}
+
+.profile-image-container .default-user-profile-image {
+	border: 1px solid var(--border-color-light);
+	border-radius: 50%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0;
+	padding: 0;
+	height: 35px;
+	width: 35px;
 }

@@ -1,4 +1,5 @@
 import React from 'react';
+import { navigate } from '@reach/router';
 
 import Logo1 from '../../assets/Logos/logo1.svg';
 
@@ -26,8 +27,8 @@ class Landing extends React.Component {
 					<h1>Explain once</h1>
 					<h1>Present once</h1>
 					<h1>Share anytime</h1>
-					<p>Allon lets you record audio and video messages and share them with your documents</p>
-					<button onClick={null}>Sign In</button>
+					<p>Allons lets you record audio and video messages and share them with your documents</p>
+					<button onClick={e => navigate('/signin')}>Sign In</button>
 				</div>
 
 			</div>

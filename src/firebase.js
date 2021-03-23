@@ -152,15 +152,12 @@ export const signOutUser = () => {
 
 // Retrieves some user based on email array.
 export const retrieveSomeUsers = async (emailList) => {
-	console.log("retrieveSomeUsers, emailList:")
-	console.log(emailList)
+
 	let users = [];
 	try {
 		for (let i = 0; i < emailList.length; i++) {
 			const snap = await firestore.collection("users")
 				.where("email", "==", emailList[i]).get();
-
-			console.log(emailList[i]);
 
 			// Should always make only 1 iteration.
 			snap.forEach((doc) => {

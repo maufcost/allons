@@ -2,6 +2,8 @@ import React from 'react';
 
 import { retrieveSomeUsers } from '../../firebase';
 
+import ProfileImage from '../ProfileImage/ProfileImage';
+
 import './BlockViewer.css';
 
 class BlockViewer extends React.Component {
@@ -43,7 +45,8 @@ class BlockViewer extends React.Component {
 			// Still don't know if I'm going to put the display name in the UI though.
 			return (
 				<div className='mention-picture-wrapper' key={ix}>
-					<img className='mention-profile-picture' src={user.photoURL} alt='User'/>
+					<ProfileImage user={user} />
+					{/* <img className='mention-profile-picture' src={user.photoURL} alt='User'/> */}
 					{/* <p>{user.displayName}</p> */}
 				</div>
 			)

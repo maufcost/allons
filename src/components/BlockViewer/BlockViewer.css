@@ -11,7 +11,9 @@
 	transition: 0.2s;
 }
 
-.module-viewer-block .block-content p {
+.module-viewer-block .block-content p,
+.module-viewer-block .block-content ul,
+.module-viewer-block .block-content ol {
 	margin: 0 !important;
 }
 

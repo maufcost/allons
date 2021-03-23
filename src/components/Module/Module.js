@@ -8,6 +8,8 @@ import { generateRandomId } from '../../util/main_util'
 
 import OneColumnOutlineIcon from '../../assets/allons-icons/one-column.svg';
 import TwoColumnOutlineIcon from '../../assets/allons-icons/two-columns.svg';
+import PrivateModuleIcon from '../../assets/allons-icons/private-lock.svg';
+import GitHubIcon from '../../assets/allons-icons/github-icon.svg';
 
 import './Module.css';
 
@@ -188,6 +190,18 @@ class Module extends React.Component {
 								<img
 									src={TwoColumnOutlineIcon}
 									alt='Double column module outline'
+								/>
+							</button>
+							<button disabled className='toolbar-button'>
+								<img
+									src={PrivateModuleIcon}
+									alt='Private Module'
+								/>
+							</button>
+							<button disabled className='toolbar-button'>
+								<img
+									src={GitHubIcon}
+									alt='Private Module'
 								/>
 							</button>
 						</div>

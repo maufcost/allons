@@ -33,7 +33,9 @@ function Dashboard({
 			if (user) {
 				// Retrieve all the modules from this user
 				let { modules } = await getUserModules(user)
-				setModules(Object.values(modules));
+				if (modules) {
+					setModules(Object.values(modules));
+				}
 			}else {
 				console.log('[fetchModules] Error')
 			}
@@ -59,11 +61,11 @@ function Dashboard({
 	const handleShowingModule = (module) => {
 		// To force <Module/> re-rerender
 		// setShowModule(false);
-		setShowModule(true);
-
 		setSelectedModuleId(module.id);
 		setSelectedModuleName(module.moduleName);
 		setSelectedModuleSections(module.moduleSections);
+
+		setShowModule(true);
 	}
 
 	// Creates new module

@@ -146,3 +146,7 @@
 	width: 25px;
 	height: 25px;
 }
+
+.module-viewer-section .module-viewer-section-name {
+	font-weight: 600;
+}

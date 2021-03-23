@@ -205,7 +205,7 @@ function ModuleViewer({ userId, moduleId }) {
 
 			<footer>
 				<small>
-					Built with <a href="http://producthunt.com"><img src={Logo1} alt='Allons'/></a>
+					Built with <a href="/dashboard"><img src={Logo1} alt='Allons'/></a>
 				</small>
 			</footer>
 		</div>

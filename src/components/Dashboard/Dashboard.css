@@ -71,3 +71,8 @@
 	margin-bottom: 20px;
 	color: var(--left-sidebar-font-color);
 }
+
+/* @TODO: DELETE BELOW */
+.dashboard .left-sidebar .left-sidebar-button-list button:disabled {
+	cursor: not-allowed;
+}

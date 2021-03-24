@@ -8,6 +8,7 @@ import Dashboard from '../Dashboard/Dashboard';
 import ModuleViewer from '../ModuleViewer/ModuleViewer';
 import AddVideoMessageModal from '../AddVideoMessageModal/AddVideoMessageModal';
 import AddAudioMessageModal from '../AddAudioMessageModal/AddAudioMessageModal';
+import EmbeddableMessage from '../EmbeddableMessage/EmbeddableMessage';
 
 import './Main.css';
 
@@ -33,24 +34,46 @@ class Main extends React.Component {
 		this.closeAddAudioMessageModal = this.closeAddAudioMessageModal.bind(this);
 	}
 
-	openAddVideoMessageModal(moduleId, userId) {
-		this.setState({
-			openAddVideoMessageModal: true,
-			videoMessageModuleId: moduleId,
-			videoMessageUserId: userId
-		});
+	openAddVideoMessageModal({ moduleId, userId, embed }) {
+		if (embed) {
+			// User is generating an embed code with the message for a non-allons
+			// module.
+			this.setState({
+				openAddVideoMessageModal: true,
+				videoMessageModuleId: null,
+				videoMessageUserId: userId
+			});
+		}else {
+			// User is adding a video message on an allons module.
+			this.setState({
+				openAddVideoMessageModal: true,
+				videoMessageModuleId: moduleId,
+				videoMessageUserId: userId
+			});
+		}
 	}
 
 	closeAddVideoMessageModal() {
 		this.setState({ openAddVideoMessageModal: false });
 	}
 
-	openAddAudioMessageModal(moduleId, userId) {
-		this.setState({
-			openAddAudioMessageModal: true,
-			audioMessageModuleId: moduleId,
-			audioMessageUserId: userId
-		});
+	openAddAudioMessageModal({ moduleId, userId, embed }) {
+		if (embed) {
+			// User is generating an embed code with the message for a non-allons
+			// module.
+			this.setState({
+				openAddAudioMessageModal: true,
+				audioMessageModuleId: null,
+				audioMessageUserId: userId
+			});
+		}else {
+			// User is adding a video message on an allons module.
+			this.setState({
+				openAddAudioMessageModal: true,
+				audioMessageModuleId: moduleId,
+				audioMessageUserId: userId
+			});
+		}
 	}
 
 	closeAddAudioMessageModal() {
@@ -74,6 +97,8 @@ class Main extends React.Component {
 					/>
 
 					<ModuleViewer path='/:userId/:moduleId' />
+
+					<EmbeddableMessage path='msg' />
 				</Router>
 
 				{/* Modals */}

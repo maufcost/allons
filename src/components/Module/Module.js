@@ -127,11 +127,19 @@ class Module extends React.Component {
 	}
 
 	addAudioMessage() {
-		this.props.openAddAudioMessageModal(this.state.moduleId, this.props.user.uid);
+		this.props.openAddAudioMessageModal({
+			moduleId: this.state.moduleId,
+			userId: this.props.user.uid,
+			embed: false
+		});
 	}
 
 	addVideoMessage() {
-		this.props.openAddVideoMessageModal(this.state.moduleId, this.props.user.uid);
+		this.props.openAddVideoMessageModal({
+			moduleId: this.state.moduleId,
+			userId: this.props.user.uid,
+			embed: false
+		});
 	}
 
 	render() {

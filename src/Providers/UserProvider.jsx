@@ -17,12 +17,13 @@ class UserProvider extends React.Component {
 		auth.onAuthStateChanged(async userAuth => {
 			// console.log('onAuthStateChanged in UserProvider called')
 
+			// Creating or retrieving a user.
 			const user = await generateUserDocument(userAuth);
 
-			// console.log(user);
-
 			this.setState({ user });
-		})
+
+			// console.log(user);
+		});
 	}
 
 	render() {

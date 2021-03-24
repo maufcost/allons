@@ -184,6 +184,10 @@ class AddVideoMessageModal extends React.Component {
 		}
 	}
 
+	generateEmbedCode() {
+
+	}
+
 	render() {
 		return (
 			<div>
@@ -191,7 +195,12 @@ class AddVideoMessageModal extends React.Component {
 				<div className='add-video-message-modal'>
 					<div className='add-video-message-modal-inner'>
 						<header>
-							<p className='title'>Add a personalized video message for your module viewers</p><br/>
+							{this.props.moduleId ? (
+								<p className='title'>Add a personalized video message for your module viewers</p>
+							) : (
+								<p className='title'>Add a personalized video message to an external website</p>
+							)}
+							<br/>
 							<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
 							<button
 								className='close-button'
@@ -201,7 +210,7 @@ class AddVideoMessageModal extends React.Component {
 							</button>
 						</header>
 
-						{this.state.flashMessage && (
+						{this.state.flashMessage && this.props.moduleId && (
 							<div className='video-message-flash-message'>
 								<p>Your video message has been successfully added to your module</p>
 							</div>
@@ -250,13 +259,24 @@ class AddVideoMessageModal extends React.Component {
 							>
 								{this.state.isRecordingStarted ? 'Stop recording' : 'Start recording' }
 							</button>
-							<button
-								className='add-video-message-to-module-button'
-								onClick={this.addVideoMessageToModule}
-								disabled={!this.state.isPreviewRecorded}
-							>
-								Add Video Message to Module
-							</button>
+
+							{this.props.moduleId ? (
+								<button
+									className='add-video-message-to-module-button'
+									onClick={this.addVideoMessageToModule}
+									disabled={!this.state.isPreviewRecorded}
+								>
+									Add video message to module
+								</button>
+							) : (
+								<button
+									className='add-video-message-to-module-button'
+									onClick={this.generateEmbedCode}
+									disabled={!this.state.isPreviewRecorded}
+								>
+									Generate embed code
+								</button>
+							)}
 							{this.state.isRecordingStarted && (
 								<div className='timer'>
 									<p>Time left: <b>{this.state.countdown}</b></p>

@@ -161,6 +161,10 @@ class AddAudioMessageModal extends React.Component {
 		}
 	}
 
+	generateEmbedCode() {
+
+	}
+
 	render() {
 		return (
 			<div>
@@ -168,7 +172,12 @@ class AddAudioMessageModal extends React.Component {
 				<div className='add-audio-message-modal'>
 					<div className='add-audio-message-modal-inner'>
 						<header>
-							<p className='title'>Add a personalized audio message for your module viewers</p><br />
+							{this.props.moduleId ? (
+								<p className='title'>Add a personalized audio message for your module viewers</p>
+							): (
+								<p className='title'>Add a personalized audio message to an external website</p>
+							)}
+							<br />
 							<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
 							<button
 								className='close-button'
@@ -178,7 +187,7 @@ class AddAudioMessageModal extends React.Component {
 							</button>
 						</header>
 
-						{this.state.flashMessage && (
+						{this.state.flashMessage && this.props.moduleId && (
 							<div className='audio-message-flash-message'>
 								<p>Your audio message has been successfully added to your module</p>
 							</div>
@@ -211,13 +220,24 @@ class AddAudioMessageModal extends React.Component {
 							>
 								{this.state.isRecordingStarted ? 'Stop recording' : 'Start recording' }
 							</button>
-							<button
-								className='add-audio-message-to-module-button'
-								onClick={this.addAudioMessageToModule}
-								disabled={!this.state.isPreviewRecorded}
-							>
-								Add Audio Message to Module
-							</button>
+
+							{this.props.moduleId ? (
+								<button
+									className='add-audio-message-to-module-button'
+									onClick={this.addAudioMessageToModule}
+									disabled={!this.state.isPreviewRecorded}
+								>
+									Add Audio Message to Module
+								</button>
+							): (
+								<button
+									className='add-audio-message-to-module-button'
+									onClick={this.generateEmbedCode}
+									disabled={!this.state.isPreviewRecorded}
+								>
+									Add Audio Message to Module
+								</button>
+							)}
 							{this.state.isRecordingStarted && (
 								<div className='timer'>
 									<p>Time left: <b>{this.state.countdown}</b></p>

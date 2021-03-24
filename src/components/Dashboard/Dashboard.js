@@ -13,10 +13,7 @@ import Logo1 from '../../assets/Logos/logo1.svg';
 
 import './Dashboard.css';
 
-function Dashboard({
-	openAddVideoMessageModal,
-	openAddAudioMessageModal
-}) {
+function Dashboard(props) {
 
 	const user = useContext(UserContext);
 	const [modules, setModules] = useState([]);
@@ -24,9 +21,24 @@ function Dashboard({
 	const [selectedModuleId, setSelectedModuleId] = useState(null);
 	const [selectedModuleName, setSelectedModuleName] = useState("");
 	const [selectedModuleSections, setSelectedModuleSections] = useState([]);
+	const [isLoading, setIsLoading] = useState(false);
 
 	// componentDidMount()
 	useEffect(() => {
+
+		if (user === null) {
+			// It means that the user provider hasn't returned yet.
+
+			// Loading animation here.
+			setIsLoading(true);
+		}
+
+		if (typeof user === 'undefined') {
+			// It means that the user provider has returned and, therefore, this
+			// user is not logged in.
+			navigate('/');
+		}
+
 		// useEffect shouldn't be async to prevent race conditions.
 		async function fetchModules() {
 			// Check if there's a user
@@ -88,6 +100,18 @@ function Dashboard({
 		}
 	}
 
+	const openEmbedVideoMessage = () => {
+		if (user) {
+			props.openAddVideoMessageModal({ userId: user.uid, embed: true });
+		}
+	}
+
+	const openEmbedAudioMessage = () => {
+		if (user) {
+			props.openAddAudioMessageModal({ userId: user.uid, embed: true });
+		}
+	}
+
 	const updateModule = async ({ id, moduleName, moduleSections }) => {
 
 		// Updating single module.
@@ -132,6 +156,8 @@ function Dashboard({
 	// 	<p>There isn't a user</p>
 	// }
 
+	// /* <iframe title='embeddable message uhu' src='http://localhost:3000/msg'/> */
+
 	return (
 		<div className='dashboard'>
 			<div className='left-sidebar'>
@@ -139,7 +165,9 @@ function Dashboard({
 
 				<div className='left-sidebar-button-list'>
 					<button onClick={createModule}>Create Module</button>
-					<button onClick={createModule}>Contact</button>
+					<button disabled onClick={openEmbedVideoMessage}>Embed Video Message</button>
+					<button disabled onClick={openEmbedAudioMessage}>Embed Audio Message</button>
+					<button disabled onClick={createModule}>Contact</button>
 					<button onClick={handleSignOut}>Sign out</button>
 				</div>
 
@@ -149,7 +177,7 @@ function Dashboard({
 			</div>
 
 			<main>
-				{/* Any selected module will show here. */}
+				{/* A selected module will show here. */}
 				{showModule ?
 					<Module
 						id={selectedModuleId}
@@ -159,8 +187,8 @@ function Dashboard({
 						user={user}
 						updateModule={updateModule}
 						closeModule={closeModule}
-						openAddVideoMessageModal={openAddVideoMessageModal}
-						openAddAudioMessageModal={openAddAudioMessageModal}
+						openAddVideoMessageModal={props.openAddVideoMessageModal}
+						openAddAudioMessageModal={props.openAddAudioMessageModal}
 					/>
 				:
 					<section className='main-content-module-not-opened'>

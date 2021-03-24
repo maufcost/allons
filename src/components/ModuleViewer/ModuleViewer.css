@@ -2,9 +2,10 @@
 	position: relative;
 	background-color: var(--card-color);
 	width: 70vw;
-	height: 100vh;
+	min-height: 100vh;
 	margin: 0 auto;
 	padding: 0 20px;
+	padding-bottom: 60px;
 }
 
 .module-viewer p {
@@ -55,10 +56,9 @@
 }
 
 .module-viewer .video-message-player-container {
-	/* position: absolute;
+	position: fixed;
 	bottom: 20px;
-	right: -90px; */
-	margin-bottom: 20px;
+	right: 20px;
 }
 
 .module-viewer .video-message-player {
@@ -111,6 +111,7 @@
 	position: absolute;
 	bottom: 10px;
 	font-size: 0.8em;
+	/* opacity: 0.8; */
 }
 
 .module-viewer footer:hover img {
@@ -118,9 +119,15 @@
 }
 
 .module-viewer .audio-message-player-container {
-	/* position: absolute; */
-	bottom: 10px;
-	margin-bottom: 20px;
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
+}
+
+.module-viewer .audio-message-player-container.extra-offset {
+	position: fixed;
+	bottom: 220px;
+	right: 100px;
 }
 
 .module-viewer .audio-message-play-pause {

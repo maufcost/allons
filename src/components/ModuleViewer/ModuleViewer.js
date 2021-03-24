@@ -43,11 +43,19 @@ function ModuleViewer({ userId, moduleId }) {
 		fetchModule();
 	}, [userId, moduleId]);
 
-	// Detecting when video message (if any) ended
+	// Detecting when video message (if any) ended.
 	// @TODO: Move this to a componentdidmount-equivalent
 	if (videoMessageRef != null && videoMessageRef.current != null) {
 		videoMessageRef.current.addEventListener('ended', () => {
 			setIsVideoMessagePlaying(false);
+		})
+	}
+
+	// Detecting when audio message (if any) ended.
+	// @TODO: Move this to a componentdidmount-equivalent
+	if (audioMessageRef != null && audioMessageRef.current != null) {
+		audioMessageRef.current.addEventListener('ended', () => {
+			setIsAudioMessagePlaying(false);
 		})
 	}
 
@@ -158,8 +166,13 @@ function ModuleViewer({ userId, moduleId }) {
 
 		// Rendering module audio message
 		if (module.audioMessageURL) {
+
+			let className = 'audio-message-player-container ';
+			className += videoMessage ? 'extra-offset' : '';
+
 			audioMessage = (
-				<div className='audio-message-player-container'>
+				<div
+					className={className}>
 					<button
 						className='audio-message-play-pause'
 						onClick={playPauseAudioMessage}
@@ -179,7 +192,7 @@ function ModuleViewer({ userId, moduleId }) {
 	if (user) {
 		authorInformation = (
 			<div className='author-information'>
-				<p><span>Written by</span> {user.displayName}</p>
+				<p><span>Created by</span> {user.displayName}</p>
 				<ProfileImage
 					user={user}
 					profileImageURL={user.photoURL}

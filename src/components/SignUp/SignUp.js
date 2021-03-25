@@ -1,7 +1,7 @@
 import React from 'react';
 import { navigate } from '@reach/router'
 
-import { auth, generateUserDocument } from '../../firebase.js';
+import { auth, createUserDocument } from '../../firebase.js';
 
 import Logo1 from '../../assets/Logos/logo1.svg';
 
@@ -16,7 +16,8 @@ class SignUp extends React.Component {
 			displayName: '',
 			email: '',
 			password: '',
-			error: null
+			error: null,
+			loading: false
 		};
 
 		this.signUpWithEmailAndPasswordHandler = this.signUpWithEmailAndPasswordHandler.bind(this);
@@ -28,6 +29,8 @@ class SignUp extends React.Component {
 	async signUpWithEmailAndPasswordHandler(e) {
 		e.preventDefault();
 
+		this.setState({ loading: true });
+
 		try {
 			// Here, we register the new user on the Authentication API from firebase.
 			const { user } = await auth.createUserWithEmailAndPassword(
@@ -35,9 +38,12 @@ class SignUp extends React.Component {
 			);
 
 			// Here, we register the new user (all of its info) on Firestore.
-			generateUserDocument(user, { displayName: this.state.displayName });
+			await createUserDocument(user, { displayName: this.state.displayName });
 
-			navigate('/signin');
+			navigate('/dashboard', { state: { uid: user.uid } });
+
+			this.setState({ loading: false });
+
 		} catch(error) {
 			this.setState({
 				error: 'Error signing up with email and password'
@@ -101,8 +107,15 @@ class SignUp extends React.Component {
 						value={this.state.password}
 						onChange={this.handlePasswordChange}
 					/>
-					<button onClick={this.signUpWithEmailAndPasswordHandler}>
-						Sign Up
+					<button
+						onClick={this.signUpWithEmailAndPasswordHandler}
+						disabled={this.state.loading}
+					>
+						{!this.state.loading ? (
+							<p>Sign Up</p>
+						) : (
+							<p>Preparing Allons to you...</p>
+						)}
 					</button>
 					<br/>
 					<a className='sub-text' href='/sign-in'>Already have an account? Sign in here</a>

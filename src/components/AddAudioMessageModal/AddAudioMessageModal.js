@@ -20,7 +20,8 @@ class AddAudioMessageModal extends React.Component {
 			isPreviewRecorded: false,
 			isPreviewPlaying: false,
 			countdown: 10,
-			flashMessage: false
+			hasFlashMessage: false,
+			flashMessage: ''
 		};
 
 		this.mediaRecorder = null;
@@ -31,6 +32,7 @@ class AddAudioMessageModal extends React.Component {
 		this.audioConstraintsObj = { audio: true, video: false };
 
 		this.addAudioMessageToModule = this.addAudioMessageToModule.bind(this);
+		this.onBlockAudioPermission = this.onBlockAudioPermission.bind(this);
 		this.startStopRecording = this.startStopRecording.bind(this);
 		this.playPausePreview = this.playPausePreview.bind(this);
 		this.startCountdown = this.startCountdown.bind(this);
@@ -38,7 +40,6 @@ class AddAudioMessageModal extends React.Component {
 	}
 
 	componentDidMount() {
-
 		// User video stream retrieval setup
 		navigator.mediaDevices.getUserMedia(this.audioConstraintsObj)
 		.then((mediaStreamObj) => {
@@ -72,18 +73,28 @@ class AddAudioMessageModal extends React.Component {
 			}
 		})
 		.catch((error) => {
-			console.log('Error: ', error)
+			// console.log('Error: ', error)
+			this.onBlockAudioPermission();
 		});
 	}
 
 	componentWillUnmount() {
-		this.mediaStreamObj.getTracks().forEach((track) => {
-			track.stop();
-		})
+		if (this.mediaStreamObj) {
+			this.mediaStreamObj.getTracks().forEach((track) => {
+				track.stop();
+			});
+		}
 
 		// To avoid those 'can't update state after component has been unmounted'
 		// errors.
 		clearInterval(id);
+	}
+
+	onBlockAudioPermission() {
+		this.setState({
+			hasFlashMessage: true,
+			flashMessage: "Make sure to give Allons permission to listen to you"
+		})
 	}
 
 	startStopRecording() {
@@ -153,7 +164,8 @@ class AddAudioMessageModal extends React.Component {
 			);
 
 			this.setState({
-				flashMessage: true,
+				hasFlashMessage: true,
+				flashMessage: 'Your audio message has been successfully added to your module',
 				// To disable the add audio message button to prevent users
 				// from clicking twice on it.
 				isPreviewRecorded: false
@@ -189,7 +201,7 @@ class AddAudioMessageModal extends React.Component {
 
 						{this.state.flashMessage && this.props.moduleId && (
 							<div className='audio-message-flash-message'>
-								<p>Your audio message has been successfully added to your module</p>
+								<p>{this.state.flashMessage}</p>
 							</div>
 						)}
 

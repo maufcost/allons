@@ -30,8 +30,8 @@ class SignIn extends React.Component {
 		auth.signInWithEmailAndPassword(
 			this.state.email, this.state.password
 		)
-		.then((obj) => {
-			navigate('/dashboard');
+		.then((res) => {
+			navigate('/dashboard', { state: { uid: res.user.uid } });
 		})
 		.catch(error => {
 			console.log('Error signing user in with email and password', error);

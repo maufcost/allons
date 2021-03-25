@@ -6,7 +6,10 @@ class ProfileImage extends React.Component {
 	render() {
 		// Generating a default profile "image" if a user does not have one.
 		let displayNameInitials = ''
-		if (this.props.user !== null & typeof this.props.user !== 'undefined') {
+		if (this.props.user !== null &&
+			typeof this.props.user !== 'undefined' &&
+			this.props.user.displayName
+		) {
 			const displayNameArr = this.props.user.displayName.split(' ');
 			for (let i = 0; i < displayNameArr.length; i++) {
 				displayNameInitials += displayNameArr[i][0].toUpperCase();

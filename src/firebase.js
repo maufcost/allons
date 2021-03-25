@@ -25,29 +25,29 @@ export const firestore = firebase.firestore();
 export const firebaseStorage = firebase.storage();
 
 // Generates a user document on firebase if there isn't one already there
-export const generateUserDocument = async (user, additionalData) => {
+export const createUserDocument = async (user, additionalData) => {
 	if (!user) return;
 	const userRef = firestore.doc(`users/${user.uid}`);
 	const snapshot = await userRef.get();
 
+	// console.log('[firebase.js]', user)
+	// console.log('[firebase.js]', additionalData)
+
 	// The user does not exist.
 	if (!snapshot.exists) {
-		const { email, displayName, photoURL } = user;
+		const { email } = user;
 
 		// Creating new user.
 		try {
 			await userRef.set({
-				displayName,
 				email,
-				photoURL,
-				...additionalData
+				displayName: additionalData.displayName,
+				photoURL: null
 			});
 		}catch(error) {
 			console.error("[generateUserDocument] Error", error);
 		}
 	}
-
-	return getUserDocument(user.uid);
 }
 
 // Retrieves a user document
@@ -57,6 +57,7 @@ export const getUserDocument = async uid => {
 	// Retrieving user.
 	try {
 		const userDocument = await firestore.doc(`users/${uid}`).get();
+
 		return {
 			uid,
 			...userDocument.data()

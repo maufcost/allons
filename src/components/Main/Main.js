@@ -6,9 +6,12 @@ import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import Dashboard from '../Dashboard/Dashboard';
 import ModuleViewer from '../ModuleViewer/ModuleViewer';
+import Loading from '../Loading/Loading';
 import AddVideoMessageModal from '../AddVideoMessageModal/AddVideoMessageModal';
 import AddAudioMessageModal from '../AddAudioMessageModal/AddAudioMessageModal';
 import EmbeddableMessage from '../EmbeddableMessage/EmbeddableMessage';
+// import { auth } from '../../firebase'
+
 
 import './Main.css';
 
@@ -24,7 +27,9 @@ class Main extends React.Component {
 
 			audioMessageModuleId: null,
 			audioMessageUserId: null,
-			openAddAudioMessageModal: false
+			openAddAudioMessageModal: false,
+
+			showLoadingAnimation: false
 		};
 
 		this.openAddVideoMessageModal = this.openAddVideoMessageModal.bind(this);
@@ -32,7 +37,14 @@ class Main extends React.Component {
 
 		this.openAddAudioMessageModal = this.openAddAudioMessageModal.bind(this);
 		this.closeAddAudioMessageModal = this.closeAddAudioMessageModal.bind(this);
+
+		this.showLoadingAnimation = this.showLoadingAnimation.bind(this);
+		this.stopLoadingAnimation = this.stopLoadingAnimation.bind(this);
 	}
+
+	// componentDidMount() {
+	// 	console.log(auth.currentUser);
+	// }
 
 	openAddVideoMessageModal({ moduleId, userId, embed }) {
 		if (embed) {
@@ -80,11 +92,21 @@ class Main extends React.Component {
 		this.setState({ openAddAudioMessageModal: false });
 	}
 
+	showLoadingAnimation() {
+		this.setState({ showLoadingAnimation: true });
+	}
+
+	stopLoadingAnimation() {
+		this.setState({ showLoadingAnimation: false });
+	}
+
 	render() {
 		return(
 			<div>
 				<Router>
-					<Landing path='/' />
+					<Landing
+						path='/'
+					/>
 
 					<SignUp path='/signup' />
 
@@ -100,6 +122,11 @@ class Main extends React.Component {
 
 					<EmbeddableMessage path='msg' />
 				</Router>
+
+				{/* Loading */}
+				{this.state.showLoadingAnimation && (
+					<Loading />
+				)}
 
 				{/* Modals */}
 				{this.state.openAddVideoMessageModal && (

@@ -23,7 +23,8 @@ class AddVideoMessageModal extends React.Component {
 			isPreviewRecorded: false,
 			isPreviewPlaying: false,
 			countdown: 10,
-			flashMessage: false
+			hasFlashMessage: false,
+			flashMessage: ''
 		};
 
 		this.mediaRecorder = null;
@@ -43,6 +44,7 @@ class AddVideoMessageModal extends React.Component {
 		this.videoPreviewRef = React.createRef();
 
 		this.addVideoMessageToModule = this.addVideoMessageToModule.bind(this);
+		this.onBlockVideoPermission = this.onBlockVideoPermission.bind(this);
 		this.startStopRecording = this.startStopRecording.bind(this);
 		this.playPausePreview = this.playPausePreview.bind(this);
 		this.startCountdown = this.startCountdown.bind(this);
@@ -92,7 +94,9 @@ class AddVideoMessageModal extends React.Component {
 			}
 		})
 		.catch((error) => {
-			console.log('Error: ', error)
+			// console.log('Error: ', error)
+
+			this.onBlockVideoPermission();
 		})
 
 		// Event listeners
@@ -104,13 +108,22 @@ class AddVideoMessageModal extends React.Component {
 	}
 
 	componentWillUnmount() {
-		this.mediaStreamObj.getTracks().forEach((track) => {
-			track.stop();
-		})
+		if (this.mediaStreamObj) {
+			this.mediaStreamObj.getTracks().forEach((track) => {
+				track.stop();
+			});
+		}
 
 		// To avoid those 'can't update state after component has been unmounted'
 		// errors.
 		clearInterval(id);
+	}
+
+	onBlockVideoPermission() {
+		this.setState({
+			hasFlashMessage: true,
+			flashMessage: "Make sure to give Allons permission to see you :)"
+		})
 	}
 
 	startStopRecording() {
@@ -176,10 +189,11 @@ class AddVideoMessageModal extends React.Component {
 			);
 
 			this.setState({
-				flashMessage: true,
+				hasFlashMessage: true,
+				flashMessage: 'Your video message has been successfully added to your module',
 				// To disable the add video message button to prevent users
 				// from clicking twice on it.
-				isPreviewRecorded: false
+				isPreviewRecorded: false,
 			});
 		}
 	}
@@ -210,9 +224,9 @@ class AddVideoMessageModal extends React.Component {
 							</button>
 						</header>
 
-						{this.state.flashMessage && this.props.moduleId && (
+						{this.state.hasFlashMessage && this.props.moduleId && (
 							<div className='video-message-flash-message'>
-								<p>Your video message has been successfully added to your module</p>
+								<p>{this.state.flashMessage}</p>
 							</div>
 						)}
 

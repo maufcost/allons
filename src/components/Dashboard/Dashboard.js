@@ -6,8 +6,8 @@ import Module from '../Module/Module';
 import ModuleThumbnail from '../ModuleThumbnail/ModuleThumbnail';
 
 import { generateRandomId } from '../../util/main_util'
-import { createNewUserModule, getUserModules, signOutUser } from '../../firebase'
-import { UserContext } from '../../Providers/UserProvider';
+import { getUserDocument, createNewUserModule, getUserModules, signOutUser } from '../../firebase'
+// import { UserContext } from '../../Providers/UserProvider';
 
 import Logo1 from '../../assets/Logos/logo1.svg';
 
@@ -15,28 +15,33 @@ import './Dashboard.css';
 
 function Dashboard(props) {
 
-	const user = useContext(UserContext);
+	const [user, setUser] = useState(null);
 	const [modules, setModules] = useState([]);
 	const [showModule, setShowModule] = useState(false);
 	const [selectedModuleId, setSelectedModuleId] = useState(null);
 	const [selectedModuleName, setSelectedModuleName] = useState("");
 	const [selectedModuleSections, setSelectedModuleSections] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
 
 	// componentDidMount()
 	useEffect(() => {
+		fetchModules();
 
 		if (user === null) {
-			// It means that the user provider hasn't returned yet.
-
-			// Loading animation here.
-			setIsLoading(true);
+			// It means that I haven't fetched the user yet.
+			getUser();
 		}
 
 		if (typeof user === 'undefined') {
-			// It means that the user provider has returned and, therefore, this
-			// user is not logged in.
+			// It means that this user does not exist or is not logged in.
 			navigate('/');
+		}
+
+		async function getUser() {
+			if (props.location.state) {
+				setUser(await getUserDocument(props.location.state.uid));
+			}else {
+				setUser(undefined)
+			}
 		}
 
 		// useEffect shouldn't be async to prevent race conditions.
@@ -47,14 +52,14 @@ function Dashboard(props) {
 				let { modules } = await getUserModules(user)
 				if (modules) {
 					setModules(Object.values(modules));
+
+					// Stop loading animation
 				}
 			}else {
 				console.log('[fetchModules] Error')
 			}
 		}
-
-		fetchModules();
-	}, [user])
+	}, [user, props])
 
 	// It will be called after handleShowingModule in order to force a re-render.
 	// We need to have this useEffect here because setShowModule(true) was right

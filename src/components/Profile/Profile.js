@@ -25,6 +25,10 @@ function Profile({ user }) {
 			// An error occurred
 			setFile(null);
 			setError('Please, select a png or jpeg image file. Thank you!');
+
+			setTimeout(() => {
+				setError(null);
+			}, 3000);
 		}
 	}
 
@@ -34,11 +38,11 @@ function Profile({ user }) {
 	}
 
 	// Formatting display name.
-	let userFormattedDisplayName = 'Default Display Name'
+	let userFormattedDisplayName = 'Default Display Name';
 
-	console.log(user)
+	// console.log(user);
 
-	if (user !== null & typeof user !== 'undefined') {
+	if (user !== null & typeof user !== 'undefined' && user.displayName) {
 		const displayNameArr = user.displayName.split(' ');
 		for (let i = 0; i < displayNameArr.length; i++) {
 			displayNameArr[i] =
@@ -53,10 +57,12 @@ function Profile({ user }) {
 			<div className='user-profile-information'>
 
 				<div className='profile-image-wrapper'>
-					<ProfileImage
-						user={user}
-						profileImageURL={url}
-					/>
+					{user && (
+						<ProfileImage
+							user={user}
+							profileImageURL={url}
+						/>
+					)}
 					<input type='file' onChange={handleFileInputChange} />
 				</div>
 

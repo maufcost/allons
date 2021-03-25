@@ -7,7 +7,7 @@ import Logo1 from '../../assets/Logos/logo1.svg';
 
 import './Landing.css';
 
-function Landing () {
+function Landing (props) {
 
 	const user = useContext(UserContext);
 
@@ -15,10 +15,11 @@ function Landing () {
 	useEffect(() => {
 
 		if (user !== null & typeof user !== 'undefined') {
+			// The user is already logged in.
 			navigate('/dashboard');
 		}
 
-	}, [user])
+	}, [user, props]);
 
 	return (
 		<div className='landing-page'>

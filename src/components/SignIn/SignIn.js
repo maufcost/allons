@@ -40,8 +40,8 @@ class SignIn extends React.Component {
 			this.setState({ loading: false, flashMessage: false });
 		})
 		.catch(error => {
-			this.setState({ flashMessage: true });
-			console.log('Error signing user in with email and password', error);
+			this.setState({ loading: false, flashMessage: true });
+			// console.log('Error signing user in with email and password', error);
 		});
 	}
 

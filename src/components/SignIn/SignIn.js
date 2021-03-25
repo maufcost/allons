@@ -16,7 +16,8 @@ class SignIn extends React.Component {
 			email: '',
 			password: '',
 			error: null,
-			loading: false
+			loading: false,
+			flashMessage: true
 		}
 
 		this.signInWithEmailAndPasswordHandler = this.signInWithEmailAndPasswordHandler.bind(this)
@@ -36,9 +37,10 @@ class SignIn extends React.Component {
 		.then((res) => {
 			navigate('/dashboard', { state: { uid: res.user.uid } });
 
-			this.setState({ loading: false });
+			this.setState({ loading: false, flashMessage: false });
 		})
 		.catch(error => {
+			this.setState({ flashMessage: true });
 			console.log('Error signing user in with email and password', error);
 		});
 	}
@@ -71,6 +73,11 @@ class SignIn extends React.Component {
 				<div className='auth'>
 					<img className='logo-auth' src={Logo1} alt='Allons' />
 					<p>Sign In</p>
+					{this.state.flashMessage && (
+						<div className='flash-message'>
+							<p>Your email or password may be wrong or you don't have an account yet</p>
+						</div>
+					)}
 					<input
 						type='text'
 						name='email'

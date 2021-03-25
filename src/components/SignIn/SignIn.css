@@ -115,6 +115,10 @@
 	color: var(--primary);
 }
 
+.sign-in .auth button:disabled {
+	cursor: not-allowed;
+}
+
 .sign-in .auth .sub-text {
 	margin: 0;
 	text-decoration: none;

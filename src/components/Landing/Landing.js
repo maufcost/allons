@@ -16,7 +16,7 @@ function Landing (props) {
 
 		if (user !== null & typeof user !== 'undefined') {
 			// The user is already logged in.
-			navigate('/dashboard');
+			navigate('/dashboard', { state: { uid: user.uid } });
 		}
 
 	}, [user, props]);

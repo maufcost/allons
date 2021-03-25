@@ -7,7 +7,6 @@ import ModuleThumbnail from '../ModuleThumbnail/ModuleThumbnail';
 
 import { generateRandomId } from '../../util/main_util'
 import { getUserDocument, createNewUserModule, getUserModules, signOutUser } from '../../firebase'
-// import { UserContext } from '../../Providers/UserProvider';
 
 import Logo1 from '../../assets/Logos/logo1.svg';
 

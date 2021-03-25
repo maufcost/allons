@@ -15,7 +15,8 @@ class SignIn extends React.Component {
 		this.state = {
 			email: '',
 			password: '',
-			error: null
+			error: null,
+			loading: false
 		}
 
 		this.signInWithEmailAndPasswordHandler = this.signInWithEmailAndPasswordHandler.bind(this)
@@ -26,12 +27,16 @@ class SignIn extends React.Component {
 	signInWithEmailAndPasswordHandler(e) {
 		e.preventDefault();
 
+		this.setState({ loading: true });
+
 		// Signing user in on firebase.
 		auth.signInWithEmailAndPassword(
 			this.state.email, this.state.password
 		)
 		.then((res) => {
 			navigate('/dashboard', { state: { uid: res.user.uid } });
+
+			this.setState({ loading: false });
 		})
 		.catch(error => {
 			console.log('Error signing user in with email and password', error);
@@ -80,8 +85,15 @@ class SignIn extends React.Component {
 						value={this.state.password}
 						onChange={this.handlePasswordChange}
 					/>
-					<button onClick={this.signInWithEmailAndPasswordHandler}>
-						Sign In
+					<button
+						onClick={this.signInWithEmailAndPasswordHandler}
+						disabled={this.state.loading}
+					>
+						{!this.state.loading ? (
+							<p>Sign In</p>
+						): (
+							<p>Preparing Allons to you...</p>
+						)}
 					</button>
 					<br/>
 					<a className='sub-text' href='/sign-up'>Don't have an account yet? Register now for free</a>

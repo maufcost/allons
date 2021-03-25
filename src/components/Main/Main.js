@@ -12,7 +12,6 @@ import AddAudioMessageModal from '../AddAudioMessageModal/AddAudioMessageModal';
 import EmbeddableMessage from '../EmbeddableMessage/EmbeddableMessage';
 // import { auth } from '../../firebase'
 
-
 import './Main.css';
 
 class Main extends React.Component {

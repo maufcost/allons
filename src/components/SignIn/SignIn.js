@@ -17,7 +17,7 @@ class SignIn extends React.Component {
 			password: '',
 			error: null,
 			loading: false,
-			flashMessage: true
+			flashMessage: false
 		}
 
 		this.signInWithEmailAndPasswordHandler = this.signInWithEmailAndPasswordHandler.bind(this)

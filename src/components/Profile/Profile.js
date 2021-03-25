@@ -36,6 +36,8 @@ function Profile({ user }) {
 	// Formatting display name.
 	let userFormattedDisplayName = 'Default Display Name'
 
+	console.log(user)
+
 	if (user !== null & typeof user !== 'undefined') {
 		const displayNameArr = user.displayName.split(' ');
 		for (let i = 0; i < displayNameArr.length; i++) {

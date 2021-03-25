@@ -161,7 +161,9 @@ function Dashboard(props) {
 	return (
 		<div className='dashboard'>
 			<div className='left-sidebar'>
-				<Profile user={user} />
+				{user && (
+					<Profile user={user} />
+				)}
 
 				<div className='left-sidebar-button-list'>
 					<button onClick={createModule}>Create Module</button>

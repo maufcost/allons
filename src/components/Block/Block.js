@@ -45,6 +45,7 @@ class Block extends React.Component {
 		super(props);
 
 		this.state = {
+			id: this.props.id,
 			content: this.props.content,
 			activeMentions: [],
 			renderViewerBlock: true
@@ -52,14 +53,26 @@ class Block extends React.Component {
 
 		this.quill = React.createRef();
 
-		this.onChangeContent = this.onChangeContent.bind(this);
-		this.detectMentions = this.detectMentions.bind(this);
-		this.renderEditorBlock = this.renderEditorBlock.bind(this);
+		this.removeBlock = this.removeBlock.bind(this);
 		this.previewBlock = this.previewBlock.bind(this);
+		this.detectMentions = this.detectMentions.bind(this);
+		this.onChangeContent = this.onChangeContent.bind(this);
+		this.renderEditorBlock = this.renderEditorBlock.bind(this);
 	}
 
 	componentDidMount() {
 		this.detectMentions(this.state.content);
+	}
+
+	// I need to do that because of when I remove blocks and how React does not
+	// fully re-render a child component.
+	componentDidUpdate(prevProps, prevState) {
+		if (prevProps.id !== this.props.id) {
+			this.setState({
+				id: this.props.id,
+				content: this.props.content
+			});
+		}
 	}
 
 	onChangeContent(content, delta, source, editor) {
@@ -71,7 +84,7 @@ class Block extends React.Component {
 		this.setState({ content });
 
 		// Sending change to parent Section component
-		this.props.onChangeBlockContent(this.props.id, content)
+		this.props.onChangeBlockContent(this.state.id, content)
 
 		// Detect mentions.
 		this.detectMentions(content);
@@ -96,6 +109,12 @@ class Block extends React.Component {
 
 	previewBlock(e) {
 		this.setState({ renderViewerBlock: true });
+	}
+
+	removeBlock(e) {
+		this.setState({ renderViewerBlock: true });
+
+		this.props.removeBlock(e, this.state.id);
 	}
 
 	render() {
@@ -130,9 +149,9 @@ class Block extends React.Component {
 					<div className='module-block-to-edit'>
 						<header>
 							<button
-								onClick={e => this.props.removeBlock(e, this.props.id)}
+								onClick={this.removeBlock}
 							>
-								Delete Block
+								Delete Block {this.state.id}
 							</button>
 							<button onClick={this.previewBlock}>Preview block</button>
 						</header>

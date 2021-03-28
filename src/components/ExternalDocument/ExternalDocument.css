@@ -1,0 +1,122 @@
+.external-document {
+	min-width: 100%;
+}
+
+.external-document header {
+	display: flex;
+	align-items: center;
+}
+
+.external-document header h1 {
+	margin-left: 20px;
+	max-width: 35%;
+	overflow-x: auto;
+}
+
+.external-document header .toolbar .toolbar-inner-container {
+	margin-left: 20px;
+}
+
+.external-document header .toolbar .toolbar-line-one {
+	display: flex;
+	align-items: center;
+	padding-left: 10px;
+}
+
+.external-document header .toolbar .toolbar-line-one div {
+	display: flex;
+	align-items: center;
+}
+
+.external-document header .toolbar .toolbar-line-one .toolbar-item {
+	margin-left: 20px;
+}
+
+.external-document header .close-external-document-button {
+	background: transparent;
+	border-radius: 50%;
+	border: 2px solid var(--primary);
+	color: var(--primary);
+	font-weight: 800;
+	transition: 0.2s;
+}
+
+.external-document header .close-external-document-button:hover {
+	cursor: pointer;
+	color: var(--left-sidebar-font-color);
+	border: 2px solid var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.external-document header .document-input-container {
+	position: relative;
+	border-radius: var(--card-br);
+	background: transparent;
+	border: 1px solid var(--left-sidebar-font-color);
+	padding: 8px 16px;
+	transition: 0.2s;
+	font-size: 0.6em;
+}
+
+.external-document header .document-input-container:hover {
+	cursor: pointer;
+	color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.external-document header .document-input-container button {
+	border: none;
+	background: transparent;
+}
+
+.external-document header .document-input-container:hover button {
+	cursor: pointer;
+	color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.external-document header .document-input-container input {
+	position: absolute;
+	width: 100%;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	transition: 0.2s;
+	opacity: 0;
+}
+
+.external-document header .document-input-container input:hover {
+	cursor: pointer;
+	transition: 0.2s;
+}
+
+.external-document header button.toolbar-item {
+	position: relative;
+	margin-left: 10px;
+	border-radius: var(--card-br);
+	background: transparent;
+	border: 1px solid var(--left-sidebar-font-color);
+	padding: 8px 16px;
+	transition: 0.2s;
+	font-size: 0.6em;
+}
+
+.external-document header button.toolbar-item:hover {
+	cursor: pointer;
+	color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.external-document header .toolbar-line-two {
+	margin-top: 10px;
+}
+
+.external-document header .toolbar-line-two span {
+	display: inline-block;
+	margin-left: 20px;
+}
+
+.external-document .selected-document-container canvas {
+	margin: 0 auto;
+}

@@ -66,6 +66,37 @@
 	transition: 0.2s;
 }
 
+.module header .module-config button:disabled {
+	cursor: not-allowed;
+}
+
+.module header .module-config button.should-save {
+	background-color: var(--primary);
+	color: var(--card-color);
+}
+
+.module header .module-config button.should-save:hover {
+	color: var(--primary);
+	background-color: var(--card-color);
+}
+
+.module header .module-config button p {
+	margin: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.module header .module-config button.message-button img {
+	width: 10px;
+	margin-left: 5px;
+}
+
+.module header .module-config button.message-button:hover img {
+	opacity: 0.6;
+	transition: 0.2s;
+}
+
 .module header .module-config .toolbar-button {
 	display: flex;
 	align-items: center;

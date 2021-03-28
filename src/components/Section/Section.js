@@ -56,10 +56,12 @@ class Section extends React.Component {
 
 		if (typeof block !== 'undefined') {
 			const index = blocks.indexOf(block);
+
 			if (index > -1) {
 				// Splice is done in-place
 				blocks.splice(index, 1);
-				this.setState({ blocks: [...blocks] })
+				this.setState({ blocks: [...blocks] });
+
 			}else {
 				console.log('[Section -> removeBlock][2] Error');
 			}

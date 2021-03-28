@@ -10,6 +10,7 @@ function Profile({ user }) {
 
 	const [file, setFile] = useState(null);
 	const [error, setError] = useState(null);
+	const [profileMsg, setProfileMsg] = useState(null);
 
 	const { url, errorFirebase } = useFirebaseStorage(user, file);
 
@@ -32,6 +33,14 @@ function Profile({ user }) {
 		}
 	}
 
+	const handleMouseEnter = (e) => {
+		setProfileMsg('Add profile picture');
+	}
+
+	const handleMouseLeave = (e) => {
+		setProfileMsg(null);
+	}
+
 	// @TODO: Better error handling.
 	if (errorFirebase) {
 		console.log('[Profile] Error');
@@ -52,7 +61,11 @@ function Profile({ user }) {
 	}
 
 	return (
-		<div className='user-profile'>
+		<div
+			className='user-profile'
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+		>
 			{error ? <div className='error'>{ error }</div> : null}
 			<div className='user-profile-information'>
 
@@ -66,10 +79,18 @@ function Profile({ user }) {
 					<input type='file' onChange={handleFileInputChange} />
 				</div>
 
-
 				<div className='user-data'>
-					<p>{userFormattedDisplayName}</p>
-					{user ? <span>{user.email}</span> : null}
+					{profileMsg ? (
+						<div>
+							<p className='add-profile-picture-msg'>{profileMsg}</p>
+							<span>You gotta look pretty</span>
+						</div>
+					) : (
+						<div>
+							<p>{userFormattedDisplayName}</p>
+							{user ? <span>{user.email}</span> : null}
+						</div>
+					)}
 				</div>
 			</div>
 		</div>

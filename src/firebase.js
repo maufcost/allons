@@ -30,9 +30,6 @@ export const createUserDocument = async (user, additionalData) => {
 	const userRef = firestore.doc(`users/${user.uid}`);
 	const snapshot = await userRef.get();
 
-	// console.log('[firebase.js]', user)
-	// console.log('[firebase.js]', additionalData)
-
 	// The user does not exist.
 	if (!snapshot.exists) {
 		const { email } = user;
@@ -103,7 +100,8 @@ export const createNewUserModule = async (uid, moduleId) => {
 	module[moduleId] = {
 		id: moduleId,
 		moduleName: "Default module name",
-		moduleSections: []
+		moduleSections: [],
+		viewers: 0
 	}
 
 	try {
@@ -246,5 +244,104 @@ export const uploadAudioMessage = async (filename, blob, moduleId, userId) => {
 		})
 	}catch(error) {
 		console.log("[postVideoMessage] Error 1", error);
+	}
+}
+
+// Creates a new external document for a user
+export const createNewExternalDocument = async (uid, externalDocumentId, fileName, file) => {
+	if (!uid) return null;
+	if (!externalDocumentId) return null;
+
+	let url;
+
+	try {
+		const storageRef = firebaseStorage.ref(externalDocumentId);
+
+		storageRef.put(file).on("state_changed", (snapshot) => {
+			// Any progress bar stuff can go here...
+		},
+		(error) => {
+			console.log("[createNewExternalDocument] Error 2", error);
+		},
+		await addEverythingToTheDB
+		);
+
+		async function addEverythingToTheDB() {
+			const url = await storageRef.getDownloadURL();
+
+			let doc = {};
+			doc[externalDocumentId] = { id: externalDocumentId, url, fileName };
+
+			firestore.doc(`external-documents/${uid}`).set(
+				{ ...doc },
+				{ merge: true }
+			)
+		}
+
+		return { id: externalDocumentId, url, fileName };
+
+	}catch(error) {
+		console.log("[createNewExternalDocument] Error 1", error);
+	}
+}
+
+// Retrieves an external document
+export const getExternalDocument = async (uid, externalDocumentId) => {
+	if (!uid) return null;
+	if (!externalDocumentId) return null;
+
+	try {
+		// @TODO: Change db schema (to create subcollections) to retrieve only one document.
+		const doc = await firestore.doc(`external-documents/${uid}`).get(); // retrieves all of them.
+		console.log('Returning the newly added doc')
+		return doc.data()[externalDocumentId];
+	}catch(error) {
+		console.log("[getExternalDocument] Error", error);
+	}
+}
+
+// Updates an external document
+export const updateExternalDocument = async (uid, externalDocumentId, fileName, file) => {
+	if (!uid) return null;
+	if (!externalDocumentId) return null;
+
+	try {
+		// externalDocumentId must be the same as when I added to the database
+		// so that I can override the last document (and not store two documents)
+		const storageRef = firebaseStorage.ref(externalDocumentId);
+
+		storageRef.put(file).on("state_changed", (snapshot) => {
+
+		},
+		(error) => {
+			console.log("[updateExternalDocument] Error 2", error);
+		},
+		async () => {
+			const url = await storageRef.getDownloadURL();
+
+			let doc = {};
+			doc[externalDocumentId] = { id: externalDocumentId, url, fileName };
+
+			await firestore.doc(`external-documents/${uid}`).set(
+				{ ...doc },
+				{ merge: true }
+			);
+		});
+	}catch(error) {
+		console.log("[updateExternalDocument] Error 1", error);
+	}
+}
+
+// Retrieves all external documents from a user.
+export const getExternalDocuments = async uid => {
+	if (!uid) return null;
+
+	try {
+		const docs = await firestore.doc(`external-documents/${uid}`).get();
+		return {
+			externalDocuments: docs.data()
+		}
+	}catch(error) {
+		console.log("[getExternalDocuments] Error", error);
 	}
 }

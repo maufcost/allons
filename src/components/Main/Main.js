@@ -23,12 +23,12 @@ class Main extends React.Component {
 			videoMessageModuleId: null,
 			videoMessageUserId: null,
 			openAddVideoMessageModal: false,
+			lastVideoMessageURL: null,
 
 			audioMessageModuleId: null,
 			audioMessageUserId: null,
 			openAddAudioMessageModal: false,
-
-			showLoadingAnimation: false
+			lastAudioMessageURL: null
 		};
 
 		this.openAddVideoMessageModal = this.openAddVideoMessageModal.bind(this);
@@ -36,16 +36,13 @@ class Main extends React.Component {
 
 		this.openAddAudioMessageModal = this.openAddAudioMessageModal.bind(this);
 		this.closeAddAudioMessageModal = this.closeAddAudioMessageModal.bind(this);
-
-		this.showLoadingAnimation = this.showLoadingAnimation.bind(this);
-		this.stopLoadingAnimation = this.stopLoadingAnimation.bind(this);
 	}
 
 	// componentDidMount() {
 	// 	console.log(auth.currentUser);
 	// }
 
-	openAddVideoMessageModal({ moduleId, userId, embed }) {
+	openAddVideoMessageModal({ moduleId, userId, embed, videoMessageURL }) {
 		if (embed) {
 			// User is generating an embed code with the message for a non-allons
 			// module.
@@ -59,7 +56,8 @@ class Main extends React.Component {
 			this.setState({
 				openAddVideoMessageModal: true,
 				videoMessageModuleId: moduleId,
-				videoMessageUserId: userId
+				videoMessageUserId: userId,
+				lastVideoMessageURL: videoMessageURL
 			});
 		}
 	}
@@ -68,7 +66,7 @@ class Main extends React.Component {
 		this.setState({ openAddVideoMessageModal: false });
 	}
 
-	openAddAudioMessageModal({ moduleId, userId, embed }) {
+	openAddAudioMessageModal({ moduleId, userId, embed, audioMessageURL }) {
 		if (embed) {
 			// User is generating an embed code with the message for a non-allons
 			// module.
@@ -78,11 +76,12 @@ class Main extends React.Component {
 				audioMessageUserId: userId
 			});
 		}else {
-			// User is adding a video message on an allons module.
+			// User is adding an audio message on an allons module.
 			this.setState({
 				openAddAudioMessageModal: true,
 				audioMessageModuleId: moduleId,
-				audioMessageUserId: userId
+				audioMessageUserId: userId,
+				lastAudioMessageURL: audioMessageURL
 			});
 		}
 	}
@@ -91,12 +90,8 @@ class Main extends React.Component {
 		this.setState({ openAddAudioMessageModal: false });
 	}
 
-	showLoadingAnimation() {
-		this.setState({ showLoadingAnimation: true });
-	}
-
-	stopLoadingAnimation() {
-		this.setState({ showLoadingAnimation: false });
+	previewModule(uid, moduleId) {
+		window.open(`/${uid}/${moduleId}`);
 	}
 
 	render() {
@@ -115,6 +110,7 @@ class Main extends React.Component {
 						path='/dashboard'
 						openAddVideoMessageModal={this.openAddVideoMessageModal}
 						openAddAudioMessageModal={this.openAddAudioMessageModal}
+						previewModule={this.previewModule}
 					/>
 
 					<ModuleViewer path='/:userId/:moduleId' />
@@ -133,6 +129,8 @@ class Main extends React.Component {
 						closeAddVideoMessageModal={this.closeAddVideoMessageModal}
 						moduleId={this.state.videoMessageModuleId}
 						userId={this.state.videoMessageUserId}
+						lastVideoMessageURL={this.state.lastVideoMessageURL}
+						previewModule={this.previewModule}
 					/>
 				)}
 
@@ -141,6 +139,8 @@ class Main extends React.Component {
 						closeAddAudioMessageModal={this.closeAddAudioMessageModal}
 						moduleId={this.state.audioMessageModuleId}
 						userId={this.state.audioMessageUserId}
+						lastAudioMessageURL={this.state.lastAudioMessageURL}
+						previewModule={this.previewModule}
 					/>
 				)}
 			</div>

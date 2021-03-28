@@ -5,6 +5,7 @@ import React from 'react';
 
 import Play from '../../assets/allons-icons/play.svg';
 import Pause from '../../assets/allons-icons/pause.svg';
+import CloseIcon from '../../assets/allons-icons/close-icon.svg';
 
 import { uploadVideoMessage } from '../../firebase';
 import { generateId } from '../../util/main_util';
@@ -22,9 +23,19 @@ class AddVideoMessageModal extends React.Component {
 			isRecordingStarted: false,
 			isPreviewRecorded: false,
 			isPreviewPlaying: false,
+			isLastMessagePlaying: false,
+
 			countdown: 10,
+
 			hasFlashMessage: false,
-			flashMessage: ''
+			flashMessage: '',
+
+			videoMessageAddedToModule: false,
+
+			animationStyle: {
+				opacity: 0,
+				transition: 'opacity 2s ease'
+			}
 		};
 
 		this.mediaRecorder = null;
@@ -42,9 +53,12 @@ class AddVideoMessageModal extends React.Component {
 
 		this.videoRecordRef = React.createRef();
 		this.videoPreviewRef = React.createRef();
+		this.lastMessageVideoRef = React.createRef();
 
 		this.addVideoMessageToModule = this.addVideoMessageToModule.bind(this);
 		this.onBlockVideoPermission = this.onBlockVideoPermission.bind(this);
+		this.playPauseLastMessage = this.playPauseLastMessage.bind(this);
+		this.handlePreviewModule = this.handlePreviewModule.bind(this);
 		this.startStopRecording = this.startStopRecording.bind(this);
 		this.playPausePreview = this.playPausePreview.bind(this);
 		this.startCountdown = this.startCountdown.bind(this);
@@ -95,16 +109,32 @@ class AddVideoMessageModal extends React.Component {
 		})
 		.catch((error) => {
 			// console.log('Error: ', error)
-
 			this.onBlockVideoPermission();
 		})
 
-		// Event listeners
+		// Listening to when the video preview ends.
 		if (this.videoPreviewRef != null && this.videoPreviewRef.current != null) {
 			this.videoPreviewRef.current.addEventListener('ended', () => {
 				this.setState({ isPreviewPlaying: false });
 			})
 		}
+
+		// Listening to when the last message video ends.
+		if (this.lastMessageVideoRef != null && this.lastMessageVideoRef.current != null) {
+			this.lastMessageVideoRef.current.addEventListener('ended', () => {
+				this.setState({ isLastMessagePlaying: false });
+			})
+		}
+
+		// Setting up fade-in animation
+		setTimeout(() => {
+			this.setState({
+				animationStyle: {
+					opacity: 1,
+					transition: 'opacity 2s ease'
+				}
+			});
+		}, 500);
 	}
 
 	componentWillUnmount() {
@@ -163,6 +193,18 @@ class AddVideoMessageModal extends React.Component {
 		}
 	}
 
+	playPauseLastMessage() {
+		if (this.state.isLastMessagePlaying) {
+			// Pause preview.
+			this.lastMessageVideoRef.current.pause();
+			this.setState({ isLastMessagePlaying: false });
+		}else {
+			// Play preview.
+			this.lastMessageVideoRef.current.play();
+			this.setState({ isLastMessagePlaying: true });
+		}
+	}
+
 	startCountdown() {
 		// Update timer
 		id = setInterval(() => {
@@ -194,8 +236,13 @@ class AddVideoMessageModal extends React.Component {
 				// To disable the add video message button to prevent users
 				// from clicking twice on it.
 				isPreviewRecorded: false,
+				videoMessageAddedToModule: true
 			});
 		}
+	}
+
+	handlePreviewModule() {
+		this.props.previewModule(this.props.userId, this.props.moduleId);
 	}
 
 	generateEmbedCode() {
@@ -206,21 +253,23 @@ class AddVideoMessageModal extends React.Component {
 		return (
 			<div>
 				<div className='add-video-message-modal-bg'></div>
-				<div className='add-video-message-modal'>
+				<div className='add-video-message-modal' style={this.state.animationStyle}>
 					<div className='add-video-message-modal-inner'>
 						<header>
-							{this.props.moduleId ? (
-								<p className='title'>Add a personalized video message for your module viewers</p>
-							) : (
-								<p className='title'>Add a personalized video message to an external website</p>
-							)}
-							<br/>
-							<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
+							<div className='text'>
+								{this.props.moduleId ? (
+									<p className='title'>Add a personalized video message <br/><span>for your module viewers</span></p>
+								) : (
+									<p className='title'>Add a personalized video message to an external website</p>
+								)}
+								<br/>
+								<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
+							</div>
 							<button
 								className='close-button'
 								onClick={this.props.closeAddVideoMessageModal}
 							>
-								<p>X</p>
+								<p><img src={CloseIcon} alt='Close modal' /></p>
 							</button>
 						</header>
 
@@ -231,8 +280,35 @@ class AddVideoMessageModal extends React.Component {
 						)}
 
 						<div className='videos'>
+							{this.props.lastVideoMessageURL && (
+								<div id='last-message-video-area' className='video-area'>
+									<p>Here's the last video message you added to this module</p>
+									<div className='video-wrapper-controls'>
+										<div className='video-wrapper'>
+											<video
+												className='video-last-message'
+												ref={this.lastMessageVideoRef}
+											>
+												<source src={this.props.lastVideoMessageURL} type="video/mp4" />
+											</video>
+										</div>
+										<button
+											className='play-pause-preview-button'
+											onClick={this.playPauseLastMessage}
+										>
+											<img
+												src={this.state.isLastMessagePlaying ? Pause : Play}
+												className='play-pause-img'
+												alt='Play or Pause Video Message Preview'
+											/>
+										</button>
+									</div>
+									<small>Any other video messages that you add to your module will automatically override this one</small>
+								</div>
+							)}
+
 							<div className='video-area'>
-								<p>Here's how you look:</p>
+								<p>Here's how you look now:</p>
 								<div className='video-wrapper'>
 									<video
 										className='video-record'
@@ -241,8 +317,9 @@ class AddVideoMessageModal extends React.Component {
 									></video>
 								</div>
 							</div>
+
 							<div className='video-area'>
-								<p>Here's the message preview:</p>
+								<p>Here's the new message preview:</p>
 								<div className='video-wrapper-controls'>
 									<div className='video-wrapper'>
 										<video
@@ -267,6 +344,7 @@ class AddVideoMessageModal extends React.Component {
 						</div>
 
 						<div className='toolbar'>
+							{/* Start/Stop recording */}
 							<button
 								className='start-record'
 								onClick={this.startStopRecording}
@@ -274,6 +352,7 @@ class AddVideoMessageModal extends React.Component {
 								{this.state.isRecordingStarted ? 'Stop recording' : 'Start recording' }
 							</button>
 
+							{/* Add video message to module/generate embed code */}
 							{this.props.moduleId ? (
 								<button
 									className='add-video-message-to-module-button'
@@ -291,10 +370,23 @@ class AddVideoMessageModal extends React.Component {
 									Generate embed code
 								</button>
 							)}
+
+							{/* Timer */}
 							{this.state.isRecordingStarted && (
 								<div className='timer'>
+									<span className='red-recording'></span>
 									<p>Time left: <b>{this.state.countdown}</b></p>
 								</div>
+							)}
+
+							{/* Preview module */}
+							{this.state.videoMessageAddedToModule && (
+								<button
+									className='add-video-message-to-module-button'
+									onClick={this.handlePreviewModule}
+								>
+									Preview module with new video message
+								</button>
 							)}
 						</div>
 					</div>

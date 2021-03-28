@@ -1,0 +1,18 @@
+.external-doc-thumbnail {
+	border-radius: var(--card-br);
+	color: var(--card-color);
+	padding: 15px;
+	width: 100px;
+	overflow-x: auto;
+	background: rgb(203,164,22);
+	background: linear-gradient(180deg, rgba(203,164,22,1) 0%, rgba(230,125,5,1) 100%);
+}
+
+.external-doc-thumbnail:hover {
+	cursor: pointer;
+	background: #e67d05;
+}
+
+.external-doc-thumbnail p {
+	margin: 0;
+}

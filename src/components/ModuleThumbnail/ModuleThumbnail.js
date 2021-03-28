@@ -13,7 +13,9 @@ class ModuleThumbnail extends React.Component {
 		const module = {
 			id: this.props.id,
 			moduleName: this.props.name,
-			moduleSections: this.props.sections
+			moduleSections: this.props.sections,
+			videoMessageURL: this.props.videoMessageURL,
+			audioMessageURL: this.props.audioMessageURL
 		};
 		this.props.showModule(module);
 	}

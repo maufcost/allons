@@ -1,12 +1,22 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { navigate } from '@reach/router';
 
 import Profile from '../Profile/Profile'
 import Module from '../Module/Module';
 import ModuleThumbnail from '../ModuleThumbnail/ModuleThumbnail';
+import ExternalDocument from '../ExternalDocument/ExternalDocument';
+import ExternalDocThumbnail from '../ExternalDocThumbnail/ExternalDocThumbnail';
 
 import { generateRandomId } from '../../util/main_util'
-import { getUserDocument, createNewUserModule, getUserModules, signOutUser } from '../../firebase'
+import {
+	getUserDocument,
+	createNewUserModule,
+	getUserModules,
+	signOutUser,
+	createNewExternalDocument,
+	updateExternalDocument,
+	getExternalDocuments
+} from '../../firebase'
 
 import Logo1 from '../../assets/Logos/logo1.svg';
 
@@ -20,10 +30,20 @@ function Dashboard(props) {
 	const [selectedModuleId, setSelectedModuleId] = useState(null);
 	const [selectedModuleName, setSelectedModuleName] = useState("");
 	const [selectedModuleSections, setSelectedModuleSections] = useState([]);
+	const [selectedModuleVideoMessageURL, setSelectedModuleVideoMessageURL] = useState(null);
+	const [selectedModuleAudioMessageURL, setSelectedModuleAudioMessageURL] = useState(null);
+	const [flashMessage, setFlashMessage] = useState(null);
+
+	const [showExternalDocument, setShowExternalDocument] = useState(false);
+	const [externalDocuments, setExternalDocuments] = useState([]);
+	const [selectedExternalDocId, setSelectedExternalDocId] = useState(null);
+	const [selectedExternalDocName, setSelectedExternalDocName] = useState(null);
+	const [selectedExternalDocURL, setSelectedExternalDocURL] = useState(null);
 
 	// componentDidMount()
 	useEffect(() => {
 		fetchModules();
+		fetchExternalDocuments();
 
 		if (user === null) {
 			// It means that I haven't fetched the user yet.
@@ -51,11 +71,21 @@ function Dashboard(props) {
 				let { modules } = await getUserModules(user)
 				if (modules) {
 					setModules(Object.values(modules));
-
-					// Stop loading animation
 				}
 			}else {
-				console.log('[fetchModules] Error')
+				console.log('[fetchModules] Error');
+			}
+		}
+
+		async function fetchExternalDocuments() {
+			// Check if there's a user
+			if (user) {
+				let { externalDocuments } = await getExternalDocuments(user.uid);
+				if (externalDocuments) {
+					setExternalDocuments(Object.values(externalDocuments));
+				}
+			}else {
+				console.log('[fetchExternalDocuments] Error');
 			}
 		}
 	}, [user, props])
@@ -71,6 +101,15 @@ function Dashboard(props) {
 		}
 	}, [selectedModuleId, selectedModuleSections])
 
+	// Making the flash message disappear
+	useEffect(() => {
+		if (flashMessage !== null) {
+			setTimeout(() => {
+				setFlashMessage(null);
+			}, 3000);
+		}
+	}, [flashMessage])
+
 	// Shows a module when:
 	// 1) A user clicks on a module thumbnail
 	// 2) OR a user creates a new module
@@ -80,12 +119,27 @@ function Dashboard(props) {
 		setSelectedModuleId(module.id);
 		setSelectedModuleName(module.moduleName);
 		setSelectedModuleSections(module.moduleSections);
+		setSelectedModuleVideoMessageURL(module.videoMessageURL);
+		setSelectedModuleAudioMessageURL(module.audioMessageURL);
 
 		setShowModule(true);
 	}
 
 	// Creates new module
 	const createModule = async () => {
+
+		// Limiting the number of modules to five for now.
+		if (modules.length === 5) {
+
+			setFlashMessage('Allons is limiting five modules per user for now');
+
+			setTimeout(() => {
+				setFlashMessage(null);
+			}, 3000);
+			return;
+		}
+
+		// Creating new module.
 		if (user) {
 			const moduleId = generateRandomId();
 			const newModule = await createNewUserModule(user.uid, moduleId);
@@ -117,7 +171,6 @@ function Dashboard(props) {
 	}
 
 	const updateModule = async ({ id, moduleName, moduleSections }) => {
-
 		// Updating single module.
 		let module = modules.find(module => module.id === id);
 		const index = modules.indexOf(module)
@@ -137,8 +190,49 @@ function Dashboard(props) {
 		setShowModule(false);
 	}
 
+	const closeExternalDocument = () => {
+		setShowExternalDocument(false);
+	}
+
+	const openAddExternalDocument = (fileName, url) => {
+		// Creating a space for an external document.
+		setShowExternalDocument(true);
+
+		console.log("openAddExternalDocument");
+		console.log(fileName)
+		console.log(url);
+
+		if (fileName !== null && url !== null) {
+			setSelectedExternalDocName(fileName);
+			setSelectedExternalDocURL(url);
+		}
+	}
+
+	const createNewExternalDoc = async (id, fileName, file) => {
+		if (user) {
+			const newDoc = await createNewExternalDocument(user.uid, id, fileName, file);
+
+			// Showing new external doc thumbnail as soon as it is created.
+			externalDocuments.push(newDoc);
+			setExternalDocuments([...externalDocuments]);
+		}
+	}
+
+	const updateExternalDoc = async (id, fileName, file) => {
+		if (user) {
+			await updateExternalDocument(user.uid, id, fileName, file);
+		}
+	}
+
+	const handleShowingExternalDoc = (id, fileName, url) => {
+		setSelectedExternalDocId(id);
+		setSelectedExternalDocName(fileName);
+		setSelectedExternalDocURL(url);
+		setShowExternalDocument(true);
+	}
+
 	// Showing the thumbnails of each module on the dashboard.
-	let children = [];
+	let children = null;
 	if (modules !== null && typeof modules !== 'undefined' && modules.length > 0) {
 		children = modules.map((module, ix) => {
 			return (
@@ -147,7 +241,28 @@ function Dashboard(props) {
 					id={module.id}
 					name={module.moduleName}
 					sections={module.moduleSections}
+					videoMessageURL={module.videoMessageURL}
+					audioMessageURL={module.audioMessageURL}
 					showModule={handleShowingModule}
+				/>
+			)
+		});
+	}
+
+	let externalChildren = null;
+	if (
+		externalDocuments !== null &&
+		typeof externalDocuments !== 'undefined' &&
+		externalDocuments.length > 0
+	) {
+		externalChildren = externalDocuments.map((doc, ix) => {
+			return (
+				<ExternalDocThumbnail
+					key={ix}
+					id={doc.id}
+					fileName={doc.fileName}
+					url={doc.url}
+					showExternalDocument={handleShowingExternalDoc}
 				/>
 			)
 		});
@@ -164,6 +279,7 @@ function Dashboard(props) {
 
 	return (
 		<div className='dashboard'>
+
 			<div className='left-sidebar'>
 				{user && (
 					<Profile user={user} />
@@ -171,8 +287,10 @@ function Dashboard(props) {
 
 				<div className='left-sidebar-button-list'>
 					<button onClick={createModule}>Create Module</button>
-					<button disabled onClick={openEmbedVideoMessage}>Embed Video Message</button>
-					<button disabled onClick={openEmbedAudioMessage}>Embed Audio Message</button>
+					<button onClick={openAddExternalDocument}>Add external document</button>
+					<button disabled onClick={null}>Notifications</button>
+					<button disabled onClick={openEmbedVideoMessage}>Embed Video messages</button>
+					<button disabled onClick={openEmbedAudioMessage}>Embed Audio Messages</button>
 					<button disabled onClick={createModule}>Contact</button>
 					<button onClick={handleSignOut}>Sign out</button>
 				</div>
@@ -183,30 +301,79 @@ function Dashboard(props) {
 			</div>
 
 			<main>
+				{flashMessage && (
+					<div className='flash-message'>
+						<p>{flashMessage}</p>
+					</div>
+				)}
+
 				{/* A selected module will show here. */}
-				{showModule ?
+				{showModule && (
 					<Module
 						id={selectedModuleId}
 						name={selectedModuleName}
-						headline={'Temporary Headline!'}
 						sections={selectedModuleSections}
+						videoMessageURL={selectedModuleVideoMessageURL}
+						audioMessageURL={selectedModuleAudioMessageURL}
 						user={user}
 						updateModule={updateModule}
 						closeModule={closeModule}
 						openAddVideoMessageModal={props.openAddVideoMessageModal}
 						openAddAudioMessageModal={props.openAddAudioMessageModal}
+						previewModule={props.previewModule}
 					/>
-				:
+				)}
+
+				{/* A selected external document will show here. */}
+				{showExternalDocument && (
+					<ExternalDocument
+						id={selectedExternalDocId}
+						url={selectedExternalDocURL}
+						fileName={selectedExternalDocName}
+						externalDocName={selectedExternalDocName}
+						externalDocURL={selectedExternalDocURL}
+						createNewExternalDoc={createNewExternalDoc}
+						updateExternalDocument={updateExternalDoc}
+						closeExternalDocument={closeExternalDocument}
+						setFlashMessage={setFlashMessage}
+						openAddVideoMessageModal={props.openAddVideoMessageModal}
+						openAddAudioMessageModal={props.openAddAudioMessageModal}
+					/>
+				)}
+
+				{/* Default dashboard page */}
+				{!showModule && !showExternalDocument && (
 					<section className='main-content-module-not-opened'>
-						<h1>Hello, welcome to allons beta!</h1>
-						<small>Create a module on the left or select one of your modules below to begin</small>
-						<div className='module-thumbnails'>
-							{/* Module thumbnails */}
-							{children}
+
+						<div>
+							<h1>Hello, welcome to allons beta!</h1>
+							<small>Create a module on the left or select one of your modules below to begin</small>
+							<div className='module-thumbnails'>
+								{/* Module thumbnails */}
+								{children ? (
+									children
+								) : (
+									<p className='no-modules-message'>You have no Allons modules yet. Let's create one!</p>
+								)}
+							</div>
 						</div>
-						{/*<p>Click on a module above to see it here</p>*/}
+
+						<div>
+							<h1>Access one of your external documents:</h1>
+							<small>These are documents that you dropped on Allons, such as PDFs.</small>
+							<div className='external-module-thumbnails'>
+								{/* External module thumbnails */}
+
+								{externalChildren ? (
+									externalChildren
+								) : (
+									<p className='no-modules-message'>You have no external modules yet. Let's add one here!</p>
+								)}
+							</div>
+						</div>
 					</section>
-				}
+				)}
+
 			</main>
 		</div>
 	)

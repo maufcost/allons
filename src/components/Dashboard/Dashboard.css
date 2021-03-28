@@ -56,6 +56,7 @@
 .dashboard main {
 	padding: 10px;
 	overflow-y: auto;
+	width: 100%;
 }
 
 .dashboard main .module-thumbnails {
@@ -70,6 +71,20 @@
 	display: block;
 	margin-bottom: 20px;
 	color: var(--left-sidebar-font-color);
+}
+
+.dashboard main .no-modules-message {
+	font-size: 0.8em;
+}
+
+.dashboard main .flash-message p {
+	display: inline-block;
+	margin-bottom: 0;
+	background-color: var(--success);
+	padding: 8px 16px;
+	opacity: 0.8;
+	border-radius: var(--card-br);
+	font-size: 0.8em;
 }
 
 /* @TODO: DELETE BELOW */

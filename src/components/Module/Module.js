@@ -10,6 +10,7 @@ import OneColumnOutlineIcon from '../../assets/allons-icons/one-column.svg';
 import TwoColumnOutlineIcon from '../../assets/allons-icons/two-columns.svg';
 import PrivateModuleIcon from '../../assets/allons-icons/private-lock.svg';
 import GitHubIcon from '../../assets/allons-icons/github-icon.svg';
+import CheckIcon from '../../assets/allons-icons/check-icon.svg';
 
 import './Module.css';
 
@@ -22,20 +23,25 @@ class Module extends React.Component {
 			moduleId: this.props.id,
 			moduleName: this.props.name || "Default module name",
 			sections: this.props.sections,
-			isPublic: true
+			videoMessageURL: this.props.videoMessageURL,
+			audioMessageURL: this.props.audioMessageURL,
+			isPublic: true,
+			isSavingModule: false,
+			shouldSave: false
 		};
 
 		this.moduleNameRef = React.createRef();
 		this.moduleHeadlineRef = React.createRef();
 
-		this.handleNewSection = this.handleNewSection.bind(this);
-		this.updateSection = this.updateSection.bind(this);
 		this.save = this.save.bind(this);
+		this.updateSection = this.updateSection.bind(this);
 		this.removeSection = this.removeSection.bind(this);
-		this.handleModuleNameChange = this.handleModuleNameChange.bind(this);
 		this.handlePreview = this.handlePreview.bind(this);
 		this.addAudioMessage = this.addAudioMessage.bind(this);
 		this.addVideoMessage = this.addVideoMessage.bind(this);
+		this.updateShouldSave = this.updateShouldSave.bind(this);
+		this.handleNewSection = this.handleNewSection.bind(this);
+		this.handleModuleNameChange = this.handleModuleNameChange.bind(this);
 	}
 
 	handleNewSection() {
@@ -50,6 +56,8 @@ class Module extends React.Component {
 		let sections = this.state.sections;
 		sections.push(newSection);
 		this.setState({ sections });
+
+		this.updateShouldSave();
 	}
 
 	updateSection(sectionId, sectionTitle, blocks) {
@@ -70,15 +78,20 @@ class Module extends React.Component {
 
 			// Putting section back to the sections state.
 			this.setState({ sections: [...sections] });
+
+			this.updateShouldSave();
 		}else {
 			console.log('[Module -> updateSection] Error')
 		}
 	}
 
-	save() {
+	async save() {
 		if (this.props.user) {
+
+			this.setState({ shouldSave: false, isSavingModule: true });
+
 			// Saving changes on firebase.
-			updateUserModule(this.props.user.uid, {
+			await updateUserModule(this.props.user.uid, {
 				id: this.props.id,
 				name: this.state.moduleName,
 				sections: this.state.sections
@@ -90,6 +103,12 @@ class Module extends React.Component {
 				moduleName: this.state.moduleName,
 				moduleSections: this.state.sections
 			});
+
+			// I'm adding this timeout after await above just so that users
+			// aren't able to click on the save button multiple times at once.
+			setTimeout(() => {
+				this.setState({ isSavingModule: false });
+			}, 2000);
 		}else {
 			console.log('[Module -> save] Error')
 		}
@@ -112,25 +131,31 @@ class Module extends React.Component {
 		}
 
 		this.setState({ sections })
+
+		this.updateShouldSave();
 	}
 
 	handleModuleNameChange(e) {
 		this.setState({ moduleName: e.target.value });
-	}
 
-	handleModuleHeadlineChange(e) {
-		this.setState({ moduleHeadline: e.target.value });
+		this.updateShouldSave();
 	}
 
 	handlePreview() {
-		window.open(`/${this.props.user.uid}/${this.state.moduleId}`);
+		// window.open(`/${this.props.user.uid}/${this.state.moduleId}`);
+		this.props.previewModule(this.props.user.uid, this.state.moduleId);
+	}
+
+	updateShouldSave() {
+		this.setState({ shouldSave: true });
 	}
 
 	addAudioMessage() {
 		this.props.openAddAudioMessageModal({
 			moduleId: this.state.moduleId,
 			userId: this.props.user.uid,
-			embed: false
+			embed: false,
+			audioMessageURL: this.state.audioMessageURL
 		});
 	}
 
@@ -138,7 +163,8 @@ class Module extends React.Component {
 		this.props.openAddVideoMessageModal({
 			moduleId: this.state.moduleId,
 			userId: this.props.user.uid,
-			embed: false
+			embed: false,
+			videoMessageURL: this.state.videoMessageURL
 		});
 	}
 
@@ -181,9 +207,41 @@ class Module extends React.Component {
 					</div>
 					<div className='module-config'>
 						<div>
-							<button onClick={this.save}>Save module</button>
-							<button onClick={this.addAudioMessage}>Add Audio Message</button>
-							<button onClick={this.addVideoMessage}>Add Video Message</button>
+							<button
+								className={this.state.shouldSave ? 'should-save' : ''}
+								onClick={this.save}
+								disabled={this.state.isSavingModule}
+							>
+								{this.state.isSavingModule ? (
+									<p>Saving for you, sunshine...</p>
+								) : (
+									<p>Save module</p>
+								)}
+							</button>
+							<button
+								className='message-button'
+								onClick={this.addAudioMessage}
+							>
+								{this.state.audioMessageURL ? (
+									<p>
+										Add audio message <img src={CheckIcon} alt='Check'/>
+									</p>
+								) : (
+									<p>Add audio message</p>
+								)}
+							</button>
+							<button
+								className='message-button'
+								onClick={this.addVideoMessage}
+							>
+								{this.state.videoMessageURL ? (
+									<p>
+										Add video message <img src={CheckIcon} alt='Check'/>
+									</p>
+								) : (
+									<p>Add video message</p>
+								)}
+							</button>
 							<button onClick={this.handlePreview}>Preview module</button>
 							<button onClick={this.handleNewSection}>Create section</button>
 						</div>

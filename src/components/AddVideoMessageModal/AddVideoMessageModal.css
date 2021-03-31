@@ -85,10 +85,14 @@
 
 .add-video-message-modal .videos {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: 1fr 1fr;
 	justify-items: center; /* Centers within each 1fr */
 	align-items: center;
 	margin: 10px 0;
+}
+
+.add-video-message-modal .videos.add-extra-fr {
+	grid-template-columns: 1fr 1fr 1fr;
 }
 
 .add-video-message-modal .video-area:first-child {
@@ -130,7 +134,6 @@
 	margin-top: 40px;
 	display: flex;
 	align-items: center;
-	/* justify-content: center; */
 }
 
 .add-video-message-modal .start-record,
@@ -151,7 +154,8 @@
 	cursor: pointer;
 }
 
-.add-video-message-modal .add-video-message-to-module-button {
+.add-video-message-modal .add-video-message-to-module-button,
+.add-video-message-modal .copy-embed-code-button {
 	transition: 0.2s;
 	padding: 8px 16px;
 	border-radius: var(--card-br);
@@ -161,7 +165,8 @@
 	margin-left: 10px;
 }
 
-.add-video-message-modal .add-video-message-to-module-button:hover {
+.add-video-message-modal .add-video-message-to-module-button:hover,
+.add-video-message-modal .copy-embed-code-button:hover {
 	transition: 0.2s;
 	cursor: pointer;
 	background-color: var(--primary);

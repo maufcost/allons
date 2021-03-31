@@ -2,17 +2,29 @@
 // because it was delaying and stressing me out too much. That's why firebase
 // stuff is here.
 import React from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import Play from '../../assets/allons-icons/play.svg';
 import Pause from '../../assets/allons-icons/pause.svg';
 import CloseIcon from '../../assets/allons-icons/close-icon.svg';
 
-import { uploadVideoMessage } from '../../firebase';
-import { generateId } from '../../util/main_util';
+import {
+	uploadVideoMessageToInstance,
+	uploadEmbeddableMessageToUser
+} from '../../firebase';
+
+import {
+	generateId,
+	generateVideoMessageEmbedCode,
+	VIDEO_MESSAGE,
+	DOCUMENT,
+	MODULE
+} from '../../util/main_util';
 
 import './AddVideoMessageModal.css';
 
 let id;
+let currentTimeout;
 
 class AddVideoMessageModal extends React.Component {
 
@@ -30,12 +42,14 @@ class AddVideoMessageModal extends React.Component {
 			hasFlashMessage: false,
 			flashMessage: '',
 
-			videoMessageAddedToModule: false,
+			videoMessageAddedToInstance: false,
 
 			animationStyle: {
 				opacity: 0,
 				transition: 'opacity 2s ease'
-			}
+			},
+
+			copied: false
 		};
 
 		this.mediaRecorder = null;
@@ -55,11 +69,12 @@ class AddVideoMessageModal extends React.Component {
 		this.videoPreviewRef = React.createRef();
 		this.lastMessageVideoRef = React.createRef();
 
-		this.addVideoMessageToModule = this.addVideoMessageToModule.bind(this);
+		this.addVideoMessageToInstance = this.addVideoMessageToInstance.bind(this);
 		this.onBlockVideoPermission = this.onBlockVideoPermission.bind(this);
+		this.handlePreviewInstance = this.handlePreviewInstance.bind(this);
 		this.playPauseLastMessage = this.playPauseLastMessage.bind(this);
-		this.handlePreviewModule = this.handlePreviewModule.bind(this);
 		this.startStopRecording = this.startStopRecording.bind(this);
+		this.generateEmbedCode = this.generateEmbedCode.bind(this);
 		this.playPausePreview = this.playPausePreview.bind(this);
 		this.startCountdown = this.startCountdown.bind(this);
 		this.stopRecording = this.stopRecording.bind(this);
@@ -166,8 +181,11 @@ class AddVideoMessageModal extends React.Component {
 			}else {
 				// Start recording
 				this.mediaRecorder.start();
-				// console.log('start', this.mediaRecorder.state);
-				this.setState({ isRecordingStarted: true, countdown: 10 });
+				this.setState({
+					isRecordingStarted: true,
+					countdown: 10,
+					copied: false
+				});
 
 				// Start countdown.
 				this.startCountdown();
@@ -176,9 +194,16 @@ class AddVideoMessageModal extends React.Component {
 	}
 
 	stopRecording() {
+		clearInterval(id);
+		clearTimeout(currentTimeout);
+
 		this.mediaRecorder.stop();
-		// console.log('stop', this.mediaRecorder.state);
-		this.setState({ isPreviewRecorded: true, isRecordingStarted: false });
+
+		this.setState({
+			isPreviewRecorded: true,
+			isRecordingStarted: false,
+			countdown: 10
+		});
 	}
 
 	playPausePreview() {
@@ -212,7 +237,7 @@ class AddVideoMessageModal extends React.Component {
 		}, 1000);
 
 		// Stop recording
-		setTimeout(() => {
+		currentTimeout = setTimeout(() => {
 			// Making sure the video is still being recorded
 			if (this.state.isRecordingStarted) {
 				this.stopRecording();
@@ -220,36 +245,81 @@ class AddVideoMessageModal extends React.Component {
 		}, 10000);
 	}
 
-	async addVideoMessageToModule() {
+	async addVideoMessageToInstance() {
 		// Uploading video message to firebase.
 		if (this.currentBlob) {
-			await uploadVideoMessage(
-				generateId(),
+			await uploadVideoMessageToInstance(
+				'video_msg_' + this.props.userId,
 				this.currentBlob,
-				this.props.moduleId,
-				this.props.userId
+				this.props.id,
+				this.props.userId,
+				this.props.instanceType
 			);
 
 			this.setState({
 				hasFlashMessage: true,
-				flashMessage: 'Your video message has been successfully added to your module',
+				flashMessage: `Your video message has been successfully added to your ${this.props.instanceType}`,
 				// To disable the add video message button to prevent users
 				// from clicking twice on it.
 				isPreviewRecorded: false,
-				videoMessageAddedToModule: true
+				videoMessageAddedToInstance: true
 			});
 		}
 	}
 
-	handlePreviewModule() {
-		this.props.previewModule(this.props.userId, this.props.moduleId);
+	handlePreviewInstance() {
+		this.props.previewInstance(this.props.userId, this.props.instanceType, this.props.id);
 	}
 
-	generateEmbedCode() {
+	async generateEmbedCode() {
+		if (this.currentBlob) {
+			await uploadEmbeddableMessageToUser(
+				generateId(), // message-id
+				this.currentBlob,
+				this.props.userId,
+				VIDEO_MESSAGE
+			);
 
+			this.setState({
+				hasFlashMessage: true,
+				flashMessage: 'Your video message embed code has been successfully generated.',
+				// To disable the add video message button to prevent users
+				// from clicking twice on it.
+				isPreviewRecorded: false,
+				videoMessageAddedToInstance: true
+			});
+		}
 	}
 
 	render() {
+		let className = 'videos';
+		className += this.props.lastVideoMessageURL ? ' add-extra-fr' : '';
+
+		let postRecordingButton = (
+			<button
+				className='add-video-message-to-module-button'
+				onClick={this.handlePreviewInstance}
+			>
+				Preview {this.props.instanceType} with new video message
+			</button>
+		)
+
+		if (!this.props.id) {
+			let postRecordingButtonContent =
+				this.state.copied ?  'Copied! Have fun, sweetie' : 'Copy embed code to clipboard'
+
+			postRecordingButton = (
+				<CopyToClipboard
+					text={generateVideoMessageEmbedCode(this.props.userId)}
+					onCopy={() => this.setState({ copied: true })}
+				>
+					<button className='copy-embed-code-button'>
+						{postRecordingButtonContent}
+					</button>
+				</CopyToClipboard>
+			)
+		}
+
 		return (
 			<div>
 				<div className='add-video-message-modal-bg'></div>
@@ -257,8 +327,8 @@ class AddVideoMessageModal extends React.Component {
 					<div className='add-video-message-modal-inner'>
 						<header>
 							<div className='text'>
-								{this.props.moduleId ? (
-									<p className='title'>Add a personalized video message <br/><span>for your module viewers</span></p>
+								{this.props.id ? (
+									<p className='title'>Add a personalized video message <br/><span>for your {this.props.instanceType} viewers</span></p>
 								) : (
 									<p className='title'>Add a personalized video message to an external website</p>
 								)}
@@ -273,16 +343,20 @@ class AddVideoMessageModal extends React.Component {
 							</button>
 						</header>
 
-						{this.state.hasFlashMessage && this.props.moduleId && (
+						{this.state.hasFlashMessage && this.props.id && (
 							<div className='video-message-flash-message'>
 								<p>{this.state.flashMessage}</p>
 							</div>
 						)}
 
-						<div className='videos'>
+						<div className={className}>
 							{this.props.lastVideoMessageURL && (
 								<div id='last-message-video-area' className='video-area'>
-									<p>Here's the last video message you added to this module</p>
+									{this.props.id ? (
+										<p>Here's the last video message you added to this {this.props.instanceType}</p>
+									): (
+										<p>Here's your last embedded video message</p>
+									)}
 									<div className='video-wrapper-controls'>
 										<div className='video-wrapper'>
 											<video
@@ -303,7 +377,7 @@ class AddVideoMessageModal extends React.Component {
 											/>
 										</button>
 									</div>
-									<small>Any other video messages that you add to your module will automatically override this one</small>
+									<small>Any other video messages that you add to your {this.props.instanceType} will automatically override this one</small>
 								</div>
 							)}
 
@@ -353,13 +427,13 @@ class AddVideoMessageModal extends React.Component {
 							</button>
 
 							{/* Add video message to module/generate embed code */}
-							{this.props.moduleId ? (
+							{this.props.id ? (
 								<button
 									className='add-video-message-to-module-button'
-									onClick={this.addVideoMessageToModule}
+									onClick={this.addVideoMessageToInstance}
 									disabled={!this.state.isPreviewRecorded}
 								>
-									Add video message to module
+									Add video message to {this.props.instanceType}
 								</button>
 							) : (
 								<button
@@ -371,22 +445,15 @@ class AddVideoMessageModal extends React.Component {
 								</button>
 							)}
 
+							{/* Preview module/doc OR generate embed code */}
+							{this.state.videoMessageAddedToInstance && postRecordingButton}
+
 							{/* Timer */}
 							{this.state.isRecordingStarted && (
 								<div className='timer'>
 									<span className='red-recording'></span>
 									<p>Time left: <b>{this.state.countdown}</b></p>
 								</div>
-							)}
-
-							{/* Preview module */}
-							{this.state.videoMessageAddedToModule && (
-								<button
-									className='add-video-message-to-module-button'
-									onClick={this.handlePreviewModule}
-								>
-									Preview module with new video message
-								</button>
 							)}
 						</div>
 					</div>

@@ -6,6 +6,7 @@
 	overflow-x: auto;
 	background: rgb(203,164,22);
 	background: linear-gradient(180deg, rgba(203,164,22,1) 0%, rgba(230,125,5,1) 100%);
+	margin-right: 10px;
 }
 
 .external-doc-thumbnail:hover {

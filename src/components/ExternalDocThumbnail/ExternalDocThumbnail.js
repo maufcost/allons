@@ -11,9 +11,11 @@ class ExternalDocThumbnail extends React.Component {
 
 	handleClick() {
 		this.props.showExternalDocument(
-			this.props.id,
-			this.props.fileName,
-			this.props.url
+			this.props.doc.id,
+			this.props.doc.fileName,
+			this.props.doc.url,
+			this.props.doc.audioMessageURL,
+			this.props.doc.videoMessageURL
 		);
 	}
 
@@ -23,7 +25,7 @@ class ExternalDocThumbnail extends React.Component {
 				className='external-doc-thumbnail'
 				onClick={this.handleClick}
 			>
-				<p>{this.props.fileName}</p>
+				<p>{this.props.doc.fileName}</p>
 			</div>
 		)
 	}

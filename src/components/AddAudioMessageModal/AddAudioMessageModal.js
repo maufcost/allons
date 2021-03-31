@@ -1,15 +1,25 @@
 import React from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 
 import Play from '../../assets/allons-icons/play.svg';
 import Pause from '../../assets/allons-icons/pause.svg';
 import CloseIcon from '../../assets/allons-icons/close-icon.svg';
 
-import { uploadAudioMessage } from '../../firebase';
-import { generateId } from '../../util/main_util';
+import {
+	uploadAudioMessage,
+	uploadEmbeddableMessageToUser
+} from '../../firebase';
+
+import {
+	generateId,
+	generateAudioMessageEmbedCode,
+	AUDIO_MESSAGE
+} from '../../util/main_util';
 
 import './AddAudioMessageModal.css';
 
 let id;
+let currentTimeout;
 
 class AddAudioMessageModal extends React.Component {
 
@@ -27,12 +37,14 @@ class AddAudioMessageModal extends React.Component {
 			hasFlashMessage: false,
 			flashMessage: '',
 
-			audioMessageAddedToModule: false,
+			audioMessageAddedToInstance: false,
 
 			animationStyle: {
 				opacity: 0,
 				transition: 'opacity 2s ease'
-			}
+			},
+
+			copied: false
 		};
 
 		this.mediaRecorder = null;
@@ -43,10 +55,10 @@ class AddAudioMessageModal extends React.Component {
 
 		this.audioConstraintsObj = { audio: true, video: false };
 
-		this.addAudioMessageToModule = this.addAudioMessageToModule.bind(this);
+		this.addAudioMessageToInstance = this.addAudioMessageToInstance.bind(this);
 		this.onBlockAudioPermission = this.onBlockAudioPermission.bind(this);
+		this.handlePreviewInstance = this.handlePreviewInstance.bind(this);
 		this.playPauseLastMessage = this.playPauseLastMessage.bind(this);
-		this.handlePreviewModule = this.handlePreviewModule.bind(this);
 		this.startStopRecording = this.startStopRecording.bind(this);
 		this.playPausePreview = this.playPausePreview.bind(this);
 		this.startCountdown = this.startCountdown.bind(this);
@@ -143,7 +155,11 @@ class AddAudioMessageModal extends React.Component {
 				// Start recording
 				this.mediaRecorder.start();
 				// console.log('start', this.mediaRecorder.state);
-				this.setState({ isRecordingStarted: true, countdown: 10 });
+				this.setState({
+					isRecordingStarted: true,
+					countdown: 10,
+					copied: false
+				});
 
 				// Start countdown.
 				this.startCountdown();
@@ -152,9 +168,16 @@ class AddAudioMessageModal extends React.Component {
 	}
 
 	stopRecording() {
+		clearInterval(id);
+		clearTimeout(currentTimeout);
+
 		this.mediaRecorder.stop();
-		// console.log('stop', this.mediaRecorder.state);
-		this.setState({ isPreviewRecorded: true, isRecordingStarted: false });
+
+		this.setState({
+			isPreviewRecorded: true,
+			isRecordingStarted: false,
+			countdown: 10
+		});
 	}
 
 	playPausePreview() {
@@ -196,7 +219,7 @@ class AddAudioMessageModal extends React.Component {
 		}, 1000);
 
 		// Stop recording
-		setTimeout(() => {
+		currentTimeout = setTimeout(() => {
 			// Making sure the audio is still being recorded
 			if (this.state.isRecordingStarted) {
 				this.stopRecording();
@@ -204,36 +227,81 @@ class AddAudioMessageModal extends React.Component {
 		}, 10000);
 	}
 
-	async addAudioMessageToModule() {
+	async addAudioMessageToInstance() {
 		// Uploading audio message to firebase.
 		if (this.currentBlob) {
 			await uploadAudioMessage(
-				generateId(),
+				'audio_msg_' + this.props.userId,
 				this.currentBlob,
-				this.props.moduleId,
-				this.props.userId
+				this.props.id,
+				this.props.userId,
+				this.props.instanceType
 			);
 
 			this.setState({
 				hasFlashMessage: true,
-				flashMessage: 'Your new audio message has been successfully added to your module',
+				flashMessage: `Your new audio message has been successfully added to your ${this.props.instanceType}`,
 				// To disable the add audio message button to prevent users
 				// from clicking twice on it.
 				isPreviewRecorded: false,
-				audioMessageAddedToModule: true
+				audioMessageAddedToInstance: true
 			});
 		}
 	}
 
-	handlePreviewModule() {
-		this.props.previewModule(this.props.userId, this.props.moduleId);
+	handlePreviewInstance() {
+		this.props.previewInstance(this.props.userId, this.props.instanceType, this.props.id);
 	}
 
-	generateEmbedCode() {
+	async generateEmbedCode() {
+		if (this.currentBlob) {
+			await uploadEmbeddableMessageToUser(
+				generateId(),
+				this.currentBlob,
+				this.props.userId,
+				AUDIO_MESSAGE
+			);
 
+			this.setState({
+				hasFlashMessage: true,
+				flashMessage: 'Your audio message embed code has been successfully generated.',
+				// To disable the add audio message button to prevent users
+				// from clicking twice on it.
+				isPreviewRecorded: false,
+				audioMessageAddedToInstance: true
+			});
+		}
 	}
 
 	render() {
+		let className = 'audios';
+		className += this.props.lastAudioMessageURL ? ' add-extra-fr' : '';
+
+		let postRecordingButton = (
+			<button
+				className='add-audio-message-to-module-button'
+				onClick={this.handlePreviewInstance}
+			>
+				Preview {this.props.instanceType} with new audio message
+			</button>
+		)
+
+		if (!this.props.id) {
+			let postRecordingButtonContent =
+				this.state.copied ?  'Copied! Have fun, sweetie' : 'Copy embed code to clipboard'
+
+			postRecordingButton = (
+				<CopyToClipboard
+					text={generateAudioMessageEmbedCode(this.props.userId)}
+					onCopy={() => this.setState({ copied: true })}
+				>
+					<button className='copy-embed-code-button'>
+						{postRecordingButtonContent}
+					</button>
+				</CopyToClipboard>
+			)
+		}
+
 		return (
 			<div>
 				<div className='add-audio-message-modal-bg'></div>
@@ -241,8 +309,8 @@ class AddAudioMessageModal extends React.Component {
 					<div className='add-audio-message-modal-inner'>
 						<header>
 							<div className='text'>
-								{this.props.moduleId ? (
-									<p className='title'>Add a personalized audio message <br/><span>for your module viewers</span></p>
+								{this.props.id ? (
+									<p className='title'>Add a personalized audio message <br/><span>for your {this.props.instanceType} viewers</span></p>
 								): (
 									<p className='title'>Add a personalized audio message to an external website</p>
 								)}
@@ -257,17 +325,21 @@ class AddAudioMessageModal extends React.Component {
 							</button>
 						</header>
 
-						{this.state.flashMessage && this.props.moduleId && (
+						{this.state.flashMessage && this.props.id && (
 							<div className='audio-message-flash-message'>
 								<p>{this.state.flashMessage}</p>
 							</div>
 						)}
 
-						<div className='audios'>
+						<div className={className}>
 
 							{this.props.lastAudioMessageURL && (
 								<div id='last-audio-message-area' className='audio-area'>
-									<p>Here's the last audio message you added to this module</p>
+									{this.props.id ? (
+										<p>Here's the last audio message you added to this {this.props.instanceType}</p>
+									) : (
+										<p>Here's your last embedded audio message</p>
+									)}
 									<button
 										onClick={this.playPauseLastMessage}
 									>
@@ -276,7 +348,7 @@ class AddAudioMessageModal extends React.Component {
 											alt='Play or Pause Audio Preview'
 										/>
 									</button>
-									<small>Any other audio messages that you add to your module will automatically override this one</small>
+									<small>Any other audio messages that you add to your {this.props.instanceType} will automatically override this one</small>
 								</div>
 							)}
 
@@ -310,13 +382,13 @@ class AddAudioMessageModal extends React.Component {
 							</button>
 
 							{/* Add audio message to module/Generate embed code */}
-							{this.props.moduleId ? (
+							{this.props.id ? (
 								<button
 									className='add-audio-message-to-module-button'
-									onClick={this.addAudioMessageToModule}
+									onClick={this.addAudioMessageToInstance}
 									disabled={!this.state.isPreviewRecorded}
 								>
-									Add Audio Message to Module
+									Add audio message to {this.props.instanceType}
 								</button>
 							): (
 								<button
@@ -328,22 +400,15 @@ class AddAudioMessageModal extends React.Component {
 								</button>
 							)}
 
+							{/* Preview module/doc OR generate embed code */}
+							{this.state.audioMessageAddedToInstance && postRecordingButton}
+
 							{/* Timer */}
 							{this.state.isRecordingStarted && (
 								<div className='timer'>
 									<span className='red-recording'></span>
 									<p>Time left: <b>{this.state.countdown}</b></p>
 								</div>
-							)}
-
-							{/* Preview module */}
-							{this.state.audioMessageAddedToModule && (
-								<button
-									className='add-audio-message-to-module-button'
-									onClick={this.handlePreviewModule}
-								>
-									Preview module with new audio message
-								</button>
 							)}
 						</div>
 					</div>

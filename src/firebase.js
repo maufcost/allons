@@ -9,6 +9,13 @@ import "firebase/auth";
 import "firebase/firestore";
 import "firebase/storage"
 
+import {
+	AUDIO_MESSAGE,
+	VIDEO_MESSAGE,
+	MODULE,
+	DOCUMENT
+} from './util/main_util';
+
 var firebaseConfig = {
 	apiKey: "AIzaSyCyWkrsbbLZJFoPLRY3UzKM5CVp_sMYZ80",
 	authDomain: "allons-y-3a514.firebaseapp.com",
@@ -39,7 +46,12 @@ export const createUserDocument = async (user, additionalData) => {
 			await userRef.set({
 				email,
 				displayName: additionalData.displayName,
-				photoURL: null
+				photoURL: null,
+				// I am adding these two properties to the user db doc because
+				// while allons is in beta, I will only allow one embedded
+				// message type per user.
+				embeddedVideoMessageURL: null,
+				embeddedAudioMessageURL: null
 			});
 		}catch(error) {
 			console.error("[generateUserDocument] Error", error);
@@ -187,8 +199,8 @@ export const retrieveAllUsers = async () => {
 	return users;
 }
 
-// Uploads video message to firebase
-export const uploadVideoMessage = async (filename, blob, moduleId, userId) => {
+// Uploads video message to firebase (to a module or an external document)
+export const uploadVideoMessageToInstance = async (filename, blob, instanceId, userId, instanceType) => {
 	try {
 		// 1) Upload video message to firebaseStorage.
 		const storageRef = firebaseStorage.ref(filename);
@@ -203,12 +215,19 @@ export const uploadVideoMessage = async (filename, blob, moduleId, userId) => {
 		async () => {
 			const url = await storageRef.getDownloadURL();
 
-			let module = {};
-			module[moduleId] = { videoMessageURL: url }
+			let instance = {};
+			instance[instanceId] = { videoMessageURL: url }
 
 			// 2) Upload video message link to module object on firestore.
-			await firestore.doc(`modules/${userId}`).set(
-				{ ...module },
+			let arg1 = '';
+			if (instanceType === MODULE) {
+				arg1 = 'modules';
+			}else if (instanceType === DOCUMENT) {
+				arg1 = 'external-documents'
+			}
+
+			await firestore.doc(`${arg1}/${userId}`).set(
+				{ ...instance },
 				{ merge: true }
 			);
 		})
@@ -217,8 +236,8 @@ export const uploadVideoMessage = async (filename, blob, moduleId, userId) => {
 	}
 }
 
-// Uploads audio message to firebase
-export const uploadAudioMessage = async (filename, blob, moduleId, userId) => {
+// Uploads audio message to firebase (to a module or an external document)
+export const uploadAudioMessage = async (filename, blob, instanceId, userId, instanceType) => {
 	try {
 		// 1) Upload video message to firebaseStorage.
 		const storageRef = firebaseStorage.ref(filename);
@@ -233,12 +252,19 @@ export const uploadAudioMessage = async (filename, blob, moduleId, userId) => {
 		async () => {
 			const url = await storageRef.getDownloadURL();
 
-			let module = {};
-			module[moduleId] = { audioMessageURL: url }
+			let instance = {};
+			instance[instanceId] = { audioMessageURL: url }
 
 			// 2) Upload video message link to module object on firestore.
-			await firestore.doc(`modules/${userId}`).set(
-				{ ...module },
+			let arg1 = '';
+			if (instanceType === 'module') {
+				arg1 = 'modules';
+			}else if (instanceType === 'document') {
+				arg1 = 'external-documents'
+			}
+
+			await firestore.doc(`${arg1}/${userId}`).set(
+				{ ...instance },
 				{ merge: true }
 			);
 		})
@@ -293,7 +319,6 @@ export const getExternalDocument = async (uid, externalDocumentId) => {
 	try {
 		// @TODO: Change db schema (to create subcollections) to retrieve only one document.
 		const doc = await firestore.doc(`external-documents/${uid}`).get(); // retrieves all of them.
-		console.log('Returning the newly added doc')
 		return doc.data()[externalDocumentId];
 	}catch(error) {
 		console.log("[getExternalDocument] Error", error);
@@ -343,5 +368,40 @@ export const getExternalDocuments = async uid => {
 		}
 	}catch(error) {
 		console.log("[getExternalDocuments] Error", error);
+	}
+}
+
+// Adds video/audio message to a user firebase document.
+export const uploadEmbeddableMessageToUser = (messageId, blob, uid, messageType) => {
+	if (!uid) return null;
+	if (!blob) return null;
+
+	try {
+		// externalDocumentId must be the same as when I added to the database
+		// so that I can override the last document (and not store two documents)
+		const storageRef = firebaseStorage.ref(messageId);
+
+		storageRef.put(blob).on("state_changed", (snapshot) => {
+		},
+		(error) => {
+			console.log("[uploadVideoMessageToUser] Error 2", error);
+		},
+		async () => {
+			const url = await storageRef.getDownloadURL();
+
+			let user = {}
+			if (messageType === VIDEO_MESSAGE) {
+				user = { embeddedVideoMessageURL: url };
+			}else if (messageType === AUDIO_MESSAGE) {
+				user = { embeddedAudioMessageURL: url };
+			}
+
+			await firestore.doc(`users/${uid}`).set(
+				{ ...user },
+				{ merge: true }
+			);
+		});
+	}catch(error) {
+		console.log("[uploadVideoMessageToUser] Error 1", error);
 	}
 }

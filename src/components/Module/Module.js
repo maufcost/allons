@@ -4,7 +4,7 @@ import ContentEditable from 'react-contenteditable'
 import Section from '../Section/Section'
 
 import { updateUserModule } from '../../firebase'
-import { generateRandomId } from '../../util/main_util'
+import { generateRandomId, MODULE } from '../../util/main_util'
 
 import OneColumnOutlineIcon from '../../assets/allons-icons/one-column.svg';
 import TwoColumnOutlineIcon from '../../assets/allons-icons/two-columns.svg';
@@ -142,8 +142,7 @@ class Module extends React.Component {
 	}
 
 	handlePreview() {
-		// window.open(`/${this.props.user.uid}/${this.state.moduleId}`);
-		this.props.previewModule(this.props.user.uid, this.state.moduleId);
+		this.props.previewInstance(this.props.user.uid, MODULE, this.state.moduleId);
 	}
 
 	updateShouldSave() {
@@ -152,19 +151,21 @@ class Module extends React.Component {
 
 	addAudioMessage() {
 		this.props.openAddAudioMessageModal({
-			moduleId: this.state.moduleId,
+			instanceId: this.state.moduleId,
 			userId: this.props.user.uid,
 			embed: false,
-			audioMessageURL: this.state.audioMessageURL
+			audioMessageURL: this.state.audioMessageURL,
+			instanceType: MODULE
 		});
 	}
 
 	addVideoMessage() {
 		this.props.openAddVideoMessageModal({
-			moduleId: this.state.moduleId,
+			instanceId: this.state.moduleId,
 			userId: this.props.user.uid,
 			embed: false,
-			videoMessageURL: this.state.videoMessageURL
+			videoMessageURL: this.state.videoMessageURL,
+			instanceType: MODULE
 		});
 	}
 

@@ -68,7 +68,6 @@ function Profile({ user }) {
 		>
 			{error ? <div className='error'>{ error }</div> : null}
 			<div className='user-profile-information'>
-
 				<div className='profile-image-wrapper'>
 					{user && (
 						<ProfileImage

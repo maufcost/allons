@@ -5,7 +5,7 @@ import Landing from '../Landing/Landing';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
 import Dashboard from '../Dashboard/Dashboard';
-import ModuleViewer from '../ModuleViewer/ModuleViewer';
+import Viewer from '../Viewer/Viewer';
 import Loading from '../Loading/Loading';
 import AddVideoMessageModal from '../AddVideoMessageModal/AddVideoMessageModal';
 import AddAudioMessageModal from '../AddAudioMessageModal/AddAudioMessageModal';
@@ -20,15 +20,18 @@ class Main extends React.Component {
 		super(props);
 
 		this.state = {
-			videoMessageModuleId: null,
+			videoMessageInstanceId: null,
 			videoMessageUserId: null,
 			openAddVideoMessageModal: false,
 			lastVideoMessageURL: null,
 
-			audioMessageModuleId: null,
+			audioMessageInstanceId: null,
 			audioMessageUserId: null,
 			openAddAudioMessageModal: false,
-			lastAudioMessageURL: null
+			lastAudioMessageURL: null,
+
+			instanceType: null,
+			instanceId: null
 		};
 
 		this.openAddVideoMessageModal = this.openAddVideoMessageModal.bind(this);
@@ -42,22 +45,24 @@ class Main extends React.Component {
 	// 	console.log(auth.currentUser);
 	// }
 
-	openAddVideoMessageModal({ moduleId, userId, embed, videoMessageURL }) {
+	openAddVideoMessageModal({ instanceId, userId, embed, videoMessageURL, instanceType }) {
 		if (embed) {
 			// User is generating an embed code with the message for a non-allons
-			// module.
+			// website.
 			this.setState({
 				openAddVideoMessageModal: true,
-				videoMessageModuleId: null,
-				videoMessageUserId: userId
-			});
-		}else {
-			// User is adding a video message on an allons module.
-			this.setState({
-				openAddVideoMessageModal: true,
-				videoMessageModuleId: moduleId,
+				videoMessageInstanceId: null,
 				videoMessageUserId: userId,
 				lastVideoMessageURL: videoMessageURL
+			});
+		}else {
+			// User is adding a video message on an allons module or external doc.
+			this.setState({
+				openAddVideoMessageModal: true,
+				videoMessageUserId: userId,
+				lastVideoMessageURL: videoMessageURL,
+				instanceId,
+				instanceType
 			});
 		}
 	}
@@ -66,22 +71,24 @@ class Main extends React.Component {
 		this.setState({ openAddVideoMessageModal: false });
 	}
 
-	openAddAudioMessageModal({ moduleId, userId, embed, audioMessageURL }) {
+	openAddAudioMessageModal({ instanceId, userId, embed, audioMessageURL, instanceType }) {
 		if (embed) {
 			// User is generating an embed code with the message for a non-allons
-			// module.
+			// website.
 			this.setState({
 				openAddAudioMessageModal: true,
-				audioMessageModuleId: null,
-				audioMessageUserId: userId
-			});
-		}else {
-			// User is adding an audio message on an allons module.
-			this.setState({
-				openAddAudioMessageModal: true,
-				audioMessageModuleId: moduleId,
+				audioMessageInstanceId: null,
 				audioMessageUserId: userId,
 				lastAudioMessageURL: audioMessageURL
+			});
+		}else {
+			// User is adding an audio message on an allons module or external doc.
+			this.setState({
+				openAddAudioMessageModal: true,
+				audioMessageUserId: userId,
+				lastAudioMessageURL: audioMessageURL,
+				instanceId,
+				instanceType
 			});
 		}
 	}
@@ -90,8 +97,8 @@ class Main extends React.Component {
 		this.setState({ openAddAudioMessageModal: false });
 	}
 
-	previewModule(uid, moduleId) {
-		window.open(`/${uid}/${moduleId}`);
+	previewInstance(uid, instanceType, instanceId) {
+		window.open(`/${uid}/${instanceType}/${instanceId}`);
 	}
 
 	render() {
@@ -110,12 +117,12 @@ class Main extends React.Component {
 						path='/dashboard'
 						openAddVideoMessageModal={this.openAddVideoMessageModal}
 						openAddAudioMessageModal={this.openAddAudioMessageModal}
-						previewModule={this.previewModule}
+						previewInstance={this.previewInstance}
 					/>
 
-					<ModuleViewer path='/:userId/:moduleId' />
+					<Viewer path='/:userId/:instanceType/:instanceId/' />
 
-					<EmbeddableMessage path='msg' />
+					<EmbeddableMessage path='msg/:msgType/:userId' />
 				</Router>
 
 				{/* Loading */}
@@ -126,21 +133,23 @@ class Main extends React.Component {
 				{/* Modals */}
 				{this.state.openAddVideoMessageModal && (
 					<AddVideoMessageModal
-						closeAddVideoMessageModal={this.closeAddVideoMessageModal}
-						moduleId={this.state.videoMessageModuleId}
+						id={this.state.instanceId}
 						userId={this.state.videoMessageUserId}
 						lastVideoMessageURL={this.state.lastVideoMessageURL}
-						previewModule={this.previewModule}
+						instanceType={this.state.instanceType}
+						previewInstance={this.previewInstance}
+						closeAddVideoMessageModal={this.closeAddVideoMessageModal}
 					/>
 				)}
 
 				{this.state.openAddAudioMessageModal && (
 					<AddAudioMessageModal
-						closeAddAudioMessageModal={this.closeAddAudioMessageModal}
-						moduleId={this.state.audioMessageModuleId}
+						id={this.state.instanceId}
 						userId={this.state.audioMessageUserId}
 						lastAudioMessageURL={this.state.lastAudioMessageURL}
-						previewModule={this.previewModule}
+						instanceType={this.state.instanceType}
+						closeAddAudioMessageModal={this.closeAddAudioMessageModal}
+						previewInstance={this.previewInstance}
 					/>
 				)}
 			</div>

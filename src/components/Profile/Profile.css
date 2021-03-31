@@ -8,7 +8,6 @@
 
 .user-profile-information {
 	display: flex;
-	/* overflow: auto; */
 }
 
 .user-data {
@@ -20,8 +19,11 @@
 	justify-content: center;
 }
 
+.user-data div {
+	display: inline-block;
+}
+
 .user-data p {
-	/* font-weight: 700; */
 	color: var(--primary);
 	margin: 0;
 	padding: 0;

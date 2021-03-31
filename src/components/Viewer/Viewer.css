@@ -1,4 +1,4 @@
-.module-viewer {
+.viewer {
 	position: relative;
 	background-color: var(--card-color);
 	width: 70vw;
@@ -8,46 +8,46 @@
 	padding-bottom: 60px;
 }
 
-.module-viewer p {
+.viewer p {
 	margin: 0;
 }
 
-.module-viewer header {
+.viewer header {
 	padding: 20px 0;
 }
 
-.module-viewer header .module-title {
+.viewer header .module-title {
 	margin: 0;
 	font-size: 2.3em;
 }
 
-.module-viewer header {
+.viewer header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 }
 
-.module-viewer header .author-information {
+.viewer header .author-information {
 	text-align: center;
 }
 
-.module-viewer header .author-information p {
+.viewer header .author-information p {
 	display: block;
 	font-size: 0.5em;
 	margin: 0;
 }
 
-.module-viewer header .author-information span {
+.viewer header .author-information span {
 	color: var(--left-sidebar-font-color);
 }
 
-.module-viewer header .author-information img {
+.viewer header .author-information img {
 	border-radius: 50%;
 	width: 60px;
 	margin-top: 5px;
 }
 
-.module-viewer .messages {
+.viewer .messages {
 	display: flex;
 	flex-direction: column;
 	position: absolute;
@@ -55,17 +55,18 @@
 	right: -95px;
 }
 
-.module-viewer .video-message-player-container {
+.viewer .video-message-player-container {
 	position: fixed;
 	bottom: 20px;
 	right: 20px;
+	z-index: 9999;
 }
 
-.module-viewer .video-message-player {
+.viewer .video-message-player {
 	position: relative;
 }
 
-.module-viewer .video-message-container {
+.viewer .video-message-container {
 	width: 190px;
 	height: 180px;
 	overflow: hidden;
@@ -74,14 +75,14 @@
 	object-fit: cover;
 }
 
-.module-viewer .video-message {
+.viewer .video-message {
 	width: 320px;
 	height: 180px;
 	margin-left: -70px;
 	border-radius: 50%;
 }
 
-.module-viewer .video-message-play-pause {
+.viewer .video-message-play-pause {
 	position: absolute;
 	bottom: 0;
 	left: 20px;
@@ -96,41 +97,42 @@
 	padding: 2px;
 }
 
-.module-viewer .video-message-play-pause:hover {
+.viewer .video-message-play-pause:hover {
 	cursor: pointer;
 	background-color: var(--left-sidebar-font-color);
 	transition: 0.2s;
 }
 
-.module-viewer .video-message-play-pause .play-pause-img {
+.viewer .video-message-play-pause .play-pause-img {
 	width: 25px;
 	height: 25px;
 }
 
-.module-viewer footer {
+.viewer footer {
 	position: absolute;
 	bottom: 10px;
 	font-size: 0.8em;
 	/* opacity: 0.8; */
 }
 
-.module-viewer footer:hover img {
+.viewer footer:hover img,
+.viewer .document-viewer small:hover img {
 	opacity: 0.5;
 }
 
-.module-viewer .audio-message-player-container {
+.viewer .audio-message-player-container {
 	position: fixed;
 	bottom: 20px;
 	right: 20px;
 }
 
-.module-viewer .audio-message-player-container.extra-offset {
+.viewer .audio-message-player-container.extra-offset {
 	position: fixed;
 	bottom: 220px;
 	right: 100px;
 }
 
-.module-viewer .audio-message-play-pause {
+.viewer .audio-message-play-pause {
 	background-color: var(--card-color);
 	color: var(--primary);
 	border: 2px solid var(--card-border-color);
@@ -143,17 +145,61 @@
 	border-radius: var(--card-br);
 }
 
-.module-viewer .audio-message-play-pause:hover {
+.viewer .audio-message-play-pause:hover {
 	cursor: pointer;
 	background-color: var(--left-sidebar-font-color);
 	transition: 0.2s;
 }
 
-.module-viewer .audio-message-play-pause .play-pause-img {
+.viewer .audio-message-play-pause .play-pause-img {
 	width: 25px;
 	height: 25px;
 }
 
-.module-viewer-section .module-viewer-section-name {
+.viewer-section .viewer-section-name {
 	font-weight: 600;
+}
+
+.viewer .document-viewer {
+}
+
+.viewer .document-viewer .document-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: auto;
+}
+
+.viewer .document-viewer .document-controls {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.viewer .document-viewer .document-controls button {
+	background: transparent;
+	border: none;
+}
+
+.viewer .document-viewer .document-controls button:hover {
+	cursor: pointer;
+}
+
+.viewer .document-viewer .document-controls button img {
+	width: 15px;
+	height: 15px;
+	transition: 0.2s;
+}
+
+.viewer .document-viewer .document-controls button:hover img {
+	opacity: 0.6;
+	transition: 0.2s;
+}
+
+.viewer .document-viewer .document-controls p {
+	/* This is solely because the previous/next icons I did really quick
+	aren't completely centered, so I had to push the p up a bit */
+	margin-bottom: 6px;
+	font-size: 0.9em;
+	font-weight: 300;
 }

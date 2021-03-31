@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
 import ProfileImage from '../ProfileImage/ProfileImage'
 import BlockViewer from '../BlockViewer/BlockViewer';
@@ -6,18 +7,24 @@ import BlockViewer from '../BlockViewer/BlockViewer';
 import Play from '../../assets/allons-icons/play.svg';
 import Pause from '../../assets/allons-icons/pause.svg';
 import Logo1 from '../../assets/Logos/logo1.svg';
+import PreviousIcon from '../../assets/allons-icons/previous-icon.svg';
+import NextIcon from '../../assets/allons-icons/next-icon.svg';
 
-import { getUserDocument, getUserModule } from '../../firebase';
+import { getUserDocument, getUserModule, getExternalDocument } from '../../firebase';
+import { MODULE, DOCUMENT } from '../../util/main_util';
 
-import './ModuleViewer.css'
+import './Viewer.css'
 
-function ModuleViewer({ userId, moduleId }) {
+function Viewer({ userId, instanceType, instanceId }) {
 
 	// State
 	const [user, setUser] = useState(null);
 	const [module, setModule] = useState(null);
+	const [document, setDocument] = useState(null);
 	const [isVideoMessagePlaying, setIsVideoMessagePlaying] = useState(false);
 	const [isAudioMessagePlaying, setIsAudioMessagePlaying] = useState(false);
+	const [numPages, setNumPages] = useState(null);
+	const [pageNumber, setPageNumber] = useState(1);
 
 	// Refs
 	const videoMessageRef = useRef(null);
@@ -25,9 +32,9 @@ function ModuleViewer({ userId, moduleId }) {
 
 	// ComponentDidMount
 	useEffect(() => {
-		// Retrieves module based on url params.
+		// Retrieves module or document based on url params.
 		async function fetchModule() {
-			 const module = await getUserModule(userId, moduleId);
+			 const module = await getUserModule(userId, instanceId);
 			 setModule(module);
 
 			 // Setting up audio message ref (if any audio message is present).
@@ -40,8 +47,27 @@ function ModuleViewer({ userId, moduleId }) {
 			 setUser(user);
 		}
 
-		fetchModule();
-	}, [userId, moduleId]);
+		async function fetchDocument() {
+			const document = await getExternalDocument(userId, instanceId);
+			setDocument(document);
+
+			// Setting up audio message ref (if any audio message is present).
+			if (document && typeof document !== 'undefined' && document.audioMessageURL) {
+				audioMessageRef.current = new Audio(document.audioMessageURL);
+			}
+
+			// Getting the document's author info
+			const user = await getUserDocument(userId);
+			setUser(user);
+		}
+
+		if (instanceType === MODULE) {
+			fetchModule();
+		}else if (instanceType === DOCUMENT) {
+			fetchDocument();
+		}
+
+	}, [userId, instanceId, instanceType]);
 
 	// Detecting when video message (if any) ended.
 	// @TODO: Move this to a componentdidmount-equivalent
@@ -116,11 +142,22 @@ function ModuleViewer({ userId, moduleId }) {
 		}
 	}
 
+	const onDocumentLoadSuccess = ({ numPages }) => {
+		setNumPages(numPages);
+	}
+
+	const handlePreviousPage = () => {
+		setPageNumber(pageNumber - 1);
+	}
+
+	const handleNextPage = () => {
+		setPageNumber(pageNumber + 1);
+	}
+
 	const children = [];
 	let videoMessage = null;
 	let audioMessage = null;
 	if (module) {
-
 		// Rendering module content
 		const sections = module.moduleSections;
 
@@ -135,9 +172,13 @@ function ModuleViewer({ userId, moduleId }) {
 				</div>
 			)
 		}
+	}
 
+	const instance = module ? module : document;
+
+	if (instance) {
 		// Rendering module video message
-		if (module.videoMessageURL) {
+		if (instance.videoMessageURL) {
 			videoMessage = (
 				<div className='video-message-player-container'>
 					<div className='video-message-player'>
@@ -146,7 +187,7 @@ function ModuleViewer({ userId, moduleId }) {
 								className='video-message'
 								ref={videoMessageRef}
 							>
-								<source src={module.videoMessageURL} type="video/mp4" />
+								<source src={instance.videoMessageURL} type="video/mp4" />
 							</video>
 						</div>
 						<button
@@ -165,8 +206,7 @@ function ModuleViewer({ userId, moduleId }) {
 		}
 
 		// Rendering module audio message
-		if (module.audioMessageURL) {
-
+		if (instance.audioMessageURL) {
 			let className = 'audio-message-player-container ';
 			className += videoMessage ? 'extra-offset' : '';
 
@@ -190,9 +230,14 @@ function ModuleViewer({ userId, moduleId }) {
 
 	let authorInformation = null;
 	if (user) {
+		let createdBy = <p><span>Created by</span> {user.displayName}</p>
+		if (document) {
+			createdBy = <p><span>This document is being shared by</span> {user.displayName}</p>
+		}
+
 		authorInformation = (
 			<div className='author-information'>
-				<p><span>Created by</span> {user.displayName}</p>
+				{createdBy}
 				<ProfileImage
 					user={user}
 					profileImageURL={user.photoURL}
@@ -202,27 +247,67 @@ function ModuleViewer({ userId, moduleId }) {
 	}
 
 	return (
-		<div className='module-viewer'>
+		<div className='viewer'>
 
 			<div className='messages'>
 				{audioMessage}
 				{videoMessage}
 			</div>
 
-			<header>
-				<h1 className='module-title'>{module ? module.moduleName : null}</h1>
-				{authorInformation}
-			</header>
+			{module && (
+				<div class='module-viewer'>
+					<header>
+						<h1 className='module-title'>{module ? module.moduleName : null}</h1>
+						{authorInformation}
+					</header>
+					{children}
+				</div>
+			)}
 
-			{children}
+			{document && (
+				<div className='document-viewer'>
+					<header>
+						<small>
+							Built with <a href="/"><img src={Logo1} alt='Allons'/></a>
+						</small>
+						{authorInformation}
+						<div className='document-controls'>
+							<button
+								onClick={handlePreviousPage}
+								disabled={pageNumber === 1}
+							>
+								<img src={PreviousIcon} alt='Go to the previous PDF page'/>
+							</button>
+							<p>Page {pageNumber} of {numPages}</p>
+							<button
+								onClick={handleNextPage}
+								disabled={pageNumber === numPages}
+							>
+								<img src={NextIcon} alt='Go to the next PDF page'/>
+							</button>
+						</div>
+					</header>
+					<div className='document-container'>
+						<Document
+							file={document.url}
+							onLoadSuccess={onDocumentLoadSuccess}
+							className='doc'
+						>
+							<Page pageNumber={pageNumber} />
+						</Document>
+					</div>
+				</div>
+			)}
 
-			<footer>
-				<small>
-					Built with <a href="/"><img src={Logo1} alt='Allons'/></a>
-				</small>
-			</footer>
+			{module && (
+				<footer>
+					<small>
+						Built with <a href="/"><img src={Logo1} alt='Allons'/></a>
+					</small>
+				</footer>
+			)}
 		</div>
 	)
 }
 
-export default ModuleViewer;
+export default Viewer;

@@ -23,7 +23,7 @@
 	border-radius: var(--card-br);
 	border: 1px solid var(--border-color-light);
 	box-shadow: 0 0 20px var(--card-border-color);
-	padding: 20px 30px;
+	padding: 0 20px;
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
@@ -33,7 +33,7 @@
 .add-audio-message-modal-inner {
 	position: relative;
 	width: 100%;
-	height: 100%;
+	/* height: 100%; */
 	padding-bottom: 0;
 }
 
@@ -56,11 +56,11 @@
 
 .add-audio-message-modal .preview-container .blank-preview {
 	margin: 0;
-	margin-bottom: 40px;
+	font-weight: 300;
 }
 
 .add-audio-message-modal .preview-container {
-	margin-bottom: 30px;
+	/* margin-bottom: 30px; */
 }
 
 .add-audio-message-modal .preview {
@@ -138,7 +138,7 @@
 	color: var(--left-sidebar-font-color);
 }
 
-.add-audio-message-modal .audios {
+.add-audio-message-modal .audios.add-extra-fr {
 	display: grid;
 	grid-template-columns: 1fr 1fr;
 	align-items: center;
@@ -146,8 +146,16 @@
 	margin: 20px 0;
 }
 
+.add-audio-message-modal .audios {
+	display: flex;
+	align-items: center;
+	/* justify-content: center; */
+	margin: 20px 0;
+}
+
 .add-audio-message-modal .audio-area {
 	text-align: center;
+	display: inline-block;
 }
 
 .add-audio-message-modal .audio-area p {
@@ -225,7 +233,8 @@
 	animation: recording 2s infinite;
 }
 
-.add-audio-message-modal .add-audio-message-to-module-button {
+.add-audio-message-modal .add-audio-message-to-module-button,
+.add-audio-message-modal .copy-embed-code-button {
 	transition: 0.2s;
 	padding: 8px 16px;
 	border-radius: var(--card-br);
@@ -235,7 +244,8 @@
 	margin-left: 10px;
 }
 
-.add-audio-message-modal .add-audio-message-to-module-button:hover {
+.add-audio-message-modal .add-audio-message-to-module-button:hover,
+.add-audio-message-modal .copy-embed-code-button:hover {
 	transition: 0.2s;
 	cursor: pointer;
 	background-color: var(--primary);

@@ -39,8 +39,11 @@ function Dashboard(props) {
 	const [selectedExternalDocId, setSelectedExternalDocId] = useState(null);
 	const [selectedExternalDocName, setSelectedExternalDocName] = useState(null);
 	const [selectedExternalDocURL, setSelectedExternalDocURL] = useState(null);
+	const [selectedExternalDocVideoMessageURL, setSelectedExternalDocVideoMessageURL] = useState(null);
+	const [selectedExternalDocAudioMessageURL, setSelectedExternalDocAudioMessageURL] = useState(null);
 
 	// componentDidMount()
+	// useEffect shouldn't be async to prevent race conditions.
 	useEffect(() => {
 		fetchModules();
 		fetchExternalDocuments();
@@ -63,7 +66,6 @@ function Dashboard(props) {
 			}
 		}
 
-		// useEffect shouldn't be async to prevent race conditions.
 		async function fetchModules() {
 			// Check if there's a user
 			if (user) {
@@ -129,7 +131,7 @@ function Dashboard(props) {
 	const createModule = async () => {
 
 		// Limiting the number of modules to five for now.
-		if (modules.length === 5) {
+		if (modules.length >= 5) {
 
 			setFlashMessage('Allons is limiting five modules per user for now');
 
@@ -160,13 +162,21 @@ function Dashboard(props) {
 
 	const openEmbedVideoMessage = () => {
 		if (user) {
-			props.openAddVideoMessageModal({ userId: user.uid, embed: true });
+			props.openAddVideoMessageModal({
+				userId: user.uid,
+				embed: true,
+				videoMessageURL: user.embeddedVideoMessageURL
+			});
 		}
 	}
 
 	const openEmbedAudioMessage = () => {
 		if (user) {
-			props.openAddAudioMessageModal({ userId: user.uid, embed: true });
+			props.openAddAudioMessageModal({
+				userId: user.uid,
+				embed: true,
+				audioMessageURL: user.embeddedAudioMessageURL
+			});
 		}
 	}
 
@@ -188,19 +198,28 @@ function Dashboard(props) {
 
 	const closeModule = () => {
 		setShowModule(false);
+		setSelectedModuleId(null);
 	}
 
 	const closeExternalDocument = () => {
 		setShowExternalDocument(false);
+		setSelectedExternalDocId(null);
 	}
 
-	const openAddExternalDocument = (fileName, url) => {
+	const openAddExternalDocument = (e, fileName, url) => {
+
+		// Limiting the addition of five documents for now.
+		if (externalDocuments.length >= 5) {
+			setFlashMessage('Allons is limiting five documents per user for now');
+
+			setTimeout(() => {
+				setFlashMessage(null);
+			}, 3000);
+			return;
+		}
+
 		// Creating a space for an external document.
 		setShowExternalDocument(true);
-
-		console.log("openAddExternalDocument");
-		console.log(fileName)
-		console.log(url);
 
 		if (fileName !== null && url !== null) {
 			setSelectedExternalDocName(fileName);
@@ -224,10 +243,13 @@ function Dashboard(props) {
 		}
 	}
 
-	const handleShowingExternalDoc = (id, fileName, url) => {
+	const handleShowingExternalDoc = (id, fileName, url, docAudioURL, docVideoURL) => {
 		setSelectedExternalDocId(id);
 		setSelectedExternalDocName(fileName);
 		setSelectedExternalDocURL(url);
+		setSelectedExternalDocAudioMessageURL(docAudioURL);
+		setSelectedExternalDocVideoMessageURL(docVideoURL);
+
 		setShowExternalDocument(true);
 	}
 
@@ -259,9 +281,7 @@ function Dashboard(props) {
 			return (
 				<ExternalDocThumbnail
 					key={ix}
-					id={doc.id}
-					fileName={doc.fileName}
-					url={doc.url}
+					doc={doc}
 					showExternalDocument={handleShowingExternalDoc}
 				/>
 			)
@@ -275,8 +295,6 @@ function Dashboard(props) {
 	// 	<p>There isn't a user</p>
 	// }
 
-	// /* <iframe title='embeddable message uhu' src='http://localhost:3000/msg'/> */
-
 	return (
 		<div className='dashboard'>
 
@@ -289,8 +307,13 @@ function Dashboard(props) {
 					<button onClick={createModule}>Create Module</button>
 					<button onClick={openAddExternalDocument}>Add external document</button>
 					<button disabled onClick={null}>Notifications</button>
-					<button disabled onClick={openEmbedVideoMessage}>Embed Video messages</button>
-					<button disabled onClick={openEmbedAudioMessage}>Embed Audio Messages</button>
+					{selectedModuleId || selectedExternalDocId ? null :
+					(
+						<span>
+							<button onClick={openEmbedVideoMessage}>Embed Video messages</button>
+							<button onClick={openEmbedAudioMessage}>Embed Audio Messages</button>
+						</span>
+					)}
 					<button disabled onClick={createModule}>Contact</button>
 					<button onClick={handleSignOut}>Sign out</button>
 				</div>
@@ -320,13 +343,14 @@ function Dashboard(props) {
 						closeModule={closeModule}
 						openAddVideoMessageModal={props.openAddVideoMessageModal}
 						openAddAudioMessageModal={props.openAddAudioMessageModal}
-						previewModule={props.previewModule}
+						previewInstance={props.previewInstance}
 					/>
 				)}
 
 				{/* A selected external document will show here. */}
 				{showExternalDocument && (
 					<ExternalDocument
+						user={user}
 						id={selectedExternalDocId}
 						url={selectedExternalDocURL}
 						fileName={selectedExternalDocName}
@@ -338,6 +362,9 @@ function Dashboard(props) {
 						setFlashMessage={setFlashMessage}
 						openAddVideoMessageModal={props.openAddVideoMessageModal}
 						openAddAudioMessageModal={props.openAddAudioMessageModal}
+						videoMessageURL={selectedExternalDocVideoMessageURL}
+						audioMessageURL={selectedExternalDocAudioMessageURL}
+						previewInstance={props.previewInstance}
 					/>
 				)}
 

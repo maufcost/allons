@@ -2,7 +2,9 @@ import React from 'react';
 // Already using react-pdf's worker to more efficiently load PDFs:
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
-import { generateId } from '../../util/main_util'
+import { generateId, DOCUMENT } from '../../util/main_util'
+
+import CheckIcon from '../../assets/allons-icons/check-icon.svg';
 
 import './ExternalDocument.css';
 
@@ -22,12 +24,19 @@ class ExternalDocument extends React.Component {
 			selectedDocumentFile: this.props.fileName && this.props.url ? true : null,
 			selectedDocumentFileName: this.props.fileName || '',
 			url: this.props.url,
+
+			audioMessageURL: this.props.audioMessageURL,
+			videoMessageURL: this.props.videoMessageURL,
+
 			changingDoc: false
 		};
 
-		this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
 		this.handleSelectedDocument = this.handleSelectedDocument.bind(this);
+		this.onDocumentLoadSuccess = this.onDocumentLoadSuccess.bind(this);
 		this.handlePreviousPage = this.handlePreviousPage.bind(this);
+		this.previewExternalDoc = this.previewExternalDoc.bind(this);
+		this.addAudioMessage = this.addAudioMessage.bind(this);
+		this.addVideoMessage = this.addVideoMessage.bind(this);
 		this.handleNextPage = this.handleNextPage.bind(this);
 	}
 
@@ -80,14 +89,28 @@ class ExternalDocument extends React.Component {
 
 	addAudioMessage() {
 		this.props.openAddAudioMessageModal({
-
+			instanceId: this.state.id,
+			userId: this.props.user.uid,
+			embed: false,
+			audioMessageURL: this.state.audioMessageURL,
+			instanceType: DOCUMENT
 		});
 	}
 
 	addVideoMessage() {
 		this.props.openAddVideoMessageModal({
-
+			instanceId: this.state.id,
+			userId: this.props.user.uid,
+			embed: false,
+			videoMessageURL: this.state.videoMessageURL,
+			instanceType: DOCUMENT
 		});
+	}
+
+	previewExternalDoc() {
+		console.log("previewExternalDoc")
+		console.log(this.state.id)
+		this.props.previewInstance(this.props.user.uid, DOCUMENT, this.state.id);
 	}
 
 	handlePreviousPage() {
@@ -99,8 +122,12 @@ class ExternalDocument extends React.Component {
 	}
 
 	render() {
+
+		let className = 'external-document';
+		className += this.state.selectedDocumentFile ? '' : ' only-add-doc-button-showing';
+
 		return (
-			<div className='external-document'>
+			<div className={className}>
 				<header>
 					<button
 						className='close-external-document-button'
@@ -124,14 +151,47 @@ class ExternalDocument extends React.Component {
 									}
 
 									<div>
-										<button className='toolbar-item' onClick={this.addAudioMessage}>Add audio message</button>
-										<button className='toolbar-item' onClick={this.addVideoMessage}>Add video message</button>
-										<button className='toolbar-item' onClick={this.previewExternalDoc}>Preview document</button>
+										<button className='toolbar-item' onClick={this.addAudioMessage}>
+											{this.state.audioMessageURL ? (
+												<p>
+													Add audio message <img src={CheckIcon} alt='Check'/>
+												</p>
+											) : (
+												<p>Add audio message</p>
+											)}
+										</button>
+										<button className='toolbar-item' onClick={this.addVideoMessage}>
+											{this.state.videoMessageURL ? (
+												<p>
+													Add video message <img src={CheckIcon} alt='Check'/>
+												</p>
+											) : (
+												<p>Add video message</p>
+											)}
+										</button>
+										<button
+											className='toolbar-item'
+											onClick={this.previewExternalDoc}
+										>
+											Preview document
+										</button>
 									</div>
 								</div>
 								<div className='toolbar-line-two'>
-									<button className='toolbar-item' onClick={this.handlePreviousPage}>Previous page</button>
-									<button className='toolbar-item' onClick={this.handleNextPage}>Next page</button>
+									<button
+										className='toolbar-item'
+										onClick={this.handlePreviousPage}
+										disabled={this.state.pageNumber === 1}
+									>
+										Previous page
+									</button>
+									<button
+										className='toolbar-item'
+										onClick={this.handleNextPage}
+										disabled={this.state.pageNumber === this.state.numPages}
+									>
+										Next page
+									</button>
 									<span className='toolbar-item'>Page {this.state.pageNumber} of {this.state.numPages}</span>
 								</div>
 							</div>
@@ -145,8 +205,12 @@ class ExternalDocument extends React.Component {
 
 				</header>
 
-				{this.state.selectedDocumentFile && (
+				{this.state.selectedDocumentFile &&
+				 this.state.selectedDocumentFileName &&
+				 !this.state.url &&
+				(
 					<div className='selected-document-container'>
+						<p>Document added - first time</p>
 						<Document
 							file={this.state.selectedDocumentFile}
 							onLoadSuccess={this.onDocumentLoadSuccess}
@@ -159,7 +223,6 @@ class ExternalDocument extends React.Component {
 
 				{this.state.selectedDocumentFileName && this.state.url && (
 					<div className='selected-document-container'>
-						{this.state.url}
 						<Document
 							file={this.state.url}
 							onLoadSuccess={this.onDocumentLoadSuccess}
@@ -173,8 +236,5 @@ class ExternalDocument extends React.Component {
 		)
 	}
 }
-
-// file={this.state.url}
-// httpHeaders: {}
 
 export default ExternalDocument;

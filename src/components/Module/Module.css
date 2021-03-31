@@ -90,6 +90,7 @@
 .module header .module-config button.message-button img {
 	width: 10px;
 	margin-left: 5px;
+	transition: 0.2s;
 }
 
 .module header .module-config button.message-button:hover img {

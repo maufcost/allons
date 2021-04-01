@@ -14,11 +14,8 @@ import {
 } from '../../firebase';
 
 import {
-	generateId,
 	generateVideoMessageEmbedCode,
-	VIDEO_MESSAGE,
-	DOCUMENT,
-	MODULE
+	VIDEO_MESSAGE
 } from '../../util/main_util';
 
 import './AddVideoMessageModal.css';
@@ -274,7 +271,7 @@ class AddVideoMessageModal extends React.Component {
 	async generateEmbedCode() {
 		if (this.currentBlob) {
 			await uploadEmbeddableMessageToUser(
-				generateId(), // message-id
+				'embed_video_msg_' + this.props.userId, // message-id
 				this.currentBlob,
 				this.props.userId,
 				VIDEO_MESSAGE

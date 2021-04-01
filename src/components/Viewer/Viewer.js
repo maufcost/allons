@@ -99,7 +99,6 @@ function Viewer({ userId, instanceType, instanceId }) {
 	}
 
 	const renderSectionBlocks = (blocks) => {
-
 		// dangerouslySetInnerHTML: It's very dangerous because of XSS (cross-site
 		// scripting), but we'll stick to it for now.
 		const elements = blocks.map((block, ix) => {

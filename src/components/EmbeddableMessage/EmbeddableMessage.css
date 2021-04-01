@@ -1,0 +1,117 @@
+.embeddable-message {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	background-color: var(--card-color);
+	/* background-color: blue; */
+}
+
+.embeddable-message .video-message-player {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	/*
+	I could set both the width and height here to be 500px, and I
+	know that setting both the width and height to 50%, I won't
+	keep the circle's aspect ratio. When I generate the iframe
+	embed code, I will just put a default width and height on it,
+	then users can tweak as they wish.
+	*/
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	/* background-color: salmon; */
+}
+
+.embeddable-message .video-message-container {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	overflow: hidden;
+	background: transparent;
+	object-fit: cover;
+	background-color: var(--left-sidebar-font-color);
+}
+
+.embeddable-message .video-message {
+	width: 300px;
+	margin-left: -70px;
+	margin-top: 0px;
+	border-radius: 50%;
+}
+
+.embeddable-message .video-message-play-pause {
+	position: fixed;
+	bottom: 10px;
+	left: 10px;
+	background-color: var(--card-color);
+	color: var(--primary);
+	border: 2px solid var(--card-border-color);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.2s;
+	padding: 2px;
+	margin: 0 auto;
+}
+
+.embeddable-message .video-message-play-pause:hover {
+	cursor: pointer;
+	background-color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.embeddable-message .video-message-play-pause .play-pause-img {
+	width: 25px;
+	height: 25px;
+}
+
+.embeddable-message .audio-message-player-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+	height: 100%;
+	z-index: 9999;
+	/* background-color: salmon; */
+}
+
+.embeddable-message .audio-message-play-pause {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	border-radius: 50%;
+	border: 2px solid var(--card-border-color);
+	margin: 0 auto;
+	padding: 0;
+}
+
+.embeddable-message .audio-message-play-pause:hover {
+	cursor: pointer;
+	background-color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.embeddable-message .play-pause-img {
+	width: 70px;
+	height: 70px;
+}
+
+.embeddable-message .loading {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.6em;
+	text-align: center;
+}

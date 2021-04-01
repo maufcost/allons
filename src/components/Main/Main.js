@@ -10,7 +10,6 @@ import Loading from '../Loading/Loading';
 import AddVideoMessageModal from '../AddVideoMessageModal/AddVideoMessageModal';
 import AddAudioMessageModal from '../AddAudioMessageModal/AddAudioMessageModal';
 import EmbeddableMessage from '../EmbeddableMessage/EmbeddableMessage';
-// import { auth } from '../../firebase'
 
 import './Main.css';
 
@@ -103,7 +102,7 @@ class Main extends React.Component {
 
 	render() {
 		return(
-			<div>
+			<div className='main-app'>
 				<Router>
 					<Landing
 						path='/'

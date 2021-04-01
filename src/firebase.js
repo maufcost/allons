@@ -405,3 +405,22 @@ export const uploadEmbeddableMessageToUser = (messageId, blob, uid, messageType)
 		console.log("[uploadVideoMessageToUser] Error 1", error);
 	}
 }
+
+export const getEmbedMessageURL = async (uid, msgType) => {
+	if (!uid) return;
+	if (!msgType) return;
+
+	try {
+		const user = await getUserDocument(uid);
+
+		if (msgType === VIDEO_MESSAGE) {
+			return user.embeddedVideoMessageURL;
+		}else if (msgType === AUDIO_MESSAGE) {
+			return user.embeddedAudioMessageURL;
+		}else {
+			return { error: 'Something is wrong bro. Contact: mauriciofigueiredo@knights.ucf.edu right now.' };
+		}
+	}catch(error) {
+		console.log("[getEmbedMessageURL] Error", error);
+	}
+}

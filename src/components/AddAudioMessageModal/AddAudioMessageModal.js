@@ -11,7 +11,6 @@ import {
 } from '../../firebase';
 
 import {
-	generateId,
 	generateAudioMessageEmbedCode,
 	AUDIO_MESSAGE
 } from '../../util/main_util';
@@ -60,6 +59,7 @@ class AddAudioMessageModal extends React.Component {
 		this.handlePreviewInstance = this.handlePreviewInstance.bind(this);
 		this.playPauseLastMessage = this.playPauseLastMessage.bind(this);
 		this.startStopRecording = this.startStopRecording.bind(this);
+		this.generateEmbedCode = this.generateEmbedCode.bind(this);
 		this.playPausePreview = this.playPausePreview.bind(this);
 		this.startCountdown = this.startCountdown.bind(this);
 		this.stopRecording = this.stopRecording.bind(this);
@@ -256,7 +256,7 @@ class AddAudioMessageModal extends React.Component {
 	async generateEmbedCode() {
 		if (this.currentBlob) {
 			await uploadEmbeddableMessageToUser(
-				generateId(),
+				'embed_audio_msg_' + this.props.userId,
 				this.currentBlob,
 				this.props.userId,
 				AUDIO_MESSAGE

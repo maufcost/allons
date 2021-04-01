@@ -34,6 +34,7 @@ function Landing (props) {
 					<li><a href='/signin'>Sign In</a></li>
 					<li><a href='/signup'>Sign Up</a></li>
 					<li><a href='/'>Contact</a></li>
+					{/*<li><a href='/'>Examples</a></li>*/}
 				</ul>
 			</header>
 

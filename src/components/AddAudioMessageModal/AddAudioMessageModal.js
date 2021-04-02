@@ -231,7 +231,7 @@ class AddAudioMessageModal extends React.Component {
 		// Uploading audio message to firebase.
 		if (this.currentBlob) {
 			await uploadAudioMessage(
-				'audio_msg_' + this.props.userId,
+				'audio_msg_' + this.props.id,
 				this.currentBlob,
 				this.props.id,
 				this.props.userId,
@@ -262,13 +262,15 @@ class AddAudioMessageModal extends React.Component {
 				AUDIO_MESSAGE
 			);
 
-			this.setState({
-				hasFlashMessage: true,
-				flashMessage: 'Your audio message embed code has been successfully generated.',
-				// To disable the add audio message button to prevent users
-				// from clicking twice on it.
-				isPreviewRecorded: false,
-				audioMessageAddedToInstance: true
+			setTimeout(() => {
+				this.setState({
+					hasFlashMessage: true,
+					flashMessage: 'Your audio message embed code has been successfully generated.',
+					// To disable the add audio message button to prevent users
+					// from clicking twice on it.
+					isPreviewRecorded: false,
+					audioMessageAddedToInstance: true
+				});
 			});
 		}
 	}

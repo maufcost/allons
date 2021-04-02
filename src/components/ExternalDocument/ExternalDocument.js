@@ -109,7 +109,6 @@ class ExternalDocument extends React.Component {
 
 	previewExternalDoc() {
 		console.log("previewExternalDoc")
-		console.log(this.state.id)
 		this.props.previewInstance(this.props.user.uid, DOCUMENT, this.state.id);
 	}
 
@@ -122,7 +121,6 @@ class ExternalDocument extends React.Component {
 	}
 
 	render() {
-
 		let className = 'external-document';
 		className += this.state.selectedDocumentFile ? '' : ' only-add-doc-button-showing';
 
@@ -210,7 +208,6 @@ class ExternalDocument extends React.Component {
 				 !this.state.url &&
 				(
 					<div className='selected-document-container'>
-						<p>Document added - first time</p>
 						<Document
 							file={this.state.selectedDocumentFile}
 							onLoadSuccess={this.onDocumentLoadSuccess}

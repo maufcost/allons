@@ -189,7 +189,6 @@ export const retrieveAllUsers = async () => {
 		const snap = await firestore.collection("users").get();
 		snap.forEach(doc => {
 			let userObj = doc.data();
-			console.log(doc.data());
 			userObj = {...userObj, id: userObj.email, value: userObj.displayName }
 			users.push(userObj);
 		});

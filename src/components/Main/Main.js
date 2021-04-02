@@ -50,9 +50,10 @@ class Main extends React.Component {
 			// website.
 			this.setState({
 				openAddVideoMessageModal: true,
-				videoMessageInstanceId: null,
 				videoMessageUserId: userId,
-				lastVideoMessageURL: videoMessageURL
+				lastVideoMessageURL: videoMessageURL,
+				instanceId: null,
+				instanceType: null,
 			});
 		}else {
 			// User is adding a video message on an allons module or external doc.
@@ -76,9 +77,10 @@ class Main extends React.Component {
 			// website.
 			this.setState({
 				openAddAudioMessageModal: true,
-				audioMessageInstanceId: null,
 				audioMessageUserId: userId,
-				lastAudioMessageURL: audioMessageURL
+				lastAudioMessageURL: audioMessageURL,
+				instanceId: null,
+				instanceType: null
 			});
 		}else {
 			// User is adding an audio message on an allons module or external doc.

@@ -24,7 +24,6 @@ let id;
 let currentTimeout;
 
 class AddVideoMessageModal extends React.Component {
-
 	constructor(props) {
 		super(props);
 
@@ -125,14 +124,14 @@ class AddVideoMessageModal extends React.Component {
 		})
 
 		// Listening to when the video preview ends.
-		if (this.videoPreviewRef != null && this.videoPreviewRef.current != null) {
+		if (this.videoPreviewRef !== null && this.videoPreviewRef.current !== null) {
 			this.videoPreviewRef.current.addEventListener('ended', () => {
 				this.setState({ isPreviewPlaying: false });
 			})
 		}
 
 		// Listening to when the last message video ends.
-		if (this.lastMessageVideoRef != null && this.lastMessageVideoRef.current != null) {
+		if (this.lastMessageVideoRef !== null && this.lastMessageVideoRef.current !== null) {
 			this.lastMessageVideoRef.current.addEventListener('ended', () => {
 				this.setState({ isLastMessagePlaying: false });
 			})
@@ -246,21 +245,23 @@ class AddVideoMessageModal extends React.Component {
 		// Uploading video message to firebase.
 		if (this.currentBlob) {
 			await uploadVideoMessageToInstance(
-				'video_msg_' + this.props.userId,
+				'video_msg_' + this.props.id,
 				this.currentBlob,
 				this.props.id,
 				this.props.userId,
 				this.props.instanceType
 			);
 
-			this.setState({
-				hasFlashMessage: true,
-				flashMessage: `Your video message has been successfully added to your ${this.props.instanceType}`,
-				// To disable the add video message button to prevent users
-				// from clicking twice on it.
-				isPreviewRecorded: false,
-				videoMessageAddedToInstance: true
-			});
+			setTimeout(() => {
+				this.setState({
+					hasFlashMessage: true,
+					flashMessage: `Your video message has been successfully added to your ${this.props.instanceType}`,
+					// To disable the add video message button to prevent users
+					// from clicking twice on it.
+					isPreviewRecorded: false,
+					videoMessageAddedToInstance: true
+				});
+			})
 		}
 	}
 

@@ -297,7 +297,6 @@ function Dashboard(props) {
 
 	return (
 		<div className='dashboard'>
-
 			<div className='left-sidebar'>
 				{user && (
 					<Profile user={user} />

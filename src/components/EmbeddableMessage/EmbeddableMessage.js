@@ -30,16 +30,17 @@ class EmbeddableMessage extends React.Component {
 	}
 
 	async componentDidMount() {
-		// Check if this is an audio message.....
- 		// this.audioMessage = new Audio("AUDIO_URL");
-
 		let url = null;
-		if (this.props.msgType === 'video') {
 
+		if (this.props.msgType === 'video') {
 			url = await getEmbedMessageURL(this.props.userId, VIDEO_MESSAGE);
+			// Setting state here because setting the url here allows the video+source
+			// tags to be loaded, the refs to be set, and the event listener below
+			// to be successfully set.
+			this.setState({ messageURL: url });
 
 			// Listening to when the video message ends.
-			if (this.videoMessageRef != null && this.videoMessageRef.current != null) {
+			if (this.videoMessageRef !== null && this.videoMessageRef.current !== null) {
 				this.videoMessageRef.current.addEventListener('ended', () => {
 					this.setState({ isVideoMessagePlaying: false });
 				});
@@ -47,6 +48,7 @@ class EmbeddableMessage extends React.Component {
 
 		} else if (this.props.msgType === 'audio') {
 			url = await getEmbedMessageURL(this.props.userId, AUDIO_MESSAGE);
+			this.setState({ messageURL: url });
 
 			// Creating audio object.
 			this.audioMessage = new Audio(url);
@@ -58,8 +60,6 @@ class EmbeddableMessage extends React.Component {
 		}else {
 			// @TODO: Better error handling
 		}
-
-		this.setState({ messageURL: url });
 	}
 
 	playPauseVideoMessage(e) {

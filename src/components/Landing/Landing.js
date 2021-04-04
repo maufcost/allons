@@ -23,6 +23,14 @@ function Landing (props) {
 
 	return (
 		<div className='landing-page'>
+			<iframe
+				title='allons is currently in beta. If you change the width and height values of this iframe, undesired consequences may occur (for now)'
+				frameBorder="0"
+				scrolling="no"
+				width="160"
+				height="160"
+				src='http://localhost:3000/msg/video/WZX0Rqy4DKZ6CxHoC72SW37fhUE3'
+			></iframe>
 
 			<header>
 				<a className='logo' href='/'>
@@ -45,7 +53,6 @@ function Landing (props) {
 				<p>Allons lets you record audio and video messages and share them with your documents</p>
 				<button onClick={e => navigate('/signin')}>Sign In</button>
 			</div>
-
 		</div>
 	)
 }

@@ -33,7 +33,7 @@
 	overflow: hidden;
 	background: transparent;
 	object-fit: cover;
-	background-color: var(--left-sidebar-font-color);
+	background-color: var(--card-color);
 }
 
 .embeddable-message .video-message {

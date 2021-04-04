@@ -41,7 +41,7 @@ class Main extends React.Component {
 	}
 
 	// componentDidMount() {
-	// 	console.log(auth.currentUser);
+	// 	console.log(window.top.location.href)
 	// }
 
 	openAddVideoMessageModal({ instanceId, userId, embed, videoMessageURL, instanceType }) {

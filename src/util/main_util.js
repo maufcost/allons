@@ -16,20 +16,18 @@ const DOMAIN_PROD = 'https://allons-beta.herokuapp.com'
 export const generateVideoMessageEmbedCode = (uid) => {
 	// No fancy URLs here for now since I'm only allowing one message type per user.
 	return `<iframe
-		title='allons is currently in beta. If you change the width and height
-		values of this iframe, undesired consequences may occur (for now)'
+		title='allons is currently in beta. If you change the width and height values of this iframe, undesired consequences may occur (for now)'
 		frameBorder="0"
 		scrolling="no"
 		width="160"
 		height="160"
 		src='${DOMAIN_PROD}/msg/video/${uid}'
-	></iframe> `
+	></iframe>`
 }
 
 export const generateAudioMessageEmbedCode = (uid) => {
 	return `<iframe
-		title='allons is currently in beta. If you change the width and height
-		values of this iframe, undesired consequences may occur (for now)'
+		title='allons is currently in beta. If you change the width and height values of this iframe, undesired consequences may occur (for now)'
 		frameBorder="0"
 		scrolling="no"
 		width="80"

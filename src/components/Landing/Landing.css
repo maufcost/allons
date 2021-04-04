@@ -1,5 +1,6 @@
 .landing-page {
 	/* background-color: salmon; */
+	position: relative;
 }
 
 .landing-page header {
@@ -97,4 +98,11 @@
 	color: var(--primary);
 	transition: 0.2s;
 	border: 1px solid var(--card-border-color);
+	border-bottom: 3px solid var(--warning);
+}
+
+.landing-page iframe {
+	position: fixed;
+	bottom: 20px;
+	right: 20px;
 }

@@ -97,6 +97,40 @@
 	padding: 2px;
 }
 
+/* Square videos instead of the circle: */
+
+/* .viewer .video-message-container {
+	width: 190px;
+	height: 180px;
+	overflow: hidden;
+	background: transparent;
+	border-radius: var(--card-br);
+	object-fit: cover;
+}
+
+.viewer .video-message {
+	width: 600px;
+	height: 195px;
+	margin-top: -8px;
+	margin-left: -200px;
+	border-radius: 50%;
+}
+
+.viewer .video-message-play-pause {
+	position: absolute;
+	bottom: 10px;
+	left: 10px;
+	background-color: var(--card-color);
+	color: var(--primary);
+	border: 2px solid var(--card-border-color);
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	transition: 0.2s;
+	padding: 2px;
+} */
+
 .viewer .video-message-play-pause:hover {
 	cursor: pointer;
 	background-color: var(--left-sidebar-font-color);

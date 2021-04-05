@@ -21,6 +21,7 @@ export const generateVideoMessageEmbedCode = (uid) => {
 		scrolling="no"
 		width="160"
 		height="160"
+		loading="lazy"
 		src='${DOMAIN_PROD}/msg/video/${uid}'
 	></iframe>`
 }
@@ -32,6 +33,7 @@ export const generateAudioMessageEmbedCode = (uid) => {
 		scrolling="no"
 		width="80"
 		height="80"
+		loading="lazy"
 		src='${DOMAIN_PROD}/msg/audio/${uid}'
 	></iframe>`
 }

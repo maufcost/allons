@@ -37,7 +37,7 @@ function Landing (props) {
 				width="160"
 				height="160"
 				loading="lazy"
-				src='http://localhost:3000/msg/video/WZX0Rqy4DKZ6CxHoC72SW37fhUE3'
+				src='https://allons-beta.herokuapp.com/msg/video/WZX0Rqy4DKZ6CxHoC72SW37fhUE3'
 			></iframe>
 
 			<header>

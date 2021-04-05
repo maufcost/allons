@@ -268,7 +268,7 @@ function Viewer({ userId, instanceType, instanceId }) {
 
 			{showWarning && (
 				<div className='warning-dialog'>
-					<p>If your video or audio message still does not show up or updates, it means <b>Allons</b> is still processing it. It takes a couple seconds.</p>
+					<p>If your video or audio messages still do not show up, it means <b>Allons</b> is still processing it. Wait a few seconds and refresh the page.</p>
 				</div>
 			)}
 

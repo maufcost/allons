@@ -99,7 +99,11 @@ class Main extends React.Component {
 	}
 
 	previewInstance(uid, instanceType, instanceId, flag) {
-		window.open(`/${uid}/${instanceType}/${instanceId}?author-preview=true`);
+		if (flag) {
+			window.open(`/${uid}/${instanceType}/${instanceId}?author-preview=${flag}`);
+		}else {
+			window.open(`/${uid}/${instanceType}/${instanceId}`);
+		}
 	}
 
 	render() {

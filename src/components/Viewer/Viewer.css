@@ -55,6 +55,23 @@
 	right: -95px;
 }
 
+.viewer .warning-dialog {
+	border-radius: var(--br);
+	box-shadow: 0 0 10px var(--card-border-color);
+	padding: 20px;
+	margin: 0 auto;
+	margin-top: 5%;
+	z-index: 99999;
+	text-align: center;
+}
+
+.viewer .warning-dialog p {
+	font-size: 0.8em;
+	margin: 0;
+	color: var(--primary);
+	font-weight: 300;
+}
+
 .viewer .video-message-player-container {
 	position: fixed;
 	bottom: 20px;

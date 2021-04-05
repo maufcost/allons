@@ -266,7 +266,7 @@ class AddVideoMessageModal extends React.Component {
 	}
 
 	handlePreviewInstance() {
-		this.props.previewInstance(this.props.userId, this.props.instanceType, this.props.id);
+		this.props.previewInstance(this.props.userId, this.props.instanceType, this.props.id, 'just-added');
 	}
 
 	async generateEmbedCode() {

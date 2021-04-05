@@ -4,8 +4,7 @@
 	bottom: 0;
 	right: 0;
 	left: 0;
-	background-color: transparent;
-	/* background-color: blue; */
+	background: transparent;
 }
 
 .embeddable-message .video-message-player {

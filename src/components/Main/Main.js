@@ -98,8 +98,8 @@ class Main extends React.Component {
 		this.setState({ openAddAudioMessageModal: false });
 	}
 
-	previewInstance(uid, instanceType, instanceId) {
-		window.open(`/${uid}/${instanceType}/${instanceId}`);
+	previewInstance(uid, instanceType, instanceId, flag) {
+		window.open(`/${uid}/${instanceType}/${instanceId}?author-preview=true`);
 	}
 
 	render() {

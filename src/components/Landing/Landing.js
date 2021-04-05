@@ -14,6 +14,7 @@ function Landing (props) {
 
 	// componentDidMount
 	useEffect(() => {
+		console.log(window.location)
 		if (user !== null & typeof user !== 'undefined') {
 			// The user is already logged in.
 			navigate('/dashboard', { state: { uid: user.uid } });
@@ -36,7 +37,7 @@ function Landing (props) {
 				width="160"
 				height="160"
 				loading="lazy"
-				src='https://allons-beta.herokuapp.com/msg/video/WZX0Rqy4DKZ6CxHoC72SW37fhUE3'
+				src='http://localhost:3000/msg/video/WZX0Rqy4DKZ6CxHoC72SW37fhUE3'
 			></iframe>
 
 			<header>
@@ -56,7 +57,7 @@ function Landing (props) {
 			{contact && (
 				<div class='contact-info'>
 					<p>My name is Mauricio Costa, and I created Allons. I'm available 24/7 on:</p>
-					<a href='https://twitter.com/mauriciofmcosta'>Twitter: @mauriciofmcosta</a><br/>
+					<a href='https://twitter.com/mauriciofmcosta' target='_blank' rel='noreferrer'>Twitter: @mauriciofmcosta</a><br/>
 					<a href='mailto:mauriciocosta16@gmail.com'>Email: mauriciocosta16@gmail.com</a>
 				</div>
 			)}

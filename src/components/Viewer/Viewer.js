@@ -25,6 +25,7 @@ function Viewer({ userId, instanceType, instanceId }) {
 	const [isAudioMessagePlaying, setIsAudioMessagePlaying] = useState(false);
 	const [numPages, setNumPages] = useState(null);
 	const [pageNumber, setPageNumber] = useState(1);
+	const [showWarning, setShowWarning] = useState(false);
 
 	// Refs
 	const videoMessageRef = useRef(null);
@@ -65,6 +66,18 @@ function Viewer({ userId, instanceType, instanceId }) {
 			fetchModule();
 		}else if (instanceType === DOCUMENT) {
 			fetchDocument();
+		}
+
+		// Checking if a video has just been added and the author is previewing
+		// this module or document. If the video has just been added, perhaps it
+		// still processing; so, I am going to show a quick message saying that.
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		if (urlParams.get('author-preview')) {
+			setShowWarning(true)
+			setTimeout(() => {
+				setShowWarning(false)
+			}, 6000)
 		}
 
 	}, [userId, instanceId, instanceType]);
@@ -253,8 +266,14 @@ function Viewer({ userId, instanceType, instanceId }) {
 				{videoMessage}
 			</div>
 
+			{showWarning && (
+				<div className='warning-dialog'>
+					<p>If your video or audio message still does not show up or updates, it means <b>Allons</b> is still processing it. It takes a couple seconds.</p>
+				</div>
+			)}
+
 			{module && (
-				<div class='module-viewer'>
+				<div className='module-viewer'>
 					<header>
 						<h1 className='module-title'>{module ? module.moduleName : null}</h1>
 						{authorInformation}

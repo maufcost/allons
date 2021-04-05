@@ -118,7 +118,7 @@ class SignUp extends React.Component {
 						)}
 					</button>
 					<br/>
-					<a className='sub-text' href='/sign-in'>Already have an account? Sign in here</a>
+					<a className='sub-text' href='/signin'>Already have an account? Sign in here</a>
 				</div>
 			</div>
 		)

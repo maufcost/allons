@@ -1,9 +1,10 @@
-import React from 'react';
+import React from 'react'
+import { navigate } from '@reach/router'
 
-import Play from '../../assets/allons-icons/play.svg';
-import Pause from '../../assets/allons-icons/pause.svg';
+import Play from '../../assets/allons-icons/play.svg'
+import Pause from '../../assets/allons-icons/pause.svg'
 
-import { getEmbedMessageURL } from '../../firebase';
+import { getEmbedMessageURL } from '../../firebase'
 import {
 	AUDIO_MESSAGE,
 	VIDEO_MESSAGE
@@ -30,6 +31,11 @@ class EmbeddableMessage extends React.Component {
 	}
 
 	async componentDidMount() {
+		if (!this.isInIframe()) {
+			navigate('https://allons-beta.herokuapp.com/')
+			return
+		}
+
 		let url = null;
 
 		if (this.props.msgType === 'video') {
@@ -90,6 +96,16 @@ class EmbeddableMessage extends React.Component {
 		}
 	}
 
+	isInIframe () {
+	    try {
+	        return window.self !== window.top;
+	    } catch (e) {
+	        return true;
+	    }
+	}
+
+	// @TODO: Redirect users instead of not showing the page at all (YOU'RE
+	// STILL TESTING! It's fine if you leave it this way for now!)
 	render() {
 		return (
 			<div className='embeddable-message'>

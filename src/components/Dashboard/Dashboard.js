@@ -42,6 +42,8 @@ function Dashboard(props) {
 	const [selectedExternalDocVideoMessageURL, setSelectedExternalDocVideoMessageURL] = useState(null);
 	const [selectedExternalDocAudioMessageURL, setSelectedExternalDocAudioMessageURL] = useState(null);
 
+	const [contactInfo, setContactInfo] = useState('Contact')
+
 	// componentDidMount()
 	// useEffect shouldn't be async to prevent race conditions.
 	useEffect(() => {
@@ -253,6 +255,13 @@ function Dashboard(props) {
 		setShowExternalDocument(true);
 	}
 
+	const onContactClick = () => {
+		setContactInfo('Twitter: @mauriciofmcosta or mauriciocosta16@gmail.com')
+		setTimeout(() => {
+			setContactInfo('Contact')
+		}, 4000)
+	}
+
 	// Showing the thumbnails of each module on the dashboard.
 	let children = null;
 	if (modules !== null && typeof modules !== 'undefined' && modules.length > 0) {
@@ -313,7 +322,7 @@ function Dashboard(props) {
 							<button onClick={openEmbedAudioMessage}>Embed Audio Messages</button>
 						</span>
 					)}
-					<button disabled onClick={createModule}>Contact</button>
+					<button onClick={onContactClick}>{contactInfo}</button>
 					<button onClick={handleSignOut}>Sign out</button>
 				</div>
 

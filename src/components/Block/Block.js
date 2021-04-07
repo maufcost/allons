@@ -151,7 +151,7 @@ class Block extends React.Component {
 							<button
 								onClick={this.removeBlock}
 							>
-								Delete Block {this.state.id}
+								Delete Block
 							</button>
 							<button onClick={this.previewBlock}>Preview block</button>
 						</header>

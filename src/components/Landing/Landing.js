@@ -90,7 +90,6 @@ function Landing (props) {
 
 			<footer>
 				<img src={Logo1} alt='Allon'/>
-				<a href='/'>Contact</a>
 			</footer>
 		</div>
 	)

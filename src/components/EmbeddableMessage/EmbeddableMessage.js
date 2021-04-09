@@ -114,15 +114,13 @@ class EmbeddableMessage extends React.Component {
 				)}
 
 				{this.state.messageURL && this.props.msgType === 'video' && (
-					<div className='video-message-player'>
-						<div className='video-message-container'>
-							<video
-								className='video-message'
-								ref={this.videoMessageRef}
-							>
-								<source src={this.state.messageURL} type="video/mp4" />
-							</video>
-						</div>
+					<div className='video-message-container'>
+						<video
+							className='video-message'
+							ref={this.videoMessageRef}
+						>
+							<source src={this.state.messageURL} type="video/mp4" />
+						</video>
 						<button
 							className='video-message-play-pause'
 							onClick={this.playPauseVideoMessage}

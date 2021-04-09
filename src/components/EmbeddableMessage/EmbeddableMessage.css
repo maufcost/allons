@@ -26,36 +26,38 @@
 }
 
 .embeddable-message .video-message-container {
-	width: 100%;
-	height: 100%;
-	border-radius: 50%;
-	overflow: hidden;
+	position: relative;
+	padding-bottom: 100%;
+	/* padding-bottom: 56.25%; /* 16:9 */
+	height: 0;
 	background: transparent;
+	overflow: hidden;
+	border-radius: 30px;
 	object-fit: cover;
-	background-color: var(--card-color);
 }
 
-.embeddable-message .video-message {
-	width: 300px;
-	margin-left: -70px;
-	margin-top: 0px;
-	border-radius: 50%;
+.embeddable-message video.video-message {
+	position: absolute;
+	top: 0;
+	/* left: -490px; To use with the media queries */
+	left: -40%;
+	right: 0;
+	bottom: 0;
+	width: 180%;
 }
 
 .embeddable-message .video-message-play-pause {
-	position: fixed;
+	position: absolute;
+	padding: 0;
 	bottom: 10px;
 	left: 10px;
-	background-color: var(--card-color);
-	color: var(--primary);
-	border: 2px solid var(--card-border-color);
 	border-radius: 50%;
+	border: none;
+	width: 18%;
+	height: 18%;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: 0.2s;
-	padding: 2px;
-	margin: 0 auto;
 }
 
 .embeddable-message .video-message-play-pause:hover {
@@ -64,42 +66,13 @@
 	transition: 0.2s;
 }
 
-.embeddable-message .video-message-play-pause .play-pause-img {
-	width: 25px;
-	height: 25px;
-}
-
-.embeddable-message .audio-message-player-container {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	width: 100%;
-	height: 100%;
-	z-index: 9999;
-	/* background-color: salmon; */
-}
-
-.embeddable-message .audio-message-play-pause {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	position: relative;
-	border-radius: 50%;
-	border: 2px solid var(--card-border-color);
-	margin: 0 auto;
-	padding: 0;
-}
-
-.embeddable-message .audio-message-play-pause:hover {
-	cursor: pointer;
-	background-color: var(--left-sidebar-font-color);
-	transition: 0.2s;
+.embeddable-message .video-message-play-pause:focus {
+	outline: none;
 }
 
 .embeddable-message .play-pause-img {
-	width: 60px;
-	height: 60px;
+	display: inline-block;
+	width: 50%;
 }
 
 .embeddable-message .loading {

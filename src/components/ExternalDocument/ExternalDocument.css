@@ -47,7 +47,7 @@
 .external-document header .close-external-document-button {
 	background: transparent;
 	border-radius: 50%;
-	border: 2px solid var(--primary);
+	border: 1px solid var(--primary);
 	color: var(--primary);
 	font-weight: 800;
 	transition: 0.2s;

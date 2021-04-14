@@ -6,7 +6,7 @@
 
 .dashboard .left-sidebar {
 	background-color: var(--bg);
-	width: 22%;
+	width: 25%;
 	color: var(--left-sidebar-font-color);
 	padding: 15px 15px 0 15px;
 	border-right: 1px solid var(--border-color-light);

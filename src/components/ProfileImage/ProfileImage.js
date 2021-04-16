@@ -22,11 +22,13 @@ class ProfileImage extends React.Component {
 				className='profile-image-container'
 			>
 				{this.props.user && this.props.user.photoURL ? (
-					<img
-						className='user-profile-image'
-						src={this.props.user.photoURL}
-						alt='User Profile'
-					/>
+					<div class='user-image-wrapper-object-fit'>
+						<img
+							className='user-profile-image'
+							src={this.props.user.photoURL}
+							alt='User Profile'
+						/>
+					</div>
 				):
 					<div className='default-user-profile-image'>
 						<p>{displayNameInitials}</p>

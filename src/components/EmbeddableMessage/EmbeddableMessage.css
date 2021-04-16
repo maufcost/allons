@@ -75,6 +75,29 @@
 	width: 50%;
 }
 
+.embeddable-message .audio-message-player-container {
+	padding-bottom: 100%;
+	/* background-color: red; */
+}
+
+.embeddable-message .audio-message-play-pause {
+	border-radius: var(--card-br);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid var(--card-border-color);
+}
+
+.embeddable-message .audio-message-play-pause:hover {
+	cursor: pointer;
+	background-color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.embeddable-message .audio-message-play-pause:focus {
+	outline: none;
+}
+
 .embeddable-message .loading {
 	position: absolute;
 	top: 0;

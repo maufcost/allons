@@ -11,6 +11,7 @@ function Landing (props) {
 
 	const user = useContext(UserContext);
 	const [contact, setContact] = useState(false);
+	const [openDemo, setOpenDemo] = useState(false);
 
 	// componentDidMount
 	useEffect(() => {
@@ -28,16 +29,21 @@ function Landing (props) {
 		}, 4000);
 	}
 
+	const openYTDemo = () => {
+		setOpenDemo(true);
+	}
+
 	return (
 		<div className='landing-page'>
 			<iframe
+				id='allons-iframe'
 				title='allons is currently in beta. If you change the width and height values of this iframe, undesired consequences may occur (for now)'
 				frameBorder="0"
 				scrolling="no"
 				width="160"
 				height="160"
 				loading="lazy"
-				src='https://allons-beta.herokuapp.com/msg/video/WZX0Rqy4DKZ6CxHoC72SW37fhUE3'
+				src='https://allons.tech/msg/video/WZX0Rqy4DKZ6CxHoC72SW37fhUE3'
 			></iframe>
 
 			<header>
@@ -55,7 +61,7 @@ function Landing (props) {
 			</header>
 
 			{contact && (
-				<div class='contact-info'>
+				<div className='contact-info'>
 					<p>My name is Mauricio Costa, and I created Allons. I'm available 24/7 on:</p>
 					<a href='https://twitter.com/mauriciofmcosta' target='_blank' rel='noreferrer'>Twitter: @mauriciofmcosta</a><br/>
 					<a href='mailto:mauriciocosta16@gmail.com'>Email: mauriciocosta16@gmail.com</a>
@@ -86,6 +92,22 @@ function Landing (props) {
 						<p>Present projects and share with teachers and supervisors.</p>
 					</div>
 				</div>
+			</div>
+
+			<div className='yt-video'>
+				{openDemo ? (
+					<iframe
+						width="560"
+						height="315"
+						src="https://www.youtube.com/embed/Zos6W2oeu20"
+						title="YouTube video player"
+						frameborder="0"
+						allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+						allowfullscreen>
+					</iframe>
+				) : (
+					<button onClick={openYTDemo}>Watch Allons Demo</button>
+				)}
 			</div>
 
 			<footer>

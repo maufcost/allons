@@ -32,7 +32,7 @@ class EmbeddableMessage extends React.Component {
 
 	async componentDidMount() {
 		if (!this.isInIframe()) {
-			navigate('https://allons-beta.herokuapp.com/')
+			navigate('https://allons.tech')
 			return
 		}
 

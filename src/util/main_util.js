@@ -11,7 +11,8 @@ export const generateId = () => {
 }
 
 // const DOMAIN_DEV = 'http://localhost:3000'
-const DOMAIN_PROD = 'https://allons-beta.herokuapp.com'
+// const DOMAIN_PROD = 'https://allons-beta.herokuapp.com'
+const DOMAIN_PROD = 'https://allons.tech'
 
 export const generateVideoMessageEmbedCode = (uid) => {
 	// No fancy URLs here for now since I'm only allowing one message type per user.

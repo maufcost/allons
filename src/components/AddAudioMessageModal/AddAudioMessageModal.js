@@ -31,7 +31,7 @@ class AddAudioMessageModal extends React.Component {
 			isPreviewPlaying: false,
 			isLastMessagePlaying: false,
 
-			countdown: 10,
+			countdown: this.props.isUserPro ? 60 : 10,
 
 			hasFlashMessage: false,
 			flashMessage: '',
@@ -157,7 +157,7 @@ class AddAudioMessageModal extends React.Component {
 				// console.log('start', this.mediaRecorder.state);
 				this.setState({
 					isRecordingStarted: true,
-					countdown: 10,
+					countdown: this.props.isUserPro ? 60 : 10,
 					copied: false
 				});
 
@@ -171,12 +171,15 @@ class AddAudioMessageModal extends React.Component {
 		clearInterval(id);
 		clearTimeout(currentTimeout);
 
-		this.mediaRecorder.stop();
+		// To prevent an error when user is recording and closes the modal.
+		if (this.mediaRecorder.state !== 'inactive') {
+			this.mediaRecorder.stop();
+		}
 
 		this.setState({
 			isPreviewRecorded: true,
 			isRecordingStarted: false,
-			countdown: 10
+			countdown: this.props.isUserPro ? 60 : 10
 		});
 	}
 
@@ -224,7 +227,7 @@ class AddAudioMessageModal extends React.Component {
 			if (this.state.isRecordingStarted) {
 				this.stopRecording();
 			}
-		}, 10000);
+		}, this.props.isUserPro ? 60000 : 10000);
 	}
 
 	async addAudioMessageToInstance() {
@@ -317,7 +320,11 @@ class AddAudioMessageModal extends React.Component {
 									<p className='title'>Add a personalized audio message to an external website</p>
 								)}
 								<br />
-								<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
+								{this.props.isUserPro ? (
+									<small>You are an Allons PRO user. So, you can record messages up to 60 seconds</small>
+								) : (
+									<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
+								)}
 							</div>
 							<button
 								className='close-button'

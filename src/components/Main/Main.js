@@ -23,6 +23,7 @@ class Main extends React.Component {
 			videoMessageUserId: null,
 			openAddVideoMessageModal: false,
 			lastVideoMessageURL: null,
+			isUserPro: false,
 
 			audioMessageInstanceId: null,
 			audioMessageUserId: null,
@@ -44,13 +45,14 @@ class Main extends React.Component {
 	// 	console.log(window.top.location.href)
 	// }
 
-	openAddVideoMessageModal({ instanceId, userId, embed, videoMessageURL, instanceType }) {
+	openAddVideoMessageModal({ instanceId, user, embed, videoMessageURL, instanceType }) {
 		if (embed) {
 			// User is generating an embed code with the message for a non-allons
 			// website.
 			this.setState({
 				openAddVideoMessageModal: true,
-				videoMessageUserId: userId,
+				videoMessageUserId: user.uid,
+				isUserPro: user.isPro,
 				lastVideoMessageURL: videoMessageURL,
 				instanceId: null,
 				instanceType: null,
@@ -59,7 +61,8 @@ class Main extends React.Component {
 			// User is adding a video message on an allons module or external doc.
 			this.setState({
 				openAddVideoMessageModal: true,
-				videoMessageUserId: userId,
+				videoMessageUserId: user.uid,
+				isUserPro: user.isPro,
 				lastVideoMessageURL: videoMessageURL,
 				instanceId,
 				instanceType
@@ -71,13 +74,14 @@ class Main extends React.Component {
 		this.setState({ openAddVideoMessageModal: false });
 	}
 
-	openAddAudioMessageModal({ instanceId, userId, embed, audioMessageURL, instanceType }) {
+	openAddAudioMessageModal({ instanceId, user, embed, audioMessageURL, instanceType }) {
 		if (embed) {
 			// User is generating an embed code with the message for a non-allons
 			// website.
 			this.setState({
 				openAddAudioMessageModal: true,
-				audioMessageUserId: userId,
+				audioMessageUserId: user.uid,
+				isUserPro: user.isPro,
 				lastAudioMessageURL: audioMessageURL,
 				instanceId: null,
 				instanceType: null
@@ -86,7 +90,8 @@ class Main extends React.Component {
 			// User is adding an audio message on an allons module or external doc.
 			this.setState({
 				openAddAudioMessageModal: true,
-				audioMessageUserId: userId,
+				audioMessageUserId: user.uid,
+				isUserPro: user.isPro,
 				lastAudioMessageURL: audioMessageURL,
 				instanceId,
 				instanceType
@@ -140,6 +145,7 @@ class Main extends React.Component {
 					<AddVideoMessageModal
 						id={this.state.instanceId}
 						userId={this.state.videoMessageUserId}
+						isUserPro={this.state.isUserPro}
 						lastVideoMessageURL={this.state.lastVideoMessageURL}
 						instanceType={this.state.instanceType}
 						previewInstance={this.previewInstance}
@@ -151,6 +157,7 @@ class Main extends React.Component {
 					<AddAudioMessageModal
 						id={this.state.instanceId}
 						userId={this.state.audioMessageUserId}
+						isUserPro={this.state.isUserPro}
 						lastAudioMessageURL={this.state.lastAudioMessageURL}
 						instanceType={this.state.instanceType}
 						closeAddAudioMessageModal={this.closeAddAudioMessageModal}

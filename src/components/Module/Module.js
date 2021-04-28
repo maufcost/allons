@@ -152,7 +152,7 @@ class Module extends React.Component {
 	addAudioMessage() {
 		this.props.openAddAudioMessageModal({
 			instanceId: this.state.moduleId,
-			userId: this.props.user.uid,
+			user: this.props.user,
 			embed: false,
 			audioMessageURL: this.state.audioMessageURL,
 			instanceType: MODULE
@@ -162,7 +162,7 @@ class Module extends React.Component {
 	addVideoMessage() {
 		this.props.openAddVideoMessageModal({
 			instanceId: this.state.moduleId,
-			userId: this.props.user.uid,
+			user: this.props.user,
 			embed: false,
 			videoMessageURL: this.state.videoMessageURL,
 			instanceType: MODULE

@@ -33,7 +33,7 @@ class AddVideoMessageModal extends React.Component {
 			isPreviewPlaying: false,
 			isLastMessagePlaying: false,
 
-			countdown: 10,
+			countdown: this.props.isUserPro ? 60 : 10,
 
 			hasFlashMessage: false,
 			flashMessage: '',
@@ -77,7 +77,6 @@ class AddVideoMessageModal extends React.Component {
 	}
 
 	componentDidMount() {
-
 		// User video stream retrieval setup
 		navigator.mediaDevices.getUserMedia(this.videoConstraintsObj)
 		.then((mediaStreamObj) => {
@@ -114,8 +113,13 @@ class AddVideoMessageModal extends React.Component {
 				let blob = new Blob(chunks, {'type': 'video/mp4'});
 				chunks = [];
 				let videoURL = window.URL.createObjectURL(blob);
-				this.videoPreviewRef.current.src = videoURL;
-				this.currentBlob = blob;
+
+				// To prevent an error when users are recording and they close
+				// the modal.
+				if (this.videoPreviewRef && this.videoPreviewRef.current) {
+					this.videoPreviewRef.current.src = videoURL;
+				}
+			this.currentBlob = blob;
 			}
 		})
 		.catch((error) => {
@@ -179,7 +183,7 @@ class AddVideoMessageModal extends React.Component {
 				this.mediaRecorder.start();
 				this.setState({
 					isRecordingStarted: true,
-					countdown: 10,
+					countdown: this.props.isUserPro ? 60 : 10,
 					copied: false
 				});
 
@@ -198,7 +202,7 @@ class AddVideoMessageModal extends React.Component {
 		this.setState({
 			isPreviewRecorded: true,
 			isRecordingStarted: false,
-			countdown: 10
+			countdown: this.props.isUserPro ? 60 : 10
 		});
 	}
 
@@ -238,7 +242,7 @@ class AddVideoMessageModal extends React.Component {
 			if (this.state.isRecordingStarted) {
 				this.stopRecording();
 			}
-		}, 10000);
+		}, this.props.isUserPro ? 60000 : 10000);
 	}
 
 	async addVideoMessageToInstance() {
@@ -331,7 +335,11 @@ class AddVideoMessageModal extends React.Component {
 									<p className='title'>Add a personalized video message to an external website</p>
 								)}
 								<br/>
-								<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
+								{this.props.isUserPro ? (
+									<small>You are an Allons PRO user. So, you can record messages up to 60 seconds</small>
+								) : (
+									<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
+								)}
 							</div>
 							<button
 								className='close-button'

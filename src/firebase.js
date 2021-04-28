@@ -51,7 +51,9 @@ export const createUserDocument = async (user, additionalData) => {
 				// while allons is in beta, I will only allow one embedded
 				// message type per user.
 				embeddedVideoMessageURL: null,
-				embeddedAudioMessageURL: null
+				embeddedAudioMessageURL: null,
+				isPro: false,
+				createdOn: new Date() // @TODO: Better formatting
 			});
 		}catch(error) {
 			console.error("[generateUserDocument] Error", error);
@@ -113,7 +115,8 @@ export const createNewUserModule = async (uid, moduleId) => {
 		id: moduleId,
 		moduleName: "Default module name",
 		moduleSections: [],
-		viewers: 0
+		viewers: 0,
+		createdOn: new Date()
 	}
 
 	try {
@@ -295,7 +298,12 @@ export const createNewExternalDocument = async (uid, externalDocumentId, fileNam
 			const url = await storageRef.getDownloadURL();
 
 			let doc = {};
-			doc[externalDocumentId] = { id: externalDocumentId, url, fileName };
+			doc[externalDocumentId] = {
+				id: externalDocumentId,
+				url,
+				fileName,
+				createdOn: new Date()
+			};
 
 			firestore.doc(`external-documents/${uid}`).set(
 				{ ...doc },

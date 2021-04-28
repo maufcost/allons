@@ -165,7 +165,7 @@ function Dashboard(props) {
 	const openEmbedVideoMessage = () => {
 		if (user) {
 			props.openAddVideoMessageModal({
-				userId: user.uid,
+				user: user,
 				embed: true,
 				videoMessageURL: user.embeddedVideoMessageURL
 			});
@@ -175,7 +175,7 @@ function Dashboard(props) {
 	const openEmbedAudioMessage = () => {
 		if (user) {
 			props.openAddAudioMessageModal({
-				userId: user.uid,
+				user: user,
 				embed: true,
 				audioMessageURL: user.embeddedAudioMessageURL
 			});

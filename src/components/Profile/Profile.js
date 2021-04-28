@@ -86,7 +86,7 @@ function Profile({ user }) {
 						</div>
 					) : (
 						<div>
-							<p>{userFormattedDisplayName} <span className='pro-span'>PRO</span></p>
+							<p>{userFormattedDisplayName} {user.isPro && <span className='pro-span'>PRO</span>}</p>
 							{user ? <span>{user.email}</span> : null}
 						</div>
 					)}

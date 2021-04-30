@@ -166,7 +166,6 @@ export const signOutUser = () => {
 
 // Retrieves some user based on email array.
 export const retrieveSomeUsers = async (emailList) => {
-
 	let users = [];
 	try {
 		for (let i = 0; i < emailList.length; i++) {
@@ -285,34 +284,32 @@ export const createNewExternalDocument = async (uid, externalDocumentId, fileNam
 	try {
 		const storageRef = firebaseStorage.ref(externalDocumentId);
 
-		storageRef.put(file).on("state_changed", (snapshot) => {
-			// Any progress bar stuff can go here...
-		},
-		(error) => {
-			console.log("[createNewExternalDocument] Error 2", error);
-		},
-		await addEverythingToTheDB
-		);
+		return new Promise((resolve) => {
+			storageRef.put(file).on("state_changed", (snapshot) => {
+				// Any progress bar stuff can go here...
+			},
+			(error) => {
+				console.log("[createNewExternalDocument] Error 2", error);
+			},
+			async () => {
+				url = await storageRef.getDownloadURL();
 
-		async function addEverythingToTheDB() {
-			const url = await storageRef.getDownloadURL();
+				let doc = {};
+				doc[externalDocumentId] = {
+					id: externalDocumentId,
+					url,
+					fileName,
+					createdOn: new Date()
+				};
 
-			let doc = {};
-			doc[externalDocumentId] = {
-				id: externalDocumentId,
-				url,
-				fileName,
-				createdOn: new Date()
-			};
+				firestore.doc(`external-documents/${uid}`).set(
+					{ ...doc },
+					{ merge: true }
+				)
 
-			firestore.doc(`external-documents/${uid}`).set(
-				{ ...doc },
-				{ merge: true }
-			)
-		}
-
-		return { id: externalDocumentId, url, fileName };
-
+				resolve({ id: externalDocumentId, url, fileName });
+			});
+		})
 	}catch(error) {
 		console.log("[createNewExternalDocument] Error 1", error);
 	}
@@ -429,5 +426,57 @@ export const getEmbedMessageURL = async (uid, msgType) => {
 		}
 	}catch(error) {
 		console.log("[getEmbedMessageURL] Error", error);
+	}
+}
+
+// Deletes a module
+export const deleteModule = async (uid, moduleId) => {
+	if (!uid) return;
+	if (!moduleId) return;
+
+	try {
+		// Deleting actual module.
+		let firebaseDeletingObject = {};
+		firebaseDeletingObject[moduleId] = firebase.firestore.FieldValue.delete()
+
+		const modulesRef = firestore.collection("modules").doc(uid);
+		modulesRef.update(firebaseDeletingObject)
+
+		// Deleting video and audio messages associated with it.
+		// @TODO
+
+	} catch(error) {
+		console.log("[deleteModule] Error 1", error);
+	}
+}
+
+// Deletes an external document
+export const deleteExternalDocument = async (uid, externalDocId) => {
+	if (!uid) return;
+	if (!externalDocId) return;
+
+	try {
+		// Deleting actual module.
+		let firebaseDeletingObject = {};
+		firebaseDeletingObject[externalDocId] = firebase.firestore.FieldValue.delete()
+
+		const externalDocsRef = firestore.collection("external-documents").doc(uid);
+		externalDocsRef.update(firebaseDeletingObject)
+
+		// Deleting actual PDF file (from Firebase storage).
+		const pdf = firebaseStorage.ref(`${externalDocId}`);
+		pdf.delete()
+		.then(() => {
+			// console.log("External document successfully deleted");
+		})
+		.catch((error) => {
+			console.log("[deleteExternalDocument] Error 2", error);
+		});
+
+		// Deleting video and audio messages associated with it (from Firebase storage).
+		// @TODO
+
+	} catch(error) {
+		console.log("[deleteExternalDocument] Error 1", error);
 	}
 }

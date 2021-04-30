@@ -16,6 +16,12 @@
 	--card-color: #ffffff;
 	--card-br: 5px;
 	--card-border-color: #d4d7dc;
+
+	/* Delete buttons */
+	--dark-small: #0c1624;
+	--dark-small-hover: #435673;
+	--orange-small: #f09630;
+	--orange-small-hover: #b8670b;
 }
 
 html, body {

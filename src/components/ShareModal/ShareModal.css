@@ -1,0 +1,79 @@
+.share-modal-bg {
+	/* background-color: var(--card-color); */
+	background-color: gold;
+	width: 100vw;
+	height: 100vh;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	opacity: 1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.share-modal {
+	background-color: var(--card-color);
+	/* width: 80%;
+	height: 80%; */
+	/* position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0; */
+	margin: auto;
+	padding: 30px;
+	border-radius: var(--card-br);
+	border: 1px solid var(--border-color-light);
+	box-shadow: 0 0 20px var(--card-border-color);
+}
+
+.share-modal h1 {
+	font-size: 2.2em;
+	font-weight: 900;
+	margin: 0;
+	margin-bottom: 15px;
+}
+
+.share-modal span {
+	display: inline-block;
+	margin-bottom: 15px;
+}
+
+.share-modal .close-button {
+	border: none;
+	background: transparent;
+	width: 20px;
+	transition: 0.2s;
+}
+
+.share-modal .close-button:hover {
+	cursor: pointer;
+	opacity: 0.5;
+	transition: 0.2s;
+}
+
+.share-modal .copy-button {
+	border: none;
+	background: transparent;
+	width: 20px;
+	transition: 0.2s;
+	background-color: var(--primary);
+	padding: 8px 16px;
+	width: 30%;
+	border-radius: var(--card-br);
+	color: #ffffff;
+}
+
+.share-modal .copy-button:hover {
+	cursor: pointer;
+	opacity: 0.5;
+	transition: 0.2s;
+}
+
+.share-modal small {
+	font-size: 0.7em;
+	color: var(--left-sidebar-font-color);
+}

@@ -15,7 +15,6 @@ import CheckIcon from '../../assets/allons-icons/check-icon.svg';
 import './Module.css';
 
 class Module extends React.Component {
-
 	constructor(props) {
 		super(props);
 
@@ -34,6 +33,7 @@ class Module extends React.Component {
 		this.moduleHeadlineRef = React.createRef();
 
 		this.save = this.save.bind(this);
+		this.shareModule = this.shareModule.bind(this);
 		this.updateSection = this.updateSection.bind(this);
 		this.removeSection = this.removeSection.bind(this);
 		this.handlePreview = this.handlePreview.bind(this);
@@ -169,6 +169,13 @@ class Module extends React.Component {
 		});
 	}
 
+	shareModule() {
+		this.props.openShareModal(
+			MODULE,
+			`https://allons.tech/${this.props.user.uid}/${MODULE}/${this.state.moduleId}`
+		);
+	}
+
 	render() {
 		const children = [];
 		const sections = this.state.sections;
@@ -245,6 +252,7 @@ class Module extends React.Component {
 							</button>
 							<button onClick={this.handlePreview}>Preview module</button>
 							<button onClick={this.handleNewSection}>Create section</button>
+							<button onClick={this.shareModule}>Share Module</button>
 						</div>
 						<div className='toolbar'>
 							<button disabled className='toolbar-button'>

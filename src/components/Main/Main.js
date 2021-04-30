@@ -10,6 +10,7 @@ import Loading from '../Loading/Loading';
 import AddVideoMessageModal from '../AddVideoMessageModal/AddVideoMessageModal';
 import AddAudioMessageModal from '../AddAudioMessageModal/AddAudioMessageModal';
 import EmbeddableMessage from '../EmbeddableMessage/EmbeddableMessage';
+import ShareModal from '../ShareModal/ShareModal';
 
 import './Main.css';
 
@@ -30,6 +31,9 @@ class Main extends React.Component {
 			openAddAudioMessageModal: false,
 			lastAudioMessageURL: null,
 
+			openShareModal: false,
+			instanceLink: 'https://allons.tech',
+
 			instanceType: null,
 			instanceId: null
 		};
@@ -39,6 +43,9 @@ class Main extends React.Component {
 
 		this.openAddAudioMessageModal = this.openAddAudioMessageModal.bind(this);
 		this.closeAddAudioMessageModal = this.closeAddAudioMessageModal.bind(this);
+
+		this.openShareModal = this.openShareModal.bind(this);
+		this.closeShareModal = this.closeShareModal.bind(this);
 	}
 
 	// componentDidMount() {
@@ -111,6 +118,14 @@ class Main extends React.Component {
 		}
 	}
 
+	openShareModal(instanceType, instanceLink) {
+		this.setState({ openShareModal: true, instanceType, instanceLink });
+	}
+
+	closeShareModal() {
+		this.setState({ openShareModal: false });
+	}
+
 	render() {
 		return(
 			<div className='main-app'>
@@ -128,6 +143,7 @@ class Main extends React.Component {
 						openAddVideoMessageModal={this.openAddVideoMessageModal}
 						openAddAudioMessageModal={this.openAddAudioMessageModal}
 						previewInstance={this.previewInstance}
+						openShareModal={this.openShareModal}
 					/>
 
 					<Viewer path='/:userId/:instanceType/:instanceId/' />
@@ -162,6 +178,14 @@ class Main extends React.Component {
 						instanceType={this.state.instanceType}
 						closeAddAudioMessageModal={this.closeAddAudioMessageModal}
 						previewInstance={this.previewInstance}
+					/>
+				)}
+
+				{this.state.openShareModal && (
+					<ShareModal
+						instanceType={this.state.instanceType}
+						instanceLink={this.state.instanceLink}
+						closeShareModal={this.closeShareModal}
 					/>
 				)}
 			</div>

@@ -23,7 +23,6 @@ import Logo1 from '../../assets/Logos/logo1.svg';
 import './Dashboard.css';
 
 function Dashboard(props) {
-
 	const [user, setUser] = useState(null);
 	const [modules, setModules] = useState([]);
 	const [showModule, setShowModule] = useState(false);
@@ -209,7 +208,6 @@ function Dashboard(props) {
 	}
 
 	const openAddExternalDocument = (e, fileName, url) => {
-
 		// Limiting the addition of five documents for now.
 		if (externalDocuments.length >= 5) {
 			setFlashMessage('Allons is limiting five documents per user for now');
@@ -231,11 +229,15 @@ function Dashboard(props) {
 
 	const createNewExternalDoc = async (id, fileName, file) => {
 		if (user) {
-			const newDoc = await createNewExternalDocument(user.uid, id, fileName, file);
+			let newDoc;
+			createNewExternalDocument(user.uid, id, fileName, file)
+			.then((doc) => {
+				newDoc = doc;
 
-			// Showing new external doc thumbnail as soon as it is created.
-			externalDocuments.push(newDoc);
-			setExternalDocuments([...externalDocuments]);
+				// Showing new external doc thumbnail as soon as it is created.
+				externalDocuments.push(newDoc);
+				setExternalDocuments([...externalDocuments]);
+			});
 		}
 	}
 
@@ -262,6 +264,23 @@ function Dashboard(props) {
 		}, 4000)
 	}
 
+	const updateModulesListAfterDeletion = (moduleId) => {
+		// The module with id moduleId has already been removed from the database.
+		// Let's now remove it from the modules object here locally, so that
+		// the user doesn't have to refresh the page to see the change.
+		let module = modules.find(module => module.id === moduleId);
+		const index = modules.indexOf(module);
+		modules.splice(index, 1);
+		setModules([...modules]);
+	}
+
+	const updateExternalDocsListAfterDeletion = (externalDocId) => {
+		let doc = externalDocuments.find(doc => doc.id === externalDocId);
+		const index = externalDocuments.indexOf(doc);
+		externalDocuments.splice(index, 1);
+		setExternalDocuments([...externalDocuments]);
+	}
+
 	// Showing the thumbnails of each module on the dashboard.
 	let children = null;
 	if (modules !== null && typeof modules !== 'undefined' && modules.length > 0) {
@@ -275,6 +294,8 @@ function Dashboard(props) {
 					videoMessageURL={module.videoMessageURL}
 					audioMessageURL={module.audioMessageURL}
 					showModule={handleShowingModule}
+					user={user}
+					updateModulesListAfterDeletion={updateModulesListAfterDeletion}
 				/>
 			)
 		});
@@ -292,17 +313,12 @@ function Dashboard(props) {
 					key={ix}
 					doc={doc}
 					showExternalDocument={handleShowingExternalDoc}
+					user={user}
+					updateExternalDocsListAfterDeletion={updateExternalDocsListAfterDeletion}
 				/>
 			)
 		});
 	}
-
-	// Use it to test if the UserProvider is sending the user context.
-	// {user ?
-	// 	<p>There is a user</p>
-	// :
-	// 	<p>There isn't a user</p>
-	// }
 
 	return (
 		<div className='dashboard'>
@@ -352,6 +368,7 @@ function Dashboard(props) {
 						openAddVideoMessageModal={props.openAddVideoMessageModal}
 						openAddAudioMessageModal={props.openAddAudioMessageModal}
 						previewInstance={props.previewInstance}
+						openShareModal={props.openShareModal}
 					/>
 				)}
 
@@ -373,6 +390,7 @@ function Dashboard(props) {
 						videoMessageURL={selectedExternalDocVideoMessageURL}
 						audioMessageURL={selectedExternalDocAudioMessageURL}
 						previewInstance={props.previewInstance}
+						openShareModal={props.openShareModal}
 					/>
 				)}
 

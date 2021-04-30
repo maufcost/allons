@@ -15,7 +15,7 @@ function Landing (props) {
 
 	// componentDidMount
 	useEffect(() => {
-		console.log(window.location)
+		// console.log(window.location)
 		if (user !== null & typeof user !== 'undefined') {
 			// The user is already logged in.
 			navigate('/dashboard', { state: { uid: user.uid } });

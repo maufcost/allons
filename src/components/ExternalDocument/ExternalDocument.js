@@ -38,6 +38,7 @@ class ExternalDocument extends React.Component {
 		this.addAudioMessage = this.addAudioMessage.bind(this);
 		this.addVideoMessage = this.addVideoMessage.bind(this);
 		this.handleNextPage = this.handleNextPage.bind(this);
+		this.shareDoc = this.shareDoc.bind(this);
 	}
 
 	componentDidMount() {
@@ -90,7 +91,7 @@ class ExternalDocument extends React.Component {
 	addAudioMessage() {
 		this.props.openAddAudioMessageModal({
 			instanceId: this.state.id,
-			userId: this.props.user.uid,
+			user: this.props.user,
 			embed: false,
 			audioMessageURL: this.state.audioMessageURL,
 			instanceType: DOCUMENT
@@ -100,7 +101,7 @@ class ExternalDocument extends React.Component {
 	addVideoMessage() {
 		this.props.openAddVideoMessageModal({
 			instanceId: this.state.id,
-			userId: this.props.user.uid,
+			user: this.props.user,
 			embed: false,
 			videoMessageURL: this.state.videoMessageURL,
 			instanceType: DOCUMENT
@@ -108,7 +109,6 @@ class ExternalDocument extends React.Component {
 	}
 
 	previewExternalDoc() {
-		console.log("previewExternalDoc")
 		this.props.previewInstance(this.props.user.uid, DOCUMENT, this.state.id);
 	}
 
@@ -118,6 +118,13 @@ class ExternalDocument extends React.Component {
 
 	handleNextPage() {
 		this.setState({ pageNumber: this.state.pageNumber + 1 });
+	}
+
+	shareDoc() {
+		this.props.openShareModal(
+			DOCUMENT,
+			`https://allons.tech/${this.props.user.uid}/${DOCUMENT}/${this.state.id}`
+		);
 	}
 
 	render() {
@@ -172,6 +179,12 @@ class ExternalDocument extends React.Component {
 											onClick={this.previewExternalDoc}
 										>
 											Preview document
+										</button>
+										<button
+											className='toolbar-item'
+											onClick={this.shareDoc}
+										>
+											Share document
 										</button>
 									</div>
 								</div>

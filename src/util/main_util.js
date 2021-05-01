@@ -40,9 +40,15 @@ export const generateAudioMessageEmbedCode = (uid) => {
 }
 
 // Useful constants
-
 export const MODULE = 'module';
 export const DOCUMENT = 'document';
 
 export const VIDEO_MESSAGE = 'video-message';
 export const AUDIO_MESSAGE = 'audio-message';
+
+// Setting CORS config with gsutil on google cloud.
+// 1) Open the google cloud shell on the google cloud dashboard (it's that >_ button)
+// 2) vim cors.json
+// 3) a -> to append after the position of the cursor
+// 4) ctrl-c and then :wq to write to disk and quit.
+// 5) Run: gsutil cors set myjson.json gs://projectname.appspot.com

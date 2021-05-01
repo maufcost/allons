@@ -17,7 +17,8 @@ class SignUp extends React.Component {
 			email: '',
 			password: '',
 			error: null,
-			loading: false
+			loading: false,
+			flashMessage: null
 		};
 
 		this.signUpWithEmailAndPasswordHandler = this.signUpWithEmailAndPasswordHandler.bind(this);
@@ -31,27 +32,36 @@ class SignUp extends React.Component {
 
 		this.setState({ loading: true });
 
-		try {
-			// Here, we register the new user on the Authentication API from firebase.
-			const { user } = await auth.createUserWithEmailAndPassword(
-				this.state.email, this.state.password
-			);
+		if (this.state.displayName !== '' && this.state.displayName.trim() !== '') {
+			try {
+				// Here, we register the new user on the Authentication API from firebase.
+				const { user } = await auth.createUserWithEmailAndPassword(
+					this.state.email, this.state.password
+				);
 
-			// Here, we register the new user (all of its info) on Firestore.
-			await createUserDocument(user, { displayName: this.state.displayName });
+				// Here, we register the new user (all of its info) on Firestore.
+				await createUserDocument(user, { displayName: this.state.displayName });
 
-			navigate('/dashboard', { state: { uid: user.uid } });
+				navigate('/dashboard', { state: { uid: user.uid } });
 
-			this.setState({ loading: false });
+				this.setState({ loading: false });
 
-		} catch(error) {
-			this.setState({
-				error: 'Error signing up with email and password'
-			})
+			} catch(error) {
+				this.setState({
+					error: 'Error signing up with email and password',
+					flashMessage: 'This email has already been used or your password is too weak'
+				})
+
+				setTimeout(() => {
+					this.setState({ loading: false, flashMessage: null });
+				}, 4000);
+			}
+
+			// Resetting component state.
+			this.setState({ displayName: '', email: '', password: '', error: null });
+		}else {
+			this.setState({ loading: false, flashMessage: "Don't forget your display name :)" });
 		}
-
-		// Resetting component state.
-		this.setState({ displayName: '', email: '', password: '', error: null });
 	}
 
 	handleDisplayNameChange(e) {
@@ -69,7 +79,6 @@ class SignUp extends React.Component {
 	render() {
 		return (
 			<div className='sign-up'>
-
 				<header>
 					<a className='logo' href='/'>
 						<img src={Logo1} alt='Allon'/>
@@ -86,6 +95,11 @@ class SignUp extends React.Component {
 				<div className='auth'>
 					<img className='logo-auth' src={Logo1} alt='Allons' />
 					<p>Sign Up</p>
+					{this.state.flashMessage && (
+						<div className='flash-message'>
+							<p>{this.state.flashMessage}</p>
+						</div>
+					)}
 					<input
 						type='text'
 						name='displayName'

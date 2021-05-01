@@ -32,7 +32,8 @@ class SignUp extends React.Component {
 
 		this.setState({ loading: true });
 
-		if (this.state.displayName !== '' && this.state.displayName.trim() !== '') {
+		const trimmedDisplayName = this.state.displayName.trim();
+		if (this.state.displayName !== '' && trimmedDisplayName !== '') {
 			try {
 				// Here, we register the new user on the Authentication API from firebase.
 				const { user } = await auth.createUserWithEmailAndPassword(
@@ -40,7 +41,7 @@ class SignUp extends React.Component {
 				);
 
 				// Here, we register the new user (all of its info) on Firestore.
-				await createUserDocument(user, { displayName: this.state.displayName });
+				await createUserDocument(user, { displayName: trimmedDisplayName });
 
 				navigate('/dashboard', { state: { uid: user.uid } });
 

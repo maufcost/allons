@@ -53,11 +53,21 @@ function Profile({ user }) {
 
 	if (user !== null & typeof user !== 'undefined' && user.displayName) {
 		const displayNameArr = user.displayName.split(' ');
+
+		let formattedDisplayNameArr = [];
+		// Case:  "     asdasda    asdasda    " -> "asdasda    asdasda"
+		// The spaces between the two names must be removed from the array
 		for (let i = 0; i < displayNameArr.length; i++) {
-			displayNameArr[i] =
-				displayNameArr[i][0].toUpperCase() + displayNameArr[i].substr(1);
+			if (displayNameArr[i] !== ' ' && displayNameArr[i] !== '') {
+				formattedDisplayNameArr.push(displayNameArr[i]);
+			}
 		}
-		userFormattedDisplayName = displayNameArr.join(' ');
+
+		for (let i = 0; i < 2 /*formattedDisplayNameArr.length*/ ; i++) {
+			formattedDisplayNameArr[i] =
+				formattedDisplayNameArr[i][0].toUpperCase() + formattedDisplayNameArr[i].substr(1);
+		}
+		userFormattedDisplayName = formattedDisplayNameArr.slice(0, 2).join(' ');
 	}
 
 	return (

@@ -6,13 +6,24 @@ class ProfileImage extends React.Component {
 	render() {
 		// Generating a default profile "image" if a user does not have one.
 		let displayNameInitials = ''
+
 		if (this.props.user !== null &&
 			typeof this.props.user !== 'undefined' &&
 			this.props.user.displayName
 		) {
 			const displayNameArr = this.props.user.displayName.split(' ');
+
+			let formattedDisplayNameArr = [];
+			// Case:  "     asdasda    asdasda    " -> "asdasda    asdasda"
+			// The spaces between the two names must be removed from the array
 			for (let i = 0; i < displayNameArr.length; i++) {
-				displayNameInitials += displayNameArr[i][0].toUpperCase();
+				if (displayNameArr[i] !== ' ' && displayNameArr[i] !== '') {
+					formattedDisplayNameArr.push(displayNameArr[i]);
+				}
+			}
+
+			for (let i = 0; i < 2; i++) {
+				displayNameInitials += formattedDisplayNameArr[i][0].toUpperCase();
 			}
 		}
 

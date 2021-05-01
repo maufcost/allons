@@ -77,6 +77,10 @@ class Section extends React.Component {
 		this.props.updateSection(this.props.id, e.target.value, null);
 	}
 
+	addImage() {
+
+	}
+
 	render() {
 		const children = [];
 		const blocks = this.state.blocks;
@@ -108,6 +112,7 @@ class Section extends React.Component {
 						Delete Section
 					</button>
 					<button onClick={this.handleNewBlock}>Create block</button>
+					{/* <button onClick={this.addImage}>Add image</button> */}
 				</header>
 
 				<div className='blocks'>

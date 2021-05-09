@@ -42,6 +42,9 @@ export const generateAudioMessageEmbedCode = (uid) => {
 // Useful constants
 export const MODULE = 'module';
 export const DOCUMENT = 'document';
+export const IMAGE = 'image';
+export const IMAGE_NODE_NO_IMAGE = 'image-node-no-image';
+export const IMAGE_NODE_HAS_IMAGE = 'image-node-has-image';
 
 export const VIDEO_MESSAGE = 'video-message';
 export const AUDIO_MESSAGE = 'audio-message';

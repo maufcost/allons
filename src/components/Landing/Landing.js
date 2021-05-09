@@ -55,6 +55,7 @@ function Landing (props) {
 				<ul>
 					<li><a href='/signin'>Sign In</a></li>
 					<li><a href='/signup'>Sign Up</a></li>
+					<li><a href='/user-guide'>How to use Allons</a></li>
 					<li><a onClick={onContactClick}>Contact</a></li>
 					{/*<li><a href='/'>Examples</a></li>*/}
 				</ul>

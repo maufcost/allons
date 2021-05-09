@@ -37,7 +37,7 @@ class ShareModal extends React.Component {
 						</button>
 					</CopyToClipboard>
 					<br/>
-					<small>Soon, you will be able to share modules automatically through email and Twitter</small>
+					<small>Soon you will be able to share modules automatically through email and Twitter</small>
 				</div>
 			</div>
 		)

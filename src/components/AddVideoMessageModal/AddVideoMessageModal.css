@@ -1,3 +1,5 @@
+/* background:rgba(112,81,246,0); */
+
 .add-video-message-modal-bg {
 	background-color: var(--card-color);
 	width: 100vw;
@@ -12,8 +14,8 @@
 
 .add-video-message-modal {
 	background-color: var(--card-color);
-	width: 80%;
-	height: 80%;
+	/* width: 80%;
+	height: 80%; */
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -36,18 +38,10 @@
 	max-height: 100%;
 }
 
-.add-video-message-modal header .text {
-	margin-top: 30px;
-}
-
 .add-video-message-modal header .close-button {
-	position: absolute;
-	top: 0;
-	right: 0;
 	background: transparent;
 	border: none;
 	transition: 0.2s;
-	font-size: 1.1em;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -66,7 +60,7 @@
 }
 
 .add-video-message-modal header .close-button p img {
-	width: 15px;
+	width: 10px;
 }
 
 .add-video-message-modal header .title {
@@ -195,6 +189,23 @@
 	height: 180px;
 	margin-left: -60px;
 	/* border-radius: 50%; */
+}
+
+.add-video-message-modal #video-now.animate {
+	animation: prepareToRecord 1s linear;
+}
+
+@keyframes prepareToRecord {
+	0% {
+		position: absolute;
+		left: 100px;
+		bottom: 100px;
+	}
+	100% {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+	}
 }
 
 .add-video-message-modal .video-wrapper-controls {

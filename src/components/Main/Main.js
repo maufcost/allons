@@ -11,6 +11,7 @@ import AddVideoMessageModal from '../AddVideoMessageModal/AddVideoMessageModal';
 import AddAudioMessageModal from '../AddAudioMessageModal/AddAudioMessageModal';
 import EmbeddableMessage from '../EmbeddableMessage/EmbeddableMessage';
 import ShareModal from '../ShareModal/ShareModal';
+import UserGuide from '../UserGuide/UserGuide';
 
 import './Main.css';
 
@@ -137,6 +138,8 @@ class Main extends React.Component {
 					<SignUp path='/signup' />
 
 					<SignIn path='/signin' />
+
+					<UserGuide path='/user-guide' />
 
 					<Dashboard
 						path='/dashboard'

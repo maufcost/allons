@@ -480,3 +480,43 @@ export const deleteExternalDocument = async (uid, externalDocId) => {
 		console.log("[deleteExternalDocument] Error 1", error);
 	}
 }
+
+// Adds an image added on an image node to firebase.
+export const addImageFromImageNodeToStorage = (imageId, file) => {
+	if (!imageId) return null;
+
+	try {
+		const storageRef = firebaseStorage.ref(imageId.toString());
+
+		return new Promise((resolve) => {
+			storageRef.put(file).on("state_changed", (snapshot) => {
+				// Any progress bar stuff can go here...
+			},
+			(error) => {
+				console.log("[addImageFromImageNodeToStorage] Error 2", error);
+			},
+			async () => {
+				const url = await storageRef.getDownloadURL();
+
+				resolve({ url });
+			});
+		})
+	}catch(error) {
+		console.log("[addImageFromImageNodeToStorage] Error 1", error);
+	}
+}
+
+// Removes an image added on an image node from firebase.
+export const removeImageFromImageNode = (imageId) => {
+	if (!imageId) return null;
+
+	// Deleting actual PDF file (from Firebase storage).
+	const image = firebaseStorage.ref(`${imageId}`);
+	image.delete()
+	.then(() => {
+		// console.log("Image successfully deleted");
+	})
+	.catch((error) => {
+		console.log("[removeImageFromImageNode] Error 2", error);
+	});
+}

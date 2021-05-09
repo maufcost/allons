@@ -3,6 +3,7 @@ import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
 
 import ProfileImage from '../ProfileImage/ProfileImage'
 import BlockViewer from '../BlockViewer/BlockViewer';
+import ImageNodeViewer from '../ImageNodeViewer/ImageNodeViewer';
 
 import Play from '../../assets/allons-icons/play.svg';
 import Pause from '../../assets/allons-icons/pause.svg';
@@ -11,7 +12,7 @@ import PreviousIcon from '../../assets/allons-icons/previous-icon.svg';
 import NextIcon from '../../assets/allons-icons/next-icon.svg';
 
 import { getUserDocument, getUserModule, getExternalDocument } from '../../firebase';
-import { MODULE, DOCUMENT } from '../../util/main_util';
+import { MODULE, DOCUMENT, IMAGE } from '../../util/main_util';
 
 import './Viewer.css'
 
@@ -115,13 +116,22 @@ function Viewer({ userId, instanceType, instanceId }) {
 		// dangerouslySetInnerHTML: It's very dangerous because of XSS (cross-site
 		// scripting), but we'll stick to it for now.
 		const elements = blocks.map((block, ix) => {
-			return (
-				<BlockViewer
-					key={Math.floor(Math.random() * 1000) * ix}
-					content={block.content}
-					mentions={detectMentions(block.content)}
-				/>
-			)
+			if (block.type === IMAGE) {
+				return (
+					<ImageNodeViewer
+						key={Math.floor(Math.random() * 1000) * ix}
+						link={block.imageLink}
+					/>
+				)
+			}else {
+				return (
+					<BlockViewer
+						key={Math.floor(Math.random() * 1000) * ix}
+						content={block.content}
+						mentions={detectMentions(block.content)}
+					/>
+				)
+			}
 		});
 		return elements;
 	}
@@ -320,7 +330,7 @@ function Viewer({ userId, instanceType, instanceId }) {
 			{module && (
 				<footer>
 					<small>
-						Built with <a href="/"><img src={Logo1} alt='Allons'/></a>
+						Built with <a href='/' target='_blank'><img src={Logo1} alt='Allons'/></a>
 					</small>
 				</footer>
 			)}

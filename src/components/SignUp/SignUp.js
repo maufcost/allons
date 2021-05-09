@@ -89,6 +89,7 @@ class SignUp extends React.Component {
 					<ul>
 						<li><a href='/signin'>Sign In</a></li>
 						<li><a href='/signup'>Sign Up</a></li>
+						<li><a href='/user-guide'>How to use Allons</a></li>
 						<li><a href='/'>Contact</a></li>
 					</ul>
 				</header>

@@ -29,7 +29,7 @@ function Profile({ user }) {
 
 			setTimeout(() => {
 				setError(null);
-			}, 3000);
+			}, 4000);
 		}
 	}
 

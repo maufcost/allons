@@ -1,0 +1,117 @@
+.allons-user-guide header {
+	background-color: var(--card-color);
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 15px;
+}
+
+.allons-user-guide header .logo {
+	transition: 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	text-decoration: none;
+}
+
+.allons-user-guide header .logo:hover {
+	opacity: 0.6;
+	transition: 0.2s;
+}
+
+.allons-user-guide header .logo img {
+	width: 50px;
+}
+
+.allons-user-guide header .logo span {
+	display: inline-block;
+	margin-left: 5px;
+	background-color: var(--warning);
+	padding: 5px;
+	border-radius: var(--card-br);
+	font-size: 0.8em;
+	color: var(--primary);
+}
+
+.allons-user-guide header ul {
+	list-style: none;
+	display: flex;
+	margin: 0;
+	margin-right: 2%;
+}
+
+.allons-user-guide header ul li {
+	list-style: none;
+	display: flex;
+	margin: 0;
+	margin-left: 20px;
+}
+
+.allons-user-guide header ul li a {
+	text-decoration: none;
+	color: var(--primary);
+	transition: 0.2s;
+	font-size: 0.9em;
+}
+
+.allons-user-guide header ul li a:hover {
+	text-decoration: underline;
+	color: var(--left-sidebar-font-color);
+	transition: 0.2s;
+}
+
+.allons-user-guide section {
+	width: 80%;
+	margin: 0 auto;
+	color: var(--primary);
+}
+
+.allons-user-guide h1 {
+	color: black;
+}
+
+.allons-user-guide .user-guide-gist {
+
+}
+
+.allons-user-guide .user-guide-gist .guide {
+	padding: 16px;
+	border-radius: var(--card-br);
+	margin-bottom: 15px;
+	border: 1px solid var(--card-border-color);
+}
+
+.allons-user-guide .user-guide-gist .guide a {
+	color: var(--primary);
+	text-decoration: none;
+}
+
+.allons-user-guide .user-guide-gist .guide a:hover {
+	text-decoration: underline;
+}
+
+.allons-user-guide .user-guide-gist .guide h2 {
+	font-size: 1.1em;
+	margin: 0;
+}
+
+.allons-user-guide .user-guide-gist .guide h2 span {
+	border-radius: var(--card-br);
+	background-color: var(--warning);
+	padding: 2px 6px;
+	color: black;
+	font-size: 0.9em;
+}
+
+.allons-user-guide .user-guide-gist .guide p {
+	margin: 0;
+}
+
+.allons-user-guide .user-guide-gist .guide ul {
+	margin: 0.5em 0;
+}
+
+.allons-user-guide .user-guide-gist .guide li {
+
+}

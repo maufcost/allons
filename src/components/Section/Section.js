@@ -2,8 +2,12 @@ import React from 'react';
 import ContentEditable from 'react-contenteditable'
 
 import Block from '../Block/Block';
+import ImageNode from '../ImageNode/ImageNode';
 
-import { generateRandomId } from '../../util/main_util'
+import
+{
+	generateRandomId, IMAGE, IMAGE_NODE_NO_IMAGE , IMAGE_NODE_HAS_IMAGE
+} from '../../util/main_util'
 
 import './Section.css'
 
@@ -19,10 +23,11 @@ class Section extends React.Component {
 
 		this.sectionTitleRef = React.createRef();
 
-		this.handleNewBlock = this.handleNewBlock.bind(this);
 		this.removeBlock = this.removeBlock.bind(this);
-		this.handleSectionTitleChange = this.handleSectionTitleChange.bind(this)
-		this.onChangeBlockContent = this.onChangeBlockContent.bind(this)
+		this.handleNewBlock = this.handleNewBlock.bind(this);
+		this.handleNewImage = this.handleNewImage.bind(this);
+		this.onChangeBlockContent = this.onChangeBlockContent.bind(this);
+		this.handleSectionTitleChange = this.handleSectionTitleChange.bind(this);
 	}
 
 	handleNewBlock() {
@@ -37,13 +42,19 @@ class Section extends React.Component {
 		this.props.updateSection(this.props.id, null, this.state.blocks);
 	}
 
-	onChangeBlockContent(blockId, newBlockContent) {
+	onChangeBlockContent(blockId, newBlockContent, blockType) {
 		// Finding block whose content changed.
 		const blocks = this.state.blocks;
-		const block = blocks.find(block => block.id === blockId)
+		let block = blocks.find(block => block.id === blockId);
 
 		// Updating current section state.
-		block.content = newBlockContent;
+		if (blockType === IMAGE) {
+			// Updating a block of type IMAGE.
+			Object.assign(block, newBlockContent);
+		}else {
+			// Updating a regular block
+			block.content = newBlockContent;
+		}
 		this.setState({ blocks: [...blocks] });
 
 		// Updating the section object containing this block in this Module's state.
@@ -77,8 +88,23 @@ class Section extends React.Component {
 		this.props.updateSection(this.props.id, e.target.value, null);
 	}
 
-	addImage() {
+	handleNewImage() {
+		// An "image" in Allons is just a regular block, but instead of rendering
+		// the default block UI, we're going to render a place to add images.
+		const newImageNode = {
+			type: IMAGE,
+			id: generateRandomId(),
+			stage: IMAGE_NODE_NO_IMAGE,
+			imageLink: null
+		};
 
+		let blocks = this.state.blocks;
+		blocks.push(newImageNode);
+
+		this.setState({ blocks: [...blocks] });
+
+		// Updating the section object containing this block in this Module's state.
+		this.props.updateSection(this.props.id, null, this.state.blocks);
 	}
 
 	render() {
@@ -86,15 +112,29 @@ class Section extends React.Component {
 		const blocks = this.state.blocks;
 
 		for (let i = 0; i < blocks.length; i++) {
-			children.push(
-				<Block
-					key={i}
-					id={blocks[i].id}
-					content={blocks[i].content}
-					removeBlock={this.removeBlock}
-					onChangeBlockContent={this.onChangeBlockContent}
-				/>
-			)
+
+			if (blocks[i].type === IMAGE) {
+				children.push(
+					<ImageNode
+						key={blocks[i].id}
+						id={blocks[i].id}
+						stage={blocks[i].stage}
+						imageLink={blocks[i].imageLink}
+						removeBlock={this.removeBlock}
+						onChangeBlockContent={this.onChangeBlockContent}
+					/>
+				)
+			}else {
+				children.push(
+					<Block
+						key={i}
+						id={blocks[i].id}
+						content={blocks[i].content}
+						removeBlock={this.removeBlock}
+						onChangeBlockContent={this.onChangeBlockContent}
+					/>
+				)
+			}
 		}
 
 		return (
@@ -112,7 +152,7 @@ class Section extends React.Component {
 						Delete Section
 					</button>
 					<button onClick={this.handleNewBlock}>Create block</button>
-					{/* <button onClick={this.addImage}>Add image</button> */}
+					<button onClick={this.handleNewImage}>Add image</button>
 				</header>
 
 				<div className='blocks'>

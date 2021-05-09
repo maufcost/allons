@@ -322,12 +322,22 @@ class AddVideoMessageModal extends React.Component {
 			)
 		}
 
+		// Start video animation when video recording begins.
+		let videoClass = 'video-wrapper'
+		videoClass += this.state.isRecordingStarted ? ' animate' : ''
+
 		return (
 			<div>
 				<div className='add-video-message-modal-bg'></div>
 				<div className='add-video-message-modal' style={this.state.animationStyle}>
 					<div className='add-video-message-modal-inner'>
 						<header>
+							<button
+								className='close-button'
+								onClick={this.props.closeAddVideoMessageModal}
+							>
+								<p><img src={CloseIcon} alt='Close modal' /></p>
+							</button>
 							<div className='text'>
 								{this.props.id ? (
 									<p className='title'>Add a personalized video message <br/><span>for your {this.props.instanceType} viewers</span></p>
@@ -341,12 +351,6 @@ class AddVideoMessageModal extends React.Component {
 									<small>Allon is still in beta. That's why we are limiting messages to 10 seconds <b>for now</b>.</small>
 								)}
 							</div>
-							<button
-								className='close-button'
-								onClick={this.props.closeAddVideoMessageModal}
-							>
-								<p><img src={CloseIcon} alt='Close modal' /></p>
-							</button>
 						</header>
 
 						{this.state.hasFlashMessage && this.props.id && (
@@ -389,7 +393,7 @@ class AddVideoMessageModal extends React.Component {
 
 							<div className='video-area'>
 								<p>Here's how you look now:</p>
-								<div className='video-wrapper'>
+								<div className={videoClass} id='video-now'>
 									<video
 										className='video-record'
 										ref={this.videoRecordRef}

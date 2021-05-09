@@ -33,6 +33,7 @@
 	border: 1px solid var(--left-sidebar-font-color);
 	padding: 8px 16px;
 	transition: 0.2s;
+	font-size: 0.7em;
 }
 
 .module-section header button:hover {

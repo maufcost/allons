@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import { navigate } from '@reach/router';
 
 import Profile from '../Profile/Profile'
@@ -330,7 +331,7 @@ function Dashboard(props) {
 				<div className='left-sidebar-button-list'>
 					<button onClick={createModule}>Create Module</button>
 					<button onClick={openAddExternalDocument}>Add external document</button>
-					<button disabled onClick={null}>Notifications</button>
+					<a href='/user-guide' target='_blank' rel='noopener noreferrer'>User Guide</a>
 					{selectedModuleId || selectedExternalDocId ? null :
 					(
 						<span>
@@ -338,6 +339,7 @@ function Dashboard(props) {
 							<button onClick={openEmbedAudioMessage}>Embed Audio Messages</button>
 						</span>
 					)}
+					<button disabled onClick={null}>Notifications</button>
 					<button onClick={onContactClick}>{contactInfo}</button>
 					<button onClick={handleSignOut}>Sign out</button>
 				</div>
@@ -355,22 +357,28 @@ function Dashboard(props) {
 				)}
 
 				{/* A selected module will show here. */}
-				{showModule && (
-					<Module
-						id={selectedModuleId}
-						name={selectedModuleName}
-						sections={selectedModuleSections}
-						videoMessageURL={selectedModuleVideoMessageURL}
-						audioMessageURL={selectedModuleAudioMessageURL}
-						user={user}
-						updateModule={updateModule}
-						closeModule={closeModule}
-						openAddVideoMessageModal={props.openAddVideoMessageModal}
-						openAddAudioMessageModal={props.openAddAudioMessageModal}
-						previewInstance={props.previewInstance}
-						openShareModal={props.openShareModal}
-					/>
-				)}
+				<ReactCSSTransitionGroup
+					transitionName='slide'
+					transitionEnterTimeout={500}
+					transitionLeaveTimeout={200}
+				>
+					{showModule && (
+						<Module
+							id={selectedModuleId}
+							name={selectedModuleName}
+							sections={selectedModuleSections}
+							videoMessageURL={selectedModuleVideoMessageURL}
+							audioMessageURL={selectedModuleAudioMessageURL}
+							user={user}
+							updateModule={updateModule}
+							closeModule={closeModule}
+							openAddVideoMessageModal={props.openAddVideoMessageModal}
+							openAddAudioMessageModal={props.openAddAudioMessageModal}
+							previewInstance={props.previewInstance}
+							openShareModal={props.openShareModal}
+						/>
+					)}
+				</ReactCSSTransitionGroup>
 
 				{/* A selected external document will show here. */}
 				{showExternalDocument && (
@@ -395,37 +403,36 @@ function Dashboard(props) {
 				)}
 
 				{/* Default dashboard page */}
-				{!showModule && !showExternalDocument && (
-					<section className='main-content-module-not-opened'>
-
-						<div>
-							<h1>Hello, welcome to allons beta!</h1>
-							<small>Create a module on the left or select one of your modules below to begin</small>
-							<div className='module-thumbnails'>
-								{/* Module thumbnails */}
-								{children ? (
-									children
-								) : (
-									<p className='no-modules-message'>You have no Allons modules yet. Let's create one!</p>
-								)}
+					{!showModule && !showExternalDocument && (
+						<section className='main-content-module-not-opened'>
+							<div>
+								<h1>Hello, welcome to allons beta!</h1>
+								<small>Create a module on the left or select one of your modules below to begin</small>
+								<div className='module-thumbnails'>
+									{/* Module thumbnails */}
+										{children ? (
+											children
+										) : (
+											<p className='no-modules-message'>You have no Allons modules yet. Let's create one!</p>
+										)}
+								</div>
 							</div>
-						</div>
 
-						<div>
-							<h1>Access one of your external documents:</h1>
-							<small>These are documents that you dropped on Allons, such as PDFs.</small>
-							<div className='external-module-thumbnails'>
-								{/* External module thumbnails */}
+							<div>
+								<h1>Access one of your external documents:</h1>
+								<small>These are documents that you dropped on Allons, such as PDFs.</small>
+								<div className='external-module-thumbnails'>
+									{/* External module thumbnails */}
 
-								{externalChildren ? (
-									externalChildren
-								) : (
-									<p className='no-modules-message'>You have no external modules yet. Let's add one here!</p>
-								)}
+									{externalChildren ? (
+										externalChildren
+									) : (
+										<p className='no-modules-message'>You have no external modules yet. Let's add one here!</p>
+									)}
+								</div>
 							</div>
-						</div>
-					</section>
-				)}
+						</section>
+					)}
 
 			</main>
 		</div>

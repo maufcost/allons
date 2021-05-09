@@ -194,7 +194,7 @@ class Module extends React.Component {
 		}
 
 		return (
-			<div className="module">
+			<div className='module'>
 				<header className='module-unofficial-header'>
 					<button
 						className='close-module-button'

@@ -1,9 +1,6 @@
 // Firebase configuration
 // Firebase tools used: Cloud Firestore and Authentication.
 
-// Based on:
-// https://blog.logrocket.com/user-authentication-firebase-react-apps/
-
 import firebase from "firebase/app";
 import "firebase/auth";
 import "firebase/firestore";

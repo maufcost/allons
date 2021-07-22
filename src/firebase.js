@@ -17,13 +17,13 @@ import {
 } from './util/main_util';
 
 var firebaseConfig = {
-	apiKey: "AIzaSyCyWkrsbbLZJFoPLRY3UzKM5CVp_sMYZ80",
-	authDomain: "allons-y-3a514.firebaseapp.com",
-	projectId: "allons-y-3a514",
-	storageBucket: "allons-y-3a514.appspot.com",
-	messagingSenderId: "850143895894",
-	appId: "1:850143895894:web:1b9cb2b00b8b25dfb6b6f7",
-	measurementId: "G-4E4SEC4NM1"
+	apiKey: process.env.API_KEY,
+	authDomain: process.env.AUTH_DOMAIN,
+	projectId: process.env.PROJECT_ID,
+	storageBucket: process.env.STORAGE_BUCKET_ADDRESS,
+	messagingSenderId: process.env.MESSAGING_SENDER_ID,
+	appId: process.env.APP_ID,
+	measurementId: process.env.MEASUREMENT_ID
 };
 
 firebase.initializeApp(firebaseConfig);
